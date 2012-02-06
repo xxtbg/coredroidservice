@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ProtoBuf;
 
-namespace CoreDroid.Extensions
+namespace CoreDroid.Messages
 {
-    public class Class1
+    [ProtoContract]
+    public class CloseStreamMessage
     {
     }
 }

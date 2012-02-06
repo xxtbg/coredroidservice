@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using ProtoBuf;
 
-namespace CoreDroid
+namespace CoreDroid.Messages
 {
     [ProtoContract]
-    public class SocketWaitingMessage
+    public class StreamMessage
     {
         [ProtoMember(1)]
         public int Id { get; private set; }
 
-        public SocketWaitingMessage(int id)
+        public StreamMessage(int id)
         {
             this.Id = id;
         }
