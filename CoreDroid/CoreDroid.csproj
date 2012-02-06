@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocketService.cs" />
@@ -56,6 +55,10 @@
     <None Include="Libraries\protobuf-net.dll" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CoreDroid.Extensions\CoreDroid.Extensions.csproj">
+      <Project>{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}</Project>
+      <Name>CoreDroid.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CoreDroid.Messages\CoreDroid.Messages.csproj">
       <Project>{DB13BEB7-C503-4E7D-A434-8A9405BA8A02}</Project>
       <Name>CoreDroid.Messages</Name>
