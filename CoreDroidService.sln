@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Extensions", "Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Contract", "CoreDroid.Contract\CoreDroid.Contract.csproj", "{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Client", "CoreDroid.Client\CoreDroid.Client.csproj", "{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,16 +59,6 @@ Global
 		{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}.Release|x86.ActiveCfg = Release|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{D8D3E0C1-CB1C-41FD-85F5-53DA818F82C4}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
