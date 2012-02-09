@@ -5,86 +5,137 @@ using System.Text;
 using System.IO;
 using System.Net.Sockets;
 
+using CoreDroid.Extensions;
+using CoreDroid.Contract.Message;
+
 namespace CoreDroid.Client
 {
-    public class ServiceStream : Stream
+    public class ServiceStream : Stream, IDisposable
     {
         private NetworkStream netStream;
-        private Stream srcStream;
 
-        public ServiceStream(NetworkStream netStream, Stream srcStream)
+        public ServiceStream(NetworkStream netStream)
         {
             this.netStream = netStream;
-            this.srcStream = srcStream;
         }
 
         public override bool CanRead
         {
-            get { return this.srcStream.CanRead; }
+            get { return this.DoStreamAction<bool>(StreamAction.CanRead); }
         }
 
         public override bool CanSeek
         {
-            get { return this.srcStream.CanSeek; }
+            get { return this.DoStreamAction<bool>(StreamAction.CanSeek); }
         }
 
         public override bool CanWrite
         {
-            get { return this.srcStream.CanWrite; }
+            get { return this.DoStreamAction<bool>(StreamAction.CanWrite); }
         }
 
         public override void Flush()
         {
-            // TODO Send Flush Message
-            throw new NotImplementedException();
+            this.DoStreamAction(StreamAction.Flush);
         }
 
         public override long Length
         {
-            get { return this.srcStream.Length; }
+            get { return this.DoStreamAction<long>(StreamAction.Length); }
         }
 
         public override long Position
         {
             get
             {
-                throw new NotImplementedException();
+                return this.DoStreamAction<long>(StreamAction.GetPosition);
             }
             set
             {
-                throw new NotImplementedException();
+                this.DoStreamAction(StreamAction.SetPosition, null, value, 0, 0);
             }
         }
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            // TODO Send Read Message
-            throw new NotImplementedException();
+            int read = this.DoStreamAction<int>(StreamAction.Read, null, 0, 0, count);
+            this.netStream.Read(buffer, offset, read);
+            return read;
         }
 
         public override long Seek(long offset, SeekOrigin origin)
         {
-            // TODO Send Seek Message
             // message.Position == 0 ? SeekOrigin.Begin : (message.Position == 1 ? SeekOrigin.Current : SeekOrigin.End)
-            throw new NotImplementedException();
+            return this.DoStreamAction<long>(StreamAction.Seek, null, (origin == SeekOrigin.Begin ? 0 : (origin == SeekOrigin.Current ? 1 : 2)), offset, 0);
         }
 
         public override void SetLength(long value)
         {
-            // TODO Send SetLength Message
-            throw new NotImplementedException();
+            this.DoStreamAction(StreamAction.SetLength, null, 0, 0, value);
         }
 
-        public override void Write(byte[] buffer, int offset, int count)
+        public override void Write(byte[] buffer, int offset, int size)
         {
-            // TODO Send Write Message and Data
-            throw new NotImplementedException();
+            this.DoStreamAction(StreamAction.Write, buffer, 0, offset, size);
         }
 
         public override void Close()
         {
-            // TODO Send Close Message
-            throw new NotImplementedException();
+            this.DoStreamAction(StreamAction.Close);
+        }
+
+        public void Dispose()
+        {
+            if(this.netStream.CanWrite)
+                this.Close();
+        }
+
+        private void DoStreamAction(StreamAction action)
+        {
+            this.DoStreamAction(action, null, 0, 0, 0);
+        }
+
+        private T DoStreamAction<T>(StreamAction action)
+        {
+            return this.DoStreamAction<T>(action, null, 0, 0, 0);
+        }
+
+        private void DoStreamAction(StreamAction action, byte[] buffer, long position, long offset, long size)
+        {
+            this.DoStreamAction<object>(action, buffer, position, offset, size);
+        }
+
+        private T DoStreamAction<T>(StreamAction action, byte[] buffer, long position, long offset, long size)
+        {
+            this.netStream.ProtoSend(new StreamActionMessage(action, position, action != StreamAction.Write ? offset : 0, size));
+
+            if (action == StreamAction.Write)
+                this.netStream.Write(buffer, Convert.ToInt32(offset), Convert.ToInt32(size));
+
+            OperationFinishedMessage msg = this.netStream.ProtoReceive<OperationFinishedMessage>();
+
+            if (!msg.Success)
+                throw(new ServiceException(msg));
+
+            return this.netStream.ProtoReceive<T>();
+        }
+    }
+
+    public class ServiceException:Exception
+    {
+        public string OriginalAssemblyName { get; private set; }
+        public string OriginalTypeName { get; private set; }
+
+        public string OriginalMessage { get; private set; }
+
+        public string OriginalStackTrace { get; private set; }
+
+        public ServiceException(OperationFinishedMessage msg):base()
+        {
+            this.OriginalAssemblyName = msg.ExceptionAssemblyName;
+            this.OriginalTypeName = msg.ExceptionTypeName;
+            this.OriginalMessage = msg.ExceptionMessage;
+            this.OriginalStackTrace = msg.ExceptionStackTrace;
         }
     }
 }

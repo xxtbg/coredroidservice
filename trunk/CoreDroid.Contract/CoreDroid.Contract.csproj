@@ -43,15 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExceptionInfo.cs" />
+    <Compile Include="Message\SendingPluginFinishedMessage.cs" />
     <Compile Include="Message\ServiceInitzializationErrorMessage.cs" />
     <Compile Include="Message\ServiceRuntimeErrorMessage.cs" />
-    <Compile Include="Message\TypeNotFoundErrorMessage.cs" />
     <Compile Include="Message\ServiceInitializedMessage.cs" />
     <Compile Include="Message\InitMessage.cs" />
     <Compile Include="Message\RequestMessage.cs" />
     <Compile Include="Message\ServiceCallMessage.cs" />
     <Compile Include="Message\ServiceReturnMessage.cs" />
-    <Compile Include="Message\StreamMessage.cs" />
+    <Compile Include="Message\StreamAvaliableMessage.cs" />
     <Compile Include="Message\StreamActionFinishedMessage.cs" />
     <Compile Include="Message\StreamActionMessage.cs" />
     <Compile Include="Message\TypeMessage.cs" />
