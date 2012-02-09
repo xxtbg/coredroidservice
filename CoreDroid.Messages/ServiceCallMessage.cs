@@ -40,7 +40,7 @@ namespace CoreDroid.Messages
             {
                 if (!this.assemblySearched)
                 {
-                    this.assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name == this.AssemblyName).FirstOrDefault();
+                    this.assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().FullName == this.AssemblyName).FirstOrDefault();
                     this.assemblySearched = true;
                 }
 
@@ -70,7 +70,7 @@ namespace CoreDroid.Messages
         public MethodParameterInfo(string name, Type type)
         {
             this.Name = name;
-            this.AssemblyName = type.Assembly.GetName().Name;
+            this.AssemblyName = type.Assembly.GetName().FullName;
             this.TypeName = type.FullName;
         }
     }

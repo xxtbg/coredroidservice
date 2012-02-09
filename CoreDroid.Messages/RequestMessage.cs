@@ -15,7 +15,7 @@ namespace CoreDroid.Messages
 
     public enum RequestAction
     {
-        Stop,
+        Close,
         Call
     }
 }
