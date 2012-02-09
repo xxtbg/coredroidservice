@@ -15,7 +15,7 @@ namespace CoreDroid.Contract.Message
 
     public enum InitAction
     {
-        AddDllPlugin,
+        LoadMono,
         //AddPythonPlugin,
         Start,
         Stream

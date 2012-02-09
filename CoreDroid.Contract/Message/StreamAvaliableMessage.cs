@@ -7,12 +7,12 @@ using ProtoBuf;
 namespace CoreDroid.Contract.Message
 {
     [ProtoContract]
-    public class StreamMessage
+    public class StreamAvaliableMessage
     {
         [ProtoMember(1)]
         public int Id { get; private set; }
 
-        public StreamMessage(int id)
+        public StreamAvaliableMessage(int id)
         {
             this.Id = id;
         }

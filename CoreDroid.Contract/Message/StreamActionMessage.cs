@@ -21,6 +21,8 @@ namespace CoreDroid.Contract.Message
         [ProtoMember(4)]
         public long Size { get; private set; }
 
+        public StreamActionMessage(StreamAction action) : this(action, 0, 0, 0) { }
+
         public StreamActionMessage(StreamAction action, long position, long offset, long size)
         {
             this.Action = action;
@@ -32,6 +34,12 @@ namespace CoreDroid.Contract.Message
 
     public enum StreamAction
     {
+        CanRead,
+        CanSeek,
+        CanWrite,
+        Length,
+        GetPosition,
+        SetPosition,
         Flush,
         Read,
         Seek,

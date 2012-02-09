@@ -7,7 +7,7 @@ using ProtoBuf;
 namespace CoreDroid.Contract.Message
 {
     [ProtoContract]
-    public class TypeNotFoundErrorMessage
+    public class SendingPluginFinishedMessage
     {
     }
 }

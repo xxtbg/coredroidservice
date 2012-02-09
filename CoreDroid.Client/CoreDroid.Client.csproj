@@ -48,6 +48,10 @@
       <Project>{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}</Project>
       <Name>CoreDroid.Contract</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CoreDroid.Extensions\CoreDroid.Extensions.csproj">
+      <Project>{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}</Project>
+      <Name>CoreDroid.Extensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
