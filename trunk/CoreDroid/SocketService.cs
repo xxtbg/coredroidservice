@@ -13,12 +13,13 @@ using CoreDroid.Messages;
 using CoreDroid.Messages.Info;
 using CoreDroid.Extensions;
 using System.Reflection;
+using CoreDroid.Messages.Stream;
 
 namespace CoreDroid
 {
-    public class SocketService
+    public static class SocketService
     {
-        public static delegate void ReceivedWaiting(Stream s);
+        public delegate void ReceivedWaiting(Stream s);
 
         private static Dictionary<int, ReceivedWaiting> waitings = new Dictionary<int, ReceivedWaiting>();
 
@@ -96,7 +97,45 @@ namespace CoreDroid
         {
             Stream streamToSend = waitingStreams[streamId];
 
-            // TODO StreamWrapper
+            bool closed = false;
+            while (!closed)
+            {
+                StreamActionMessage message = stream.ProtoReceive<StreamActionMessage>();
+
+                try
+                {
+                    switch (message.Action)
+                    {
+                        case StreamAction.Close:
+                            streamToSend.Close();
+                            closed = true;
+                            break;
+                        case StreamAction.Flush:
+                            streamToSend.Flush();
+                            break;
+                        case StreamAction.Read:
+                            streamToSend.CopyTo(stream, Convert.ToInt32(message.Size));
+                            break;
+                        case StreamAction.Seek:
+                            streamToSend.Seek(message.Offset, message.Position == 0 ? SeekOrigin.Begin : (message.Position == 1 ? SeekOrigin.Current : SeekOrigin.End));
+                            break;
+                        case StreamAction.SetLength:
+                            streamToSend.SetLength(message.Size);
+                            break;
+                        case StreamAction.Write:
+                            stream.CopyTo(streamToSend, Convert.ToInt32(message.Size));
+                            break;
+                        default:
+                            throw (new NotImplementedException());
+                    }
+                }
+                catch (Exception ex)
+                {
+                    stream.ProtoSend(new StreamActionFinishedMessage(ex));
+                }
+
+                stream.ProtoSend(new StreamActionFinishedMessage());
+            }
 
             lock (waitingStreams)
             {
@@ -117,8 +156,6 @@ namespace CoreDroid
             }
 
             stream.ProtoSend(new StreamMessage(id));
-
-            stream.ProtoReceive<CloseStreamMessage>();
         }
 
         private static void ServiceStarter(int id, NetworkStream stream, Type type)
@@ -180,7 +217,7 @@ namespace CoreDroid
                             case RequestAction.Call:
                                 ServiceHandleCall(stream, service);
                                 break;
-                            case RequestAction.Stop:
+                            case RequestAction.Close:
                                 stopService = true;
                                 break;
                         }
@@ -235,7 +272,16 @@ namespace CoreDroid
                     stream.ProtoSend(new ServiceReturnMessage(returnValue != null ? returnValue.GetType() : null));
 
                     if (returnValue != null)
-                        stream.ProtoSend(returnValue);
+                    {
+                        if (returnValue is Stream)
+                        {
+                            SendStream(stream, (Stream)returnValue);
+                        }
+                        else
+                        {
+                            stream.ProtoSend(returnValue);
+                        }
+                    }
                 }
             }
             else

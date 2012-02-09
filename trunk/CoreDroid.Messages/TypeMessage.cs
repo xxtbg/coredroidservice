@@ -21,7 +21,7 @@ namespace CoreDroid
             {
                 if (!this.assemblySearched)
                 {
-                    this.assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name == this.AssemblyName).FirstOrDefault();
+                    this.assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().FullName == this.AssemblyName).FirstOrDefault();
                     this.assemblySearched = true;
                 }
 

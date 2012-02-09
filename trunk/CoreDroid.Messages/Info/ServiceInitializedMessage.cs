@@ -17,7 +17,7 @@ namespace CoreDroid.Messages.Info
 
         public ServiceInitializedMessage(Type type)
         {
-            this.AssemblyName = type.Assembly.GetName().Name;
+            this.AssemblyName = type.Assembly.GetName().FullName;
             this.TypeName = type.FullName;
         }
     }

@@ -20,7 +20,7 @@ namespace CoreDroid.Messages.Error
 
         public ServiceInitzializationErrorMessage(Type type, Exception ex)
         {
-            this.AssemblyName = type.Assembly.GetName().Name;
+            this.AssemblyName = type.Assembly.GetName().FullName;
             this.TypeName = type.FullName;
             this.ErrorMessage = ex.Message;
         }
