@@ -8,12 +8,9 @@ using System.Threading;
 using System.IO;
 using ProtoBuf;
 using ProtoBuf.Meta;
-using CoreDroid.Messages.Error;
-using CoreDroid.Messages;
-using CoreDroid.Messages.Info;
 using CoreDroid.Extensions;
 using System.Reflection;
-using CoreDroid.Messages.Stream;
+using CoreDroid.Contract.Message;
 
 namespace CoreDroid
 {
