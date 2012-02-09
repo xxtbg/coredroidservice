@@ -2,20 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A577982D-7391-4260-B770-FE886C8CA732}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CoreDroid</RootNamespace>
-    <AssemblyName>CoreDroid</AssemblyName>
+    <RootNamespace>CoreDroid.Contract</RootNamespace>
+    <AssemblyName>CoreDroid.Contract</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Mono</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,8 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,7 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="protobuf-net, Version=2.0.0.480, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="protobuf-net">
+      <HintPath>..\CoreDroid\Libraries\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,25 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Message\ServiceInitzializationErrorMessage.cs" />
+    <Compile Include="Message\ServiceRuntimeErrorMessage.cs" />
+    <Compile Include="Message\TypeNotFoundErrorMessage.cs" />
+    <Compile Include="Message\ServiceInitializedMessage.cs" />
+    <Compile Include="Message\InitMessage.cs" />
+    <Compile Include="Message\RequestMessage.cs" />
+    <Compile Include="Message\ServiceCallMessage.cs" />
+    <Compile Include="Message\ServiceReturnMessage.cs" />
+    <Compile Include="Message\StreamMessage.cs" />
+    <Compile Include="Message\StreamActionFinishedMessage.cs" />
+    <Compile Include="Message\StreamActionMessage.cs" />
+    <Compile Include="Message\TypeMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SocketService.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Libraries\protobuf-net.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\CoreDroid.Contract\CoreDroid.Contract.csproj">
-      <Project>{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}</Project>
-      <Name>CoreDroid.Contract</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CoreDroid.Extensions\CoreDroid.Extensions.csproj">
-      <Project>{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}</Project>
-      <Name>CoreDroid.Extensions</Name>
-    </ProjectReference>
+    <Compile Include="ServiceStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 using System.Net.Sockets;
 
-namespace CoreDroid
+namespace CoreDroid.Contract
 {
     public class ServiceStream : Stream
     {
