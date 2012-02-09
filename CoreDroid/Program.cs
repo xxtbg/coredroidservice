@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net.NetworkInformation;
 
 namespace CoreDroid
 {
@@ -9,7 +10,23 @@ namespace CoreDroid
     {
         static void Main(string[] args)
         {
-            SocketService.Start(Convert.ToInt32(args[1]));
+            int port = 10000;
+            IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
+            TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections();
+
+            foreach (TcpConnectionInformation tcpi in tcpConnInfoArray.OrderBy(i=>i.LocalEndPoint.Port))
+            {
+                if (tcpi.LocalEndPoint.Port == port)
+                {
+                    port++;
+                }
+                else
+                    break;
+            }
+
+            Console.WriteLine(port);
+
+            SocketService.Start(port);
         }
     }
 }
