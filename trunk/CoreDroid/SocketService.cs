@@ -1,13 +1,11 @@
-																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System.IO;
 using ProtoBuf;
-using ProtoBuf.Meta;
 using CoreDroid.Extensions;
 using System.Reflection;
 using CoreDroid.Contract.Message;
@@ -64,7 +62,7 @@ namespace CoreDroid
 		{
 			int id = (int)((object[])param) [0];
 			Socket socket = (Socket)((object[])param) [1];
-
+			
 			using (socket) {
 				using (NetworkStream stream = new NetworkStream(socket)) {
 					switch (stream.ProtoReceive<InitMessage> ().Action) {
@@ -94,8 +92,7 @@ namespace CoreDroid
 					stream.ProtoSend (new OperationFinishedMessage ());
 				}
 			} catch (Exception ex) {
-				stream.ProtoSend (
-		new OperationFinishedMessage (ex));
+				stream.ProtoSend (new OperationFinishedMessage (ex));
 			}
 		}
 
