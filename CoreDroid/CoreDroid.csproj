@@ -11,7 +11,7 @@
     <RootNamespace>CoreDroid</RootNamespace>
     <AssemblyName>CoreDroid</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>CoreDroid.Program</StartupObject>
+    <StartupObject>CoreDroid.MainClass</StartupObject>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">

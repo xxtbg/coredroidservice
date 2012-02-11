@@ -11,6 +11,11 @@ namespace CoreDroid.Contract.Message
 	{
         [ProtoMember(1)]
 		public InitAction Action { get; private set; }
+		
+		public InitMessage (InitAction action)
+		{
+			this.Action = action;
+		}
 	}
 
 	public enum InitAction

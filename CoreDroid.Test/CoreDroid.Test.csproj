@@ -9,7 +9,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>CoreDroid.Test</RootNamespace>
     <AssemblyName>CoreDroid.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,6 +37,19 @@
     <Compile Include="..\CoreDroidService\ServiceStream.cs">
       <Link>ServiceStream.cs</Link>
     </Compile>
+    <Compile Include="..\CoreDroidService\SocketClient.cs">
+      <Link>SocketClient.cs</Link>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\CoreDroid.Contract\CoreDroid.Contract.csproj">
+      <Project>{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}</Project>
+      <Name>CoreDroid.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreDroid.Extensions\CoreDroid.Extensions.csproj">
+      <Project>{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}</Project>
+      <Name>CoreDroid.Extensions</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>
