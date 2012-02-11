@@ -7,17 +7,17 @@ using ProtoBuf;
 namespace CoreDroid.Contract.Message
 {
     [ProtoContract]
-    public class InitMessage
-    {
+	public class InitMessage
+	{
         [ProtoMember(1)]
-        public InitAction Action { get; private set; }
-    }
+		public InitAction Action { get; private set; }
+	}
 
-    public enum InitAction
-    {
-        LoadMono,
-        //AddPythonPlugin,
-        Start,
-        Stream
-    }
+	public enum InitAction
+	{
+		LoadMono,
+		//AddPythonPlugin,
+		Start,
+		Stream
+	}
 }
