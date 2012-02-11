@@ -52,7 +52,7 @@ namespace CoreDroid
 		
 		public T GetService<T> () where T : ServiceProxy
 		{
-			
+			throw new NotImplementedException ();
 		}
 		
 		public void Close ()

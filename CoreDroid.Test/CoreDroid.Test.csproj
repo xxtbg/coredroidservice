@@ -9,6 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>CoreDroid.Test</RootNamespace>
     <AssemblyName>CoreDroid.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +40,9 @@
     </Compile>
     <Compile Include="..\CoreDroidService\SocketClient.cs">
       <Link>SocketClient.cs</Link>
+    </Compile>
+    <Compile Include="..\CoreDroidService\ServiceProxy.cs">
+      <Link>ServiceProxy.cs</Link>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
