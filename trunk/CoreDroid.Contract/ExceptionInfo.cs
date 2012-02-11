@@ -7,26 +7,26 @@ using ProtoBuf;
 namespace CoreDroid.Contract
 {
     [ProtoContract]
-    public class ExceptionInfo
-    {
+	public class ExceptionInfo
+	{
         [ProtoMember(1)]
-        public string ExceptionAssemblyName { get; private set; }
+		public string ExceptionAssemblyName { get; private set; }
 
         [ProtoMember(2)]
-        public string ExceptionTypeName { get; private set; }
+		public string ExceptionTypeName { get; private set; }
 
         [ProtoMember(3)]
-        public string ExceptionMessage { get; private set; }
+		public string ExceptionMessage { get; private set; }
 
         [ProtoMember(4)]
-        public string ExceptionStackTrace { get; private set; }
+		public string ExceptionStackTrace { get; private set; }
 
-        public ExceptionInfo(Exception ex)
-        {
-            this.ExceptionAssemblyName = ex.GetType().Assembly.GetName().FullName;
-            this.ExceptionTypeName = ex.GetType().FullName;
-            this.ExceptionMessage = ex.Message;
-            this.ExceptionStackTrace = ex.StackTrace;
-        }
-    }
+		public ExceptionInfo (Exception ex)
+		{
+			this.ExceptionAssemblyName = ex.GetType ().Assembly.GetName ().FullName;
+			this.ExceptionTypeName = ex.GetType ().FullName;
+			this.ExceptionMessage = ex.Message;
+			this.ExceptionStackTrace = ex.StackTrace;
+		}
+	}
 }

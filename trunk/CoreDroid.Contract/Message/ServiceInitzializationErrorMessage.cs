@@ -7,22 +7,22 @@ using ProtoBuf;
 namespace CoreDroid.Contract.Message
 {
     [ProtoContract]
-    public class ServiceInitzializationErrorMessage
-    {
+	public class ServiceInitzializationErrorMessage
+	{
         [ProtoMember(1)]
-        public string AssemblyName { get; private set; }
+		public string AssemblyName { get; private set; }
 
         [ProtoMember(2)]
-        public string TypeName { get; private set; }
+		public string TypeName { get; private set; }
 
         [ProtoMember(3)]
-        public string ErrorMessage { get; private set; }
+		public string ErrorMessage { get; private set; }
 
-        public ServiceInitzializationErrorMessage(Type type, Exception ex)
-        {
-            this.AssemblyName = type.Assembly.GetName().FullName;
-            this.TypeName = type.FullName;
-            this.ErrorMessage = ex.Message;
-        }
-    }
+		public ServiceInitzializationErrorMessage (Type type, Exception ex)
+		{
+			this.AssemblyName = type.Assembly.GetName ().FullName;
+			this.TypeName = type.FullName;
+			this.ErrorMessage = ex.Message;
+		}
+	}
 }
