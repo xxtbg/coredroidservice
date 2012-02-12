@@ -13,7 +13,7 @@ namespace CoreDroid.Contract
 
 		public string OriginalStackTrace { get; private set; }
 
-		public ServiceException (OperationFinishedMessage msg)
+		public ServiceException (OperationResultMessage msg)
             : base()
 		{
 			this.OriginalAssemblyName = msg.Exception.ExceptionAssemblyName;

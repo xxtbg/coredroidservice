@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7980B6D9-81EB-4F5D-9F81-BDA49EC19DD8}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <RootNamespace>CoreDroid.Test</RootNamespace>
-    <AssemblyName>CoreDroid.Test</AssemblyName>
+    <AssemblyName>CoreDroid.Test.Plugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -19,7 +19,7 @@
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
@@ -27,23 +27,14 @@
     <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Externalconsole>true</Externalconsole>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="..\CoreDroidService\ServiceStream.cs">
-      <Link>ServiceStream.cs</Link>
-    </Compile>
-    <Compile Include="..\CoreDroidService\SocketClient.cs">
-      <Link>SocketClient.cs</Link>
-    </Compile>
-    <Compile Include="..\CoreDroidService\ServiceProxy.cs">
-      <Link>ServiceProxy.cs</Link>
-    </Compile>
     <Compile Include="TestService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -51,10 +42,6 @@
     <ProjectReference Include="..\CoreDroid.Contract\CoreDroid.Contract.csproj">
       <Project>{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}</Project>
       <Name>CoreDroid.Contract</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CoreDroid.Extensions\CoreDroid.Extensions.csproj">
-      <Project>{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}</Project>
-      <Name>CoreDroid.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

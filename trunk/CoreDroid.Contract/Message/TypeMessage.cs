@@ -10,7 +10,10 @@ namespace CoreDroid.Contract.Message
     [ProtoContract]
 	public class TypeMessage
 	{
-        [ProtoMember(1)]
+		[ProtoMember(1)]
+		public bool IsNull { get; private set; }
+		
+        [ProtoMember(2)]
 		public string AssemblyName { get; private set; }
 
 		private bool assemblySearched = false;
@@ -19,7 +22,7 @@ namespace CoreDroid.Contract.Message
 		public Assembly Assembly {
 			get {
 				if (!this.assemblySearched) {
-					this.assembly = AppDomain.CurrentDomain.GetAssemblies ().Where (a => a.GetName ().FullName == this.AssemblyName).FirstOrDefault ();
+					this.assembly = AppDomain.CurrentDomain.GetAssemblies ().Where (a => a.GetName ().Name == this.AssemblyName).FirstOrDefault ();
 					this.assemblySearched = true;
 				}
 
@@ -27,7 +30,7 @@ namespace CoreDroid.Contract.Message
 			}
 		}
 
-        [ProtoMember(2)]
+        [ProtoMember(3)]
 		public string TypeName { get; private set; }
         
 		private bool typeSearched = false;
@@ -46,8 +49,25 @@ namespace CoreDroid.Contract.Message
 
 		public TypeMessage (string assemblyName, string typeName)
 		{
+			this.IsNull = false;
 			this.AssemblyName = assemblyName;
 			this.TypeName = typeName;
+		}
+		
+		public TypeMessage (Type type)
+		{
+			this.IsNull = false;
+			this.AssemblyName = type.Assembly.GetName ().Name;
+			this.TypeName = type.FullName;
+		}
+		
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CoreDroid.Contract.Message.TypeMessage"/> class.
+		/// Call empty constructor for null
+		/// </summary>
+		public TypeMessage ()
+		{
+			this.IsNull = true;
 		}
 	}
 }

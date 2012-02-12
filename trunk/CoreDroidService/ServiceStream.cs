@@ -117,7 +117,7 @@ namespace CoreDroid
 			if (action == StreamAction.Write)
 				this.netStream.Write (buffer, Convert.ToInt32 (offset), Convert.ToInt32 (size));
 
-			OperationFinishedMessage msg = this.netStream.ProtoReceive<OperationFinishedMessage> ();
+			OperationResultMessage msg = this.netStream.ProtoReceive<OperationResultMessage> ();
 
 			if (!msg.Success)
 				throw(new ServiceException (msg));

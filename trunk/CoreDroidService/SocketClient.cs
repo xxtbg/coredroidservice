@@ -13,7 +13,7 @@ namespace CoreDroid
 {
 	public class SocketClient : IDisposable
 	{
-		public  int Port { get; private set; }
+		public int Port { get; private set; }
 
 		public SocketClient (int port)
 		{
@@ -33,13 +33,13 @@ namespace CoreDroid
 			}
 			
 			stream.ProtoSend (new SendingPluginFinishedMessage ());
-			OperationFinishedMessage msg = stream.ProtoReceive<OperationFinishedMessage> ();
+			OperationResultMessage msg = stream.ProtoReceive<OperationResultMessage> ();
 			
 			if (!msg.Success)
 				throw(new ServiceException (msg));
 		}
 		
-		private ServiceStream GetStream (NetworkStream stream)
+		internal ServiceStream GetStream (NetworkStream stream)
 		{
 			StreamAvaliableMessage avalMsg = stream.ProtoReceive<StreamAvaliableMessage> ();
 			TcpClient streamClient = new TcpClient ();
@@ -52,7 +52,19 @@ namespace CoreDroid
 		
 		public T GetService<T> () where T : ServiceProxy
 		{
-			throw new NotImplementedException ();
+			TcpClient streamClient = new TcpClient ();
+			streamClient.Connect (IPAddress.Loopback, this.Port);
+			streamClient.GetStream ().ProtoSend (new InitMessage (InitAction.Start));
+			streamClient.GetStream ().ProtoSend (new TypeMessage (typeof(T).Assembly.GetName ().Name + ".Plugin", typeof(T).FullName));
+			T service = Activator.CreateInstance<T> ();
+			OperationResultMessage msg = streamClient.GetStream ().ProtoReceive<OperationResultMessage> ();
+			
+			if (msg.Success)
+				service.Initialize (this, streamClient);
+			else
+				throw(new ServiceException (msg));
+			
+			return service;
 		}
 		
 		public void Close ()
