@@ -9,6 +9,7 @@ namespace CoreDroid.Test
 	[ServiceContract]
 	public class TestService
 	{
+		[ServiceMember]
 		public string[] List (string path)
 		{
 			UnixDirectoryInfo dirInfo = new UnixDirectoryInfo (path);

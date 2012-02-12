@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ProtoBuf;
+using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [ProtoContract]
+    [DataContract]
 	public class StreamAvaliableMessage
 	{
-        [ProtoMember(1)]
+        [DataMember]
 		public int Id { get; private set; }
 		
 		private StreamAvaliableMessage ()

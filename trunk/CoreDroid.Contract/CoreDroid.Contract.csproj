@@ -38,9 +38,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="protobuf-net, Version=2.0.0.480, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\CoreDroid\Libraries\protobuf-net.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExceptionInfo.cs" />

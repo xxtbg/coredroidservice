@@ -41,17 +41,11 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="protobuf-net, Version=2.0.0.480, Culture=neutral, PublicKeyToken=null">
-      <HintPath>Libraries\protobuf-net.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SocketService.cs" />
     <Compile Include="Main.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Libraries\protobuf-net.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CoreDroid.Contract\CoreDroid.Contract.csproj">

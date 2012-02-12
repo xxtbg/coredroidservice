@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ProtoBuf;
+using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [ProtoContract]
+    [DataContract]
 	public class OperationResultMessage
 	{
-        [ProtoMember(1)]
+        [DataMember]
 		public bool Success { get; private set; }
 
-        [ProtoMember(2)]
+        [DataMember]
 		public ExceptionInfo Exception { get; private set; }
 		
 		private OperationResultMessage ()

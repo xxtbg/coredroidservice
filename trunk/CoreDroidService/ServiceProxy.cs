@@ -33,14 +33,14 @@ namespace CoreDroid
 		
 		public virtual void Close ()
 		{
-			this.stream.ProtoSend (new ServiceRequestMessage (ServiceRequestAction.Close));
+			this.stream.DataSend (new ServiceRequestMessage (ServiceRequestAction.Close));
 			this.stream.Close ();
 			this.tcpClient.Close ();
 		}
 		
 		protected object Call (string childName, Type returnType, params object[] parameters)
 		{
-			this.stream.ProtoSend (new ServiceRequestMessage (ServiceRequestAction.Call));
+			this.stream.DataSend (new ServiceRequestMessage (ServiceRequestAction.Call));
 			
 			List<ParameterInfo > parameterInfos = new List<ParameterInfo> ();
 			
@@ -48,27 +48,27 @@ namespace CoreDroid
 				parameterInfos.Add (new ParameterInfo (parameter != null ? parameter.GetType () : null));
 			}
 			
-			this.stream.ProtoSend (new ServiceCallMessage (childName, parameterInfos.ToArray ()));
+			this.stream.DataSend (new ServiceCallMessage (childName, parameterInfos.ToArray ()));
 			
 			foreach (object parameter in parameters) {
 				if (parameter != null)
-					this.stream.ProtoSend (parameter);
+					this.stream.DataSend (parameter);
 			}
 			
-			OperationResultMessage resultMsg = this.stream.ProtoReceive<OperationResultMessage> ();
+			OperationResultMessage resultMsg = this.stream.DataReceive<OperationResultMessage> ();
 			
 			if (!resultMsg.Success) {
 				throw(new ServiceException (resultMsg));
 			}
 			
-			TypeMessage typeMsg = this.stream.ProtoReceive<TypeMessage> ();
+			TypeMessage typeMsg = this.stream.DataReceive<TypeMessage> ();
 			
 			object retVal = null;
 			if (returnType != null && !typeMsg.IsNull) {
 				if (returnType.IsSubclassOf (typeof(Stream))) {
 					retVal = this.client.GetStream (this.stream);
 				} else {
-					retVal = this.stream.ProtoReceive (returnType);
+					retVal = this.stream.DataReceive (returnType);
 				}
 			}
 			

@@ -1,24 +1,24 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ProtoBuf;
+using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract
 {
-    [ProtoContract]
+    [DataContract]
 	public class ExceptionInfo
 	{
-        [ProtoMember(1)]
+        [DataMember]
 		public string ExceptionAssemblyName { get; private set; }
 
-        [ProtoMember(2)]
+        [DataMember]
 		public string ExceptionTypeName { get; private set; }
 
-        [ProtoMember(3)]
+        [DataMember]
 		public string ExceptionMessage { get; private set; }
 
-        [ProtoMember(4)]
+        [DataMember]
 		public string ExceptionStackTrace { get; private set; }
 
 		public ExceptionInfo (Exception ex)

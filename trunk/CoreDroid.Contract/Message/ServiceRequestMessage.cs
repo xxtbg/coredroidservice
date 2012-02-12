@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ProtoBuf;
+using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [ProtoContract]
+    [DataContract]
 	public class ServiceRequestMessage
 	{
-        [ProtoMember(1)]
+        [DataMember]
 		public ServiceRequestAction Action { get; private set; }
 		
 		private ServiceRequestMessage ()

@@ -2,23 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ProtoBuf;
+using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [ProtoContract]
+    [DataContract]
 	public class StreamActionMessage
 	{
-        [ProtoMember(1)]
+        [DataMember]
 		public StreamAction Action { get; private set; }
 		
-        [ProtoMember(2)]
+        [DataMember]
 		public long Position { get; private set; }
 
-        [ProtoMember(3)]
+        [DataMember]
 		public long Offset { get; private set; }
 
-        [ProtoMember(4)]
+        [DataMember]
 		public long Size { get; private set; }
 		
 		private StreamActionMessage ()
