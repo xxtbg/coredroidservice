@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Net;
 using System.Threading;
 using System.IO;
-using ProtoBuf;
+ 
 using CoreDroid.Extensions;
 using CoreDroid.Contract.Message;
 using CoreDroid.Contract;
@@ -62,18 +62,19 @@ namespace CoreDroid
 		{
 			int id = (int)((object[])param) [0];
 			Socket socket = (Socket)((object[])param) [1];
-			
+
 			using (socket) {
 				using (NetworkStream stream = new NetworkStream(socket)) {
-					switch (stream.ProtoReceive<InitMessage> ().Action) {
+					switch (stream.DataReceive<InitMessage> ().Action) {
 					case InitAction.LoadMono:
 						LoadMono (stream);
 						break;
 					case InitAction.Start:
-						ServiceStarter (id, stream, stream.ProtoReceive<TypeMessage> ().Type);
+						TypeMessage msg = stream.DataReceive<TypeMessage> ();
+						ServiceStarter (id, stream, msg.Type);
 						break;
 					case InitAction.Stream:
-						Stream (id, stream, stream.ProtoReceive<StreamAvaliableMessage> ().Id);
+						Stream (id, stream, stream.DataReceive<StreamAvaliableMessage> ().Id);
 						break;
 					}
 				}
@@ -85,14 +86,14 @@ namespace CoreDroid
 			try {
 				using (MemoryStream ms = new MemoryStream()) {
 					SendStream (stream, ms);
-					stream.ProtoReceive<SendingPluginFinishedMessage> ();
+					stream.DataReceive<SendingPluginFinishedMessage> ();
 
 					AppDomain.CurrentDomain.Load (ms.ToArray ());
 
-					stream.ProtoSend (new OperationResultMessage (true));
+					stream.DataSend (new OperationResultMessage (true));
 				}
 			} catch (Exception ex) {
-				stream.ProtoSend (new OperationResultMessage (ex));
+				stream.DataSend (new OperationResultMessage (ex));
 			}
 		}
 
@@ -102,34 +103,34 @@ namespace CoreDroid
 
 			bool closed = false;
 			while (!closed) {
-				StreamActionMessage message = stream.ProtoReceive<StreamActionMessage> ();
+				StreamActionMessage message = stream.DataReceive<StreamActionMessage> ();
 				
 				try {
 					switch (message.Action) {
 					case StreamAction.CanRead:
 						bool canRead = streamToSend.CanRead;
 						stream.ActionFinishedSuccess ();
-						stream.ProtoSend (canRead);
+						stream.DataSend (canRead);
 						break;
 					case StreamAction.CanSeek:
 						bool canSeek = streamToSend.CanSeek;
 						stream.ActionFinishedSuccess ();
-						stream.ProtoSend (canSeek);
+						stream.DataSend (canSeek);
 						break;
 					case StreamAction.CanWrite:
 						bool canWrite = streamToSend.CanWrite;
 						stream.ActionFinishedSuccess ();
-						stream.ProtoSend (canWrite);
+						stream.DataSend (canWrite);
 						break;
 					case StreamAction.Length:
 						long length = streamToSend.Length;
 						stream.ActionFinishedSuccess ();
-						stream.ProtoSend (length);
+						stream.DataSend (length);
 						break;
 					case StreamAction.GetPosition:
 						long position = streamToSend.Position;
 						stream.ActionFinishedSuccess ();
-						stream.ProtoSend (position);
+						stream.DataSend (position);
 						break;
 					case StreamAction.SetPosition:
 						streamToSend.Position = message.Position;
@@ -138,37 +139,37 @@ namespace CoreDroid
 					case StreamAction.Close:
 						closed = true;
 						streamToSend.Close ();
-						stream.ProtoSend (new OperationResultMessage (true));
+						stream.DataSend (new OperationResultMessage (true));
 						break;
 					case StreamAction.Flush:
 						streamToSend.Flush ();
-						stream.ProtoSend (new OperationResultMessage (true));
+						stream.DataSend (new OperationResultMessage (true));
 						break;
 					case StreamAction.Read:
 						byte[] buffer = new byte[Convert.ToInt32 (message.Size)];
-						int read = streamToSend.Read (buffer, 0, Convert.ToInt32 (message.Size));
-						stream.ProtoSend (new OperationResultMessage (true));
-						stream.ProtoSend (read);
-						stream.Write (buffer, 0, read);
+						streamToSend.Read (buffer, 0, Convert.ToInt32 (message.Size));
+						stream.DataSend (buffer.Take (Convert.ToInt32 (message.Size)).ToArray ());
+						stream.DataSend (new OperationResultMessage (true));
 						break;
 					case StreamAction.Seek:
 						long seeked = streamToSend.Seek (message.Offset, message.Position == 0 ? SeekOrigin.Begin : (message.Position == 1 ? SeekOrigin.Current : SeekOrigin.End));
-						stream.ProtoSend (new OperationResultMessage (true));
-						stream.ProtoSend (seeked);
+						stream.DataSend (new OperationResultMessage (true));
+						stream.DataSend (seeked);
 						break;
 					case StreamAction.SetLength:
 						streamToSend.SetLength (message.Size);
-						stream.ProtoSend (new OperationResultMessage (true));
+						stream.DataSend (new OperationResultMessage (true));
 						break;
 					case StreamAction.Write:
-						stream.CopyTo (streamToSend, Convert.ToInt32 (message.Size));
-						stream.ProtoSend (new OperationResultMessage (true));
+						byte[] data = stream.DataReceive<byte[]> ();
+						streamToSend.Write (data, 0, data.Length);
+						stream.DataSend (new OperationResultMessage (true));
 						break;
 					default:
 						throw (new NotImplementedException ());
 					}
 				} catch (Exception ex) {
-					stream.ProtoSend (new OperationResultMessage (ex));
+					stream.DataSend (new OperationResultMessage (ex));
 				}
 			}
 
@@ -181,7 +182,7 @@ namespace CoreDroid
 
 		private static void ActionFinishedSuccess (this NetworkStream stream)
 		{
-			stream.ProtoSend (new OperationResultMessage (true));
+			stream.DataSend (new OperationResultMessage (true));
 		}
 
 		private static void SendStream (NetworkStream stream, Stream streamToSend)
@@ -193,7 +194,7 @@ namespace CoreDroid
 				waitingStreams.Add (id, streamToSend);
 			}
 
-			stream.ProtoSend (new StreamAvaliableMessage (id));
+			stream.DataSend (new StreamAvaliableMessage (id));
 		}
 
 		private static void ServiceStarter (int id, NetworkStream stream, Type type)
@@ -203,17 +204,17 @@ namespace CoreDroid
 				if (type.GetCustomAttributes (true).Where (a => a is ServiceContractAttribute).Any ()) {
 					service = Activator.CreateInstance (type);
 				} else {
-					throw (new ArgumentException ("service type has to be a ProtoContract"));
+					throw (new ArgumentException ("service type has to be a DataContract"));
 				}
 			} catch (Exception ex) {
-				stream.ProtoSend (new OperationResultMessage (ex));
+				stream.DataSend (new OperationResultMessage (ex));
 			}
 
 			if (service != null) {
 				try {
 					ServiceLooper (stream, service);
 				} catch (Exception ex) {
-					stream.ProtoSend (new OperationResultMessage (ex));
+					stream.DataSend (new OperationResultMessage (ex));
 				} finally {
 					ServiceStop (id, service);
 				}
@@ -224,12 +225,12 @@ namespace CoreDroid
 		{
 			bool stopService = false;
 			
-			stream.ProtoSend (new OperationResultMessage (true));
+			stream.DataSend (new OperationResultMessage (true));
 			
 			while (!stopService) {
 				if (stream.DataAvailable) {
 					try {
-						switch (stream.ProtoReceive<ServiceRequestMessage> ().Action) {
+						switch (stream.DataReceive<ServiceRequestMessage> ().Action) {
 						case ServiceRequestAction.Call:
 							ServiceHandleCall (stream, service);
 							break;
@@ -244,7 +245,7 @@ namespace CoreDroid
 								stream.Flush ();
 							} while (stream.DataAvailable);
 
-							stream.ProtoSend (new OperationResultMessage (ex));
+							stream.DataSend (new OperationResultMessage (ex));
 						} catch {
 							stopService = true;
 						}
@@ -257,7 +258,7 @@ namespace CoreDroid
 
 		private static void ServiceHandleCall (NetworkStream stream, object service)
 		{
-			ServiceCallMessage msg = stream.ProtoReceive<ServiceCallMessage> ();
+			ServiceCallMessage msg = stream.DataReceive<ServiceCallMessage> ();
 			string methodName = msg.ChildName;
 			ParameterInfo[] parameterInfos = msg.Parameter;
 
@@ -265,7 +266,7 @@ namespace CoreDroid
 
 			foreach (ParameterInfo parameterInfo in parameterInfos) {
 				if (!parameterInfo.IsNull)
-					parameters.Add (stream.ProtoReceive (parameterInfo.Type));
+					parameters.Add (stream.DataReceive (parameterInfo.Type));
 				else
 					parameters.Add (null);
 			}
@@ -276,18 +277,18 @@ namespace CoreDroid
 				object returnValue = methodInfo.Invoke (service, parameters.ToArray ());
 
 				if (methodInfo.ReturnType != null) {
-					stream.ProtoSend (new OperationResultMessage (true));
+					stream.DataSend (new OperationResultMessage (true));
 					if (returnValue != null) {
-						stream.ProtoSend (new TypeMessage (methodInfo.ReturnType));
+						stream.DataSend (new TypeMessage (methodInfo.ReturnType));
 					} else {
-						stream.ProtoSend (new TypeMessage (null));
+						stream.DataSend (new TypeMessage (null));
 					}
 					
 					if (returnValue != null) {
 						if (returnValue is Stream) {
 							SendStream (stream, (Stream)returnValue);
 						} else {
-							stream.ProtoSend (returnValue);
+							stream.DataSend (returnValue);
 						}
 					}
 				}

@@ -54,9 +54,11 @@ namespace CoreDroid
 
 		public override int Read (byte[] buffer, int offset, int count)
 		{
-			int read = this.DoStreamAction<int> (StreamAction.Read, null, 0, 0, count);
-			this.netStream.Read (buffer, offset, read);
-			return read;
+			byte[] data = this.DoStreamAction<byte[]> (StreamAction.Read, null, 0, 0, count);
+			for (int i = offset; i < count + offset; i++)
+				buffer [i] = data [i - offset];
+			
+			return data.Length;
 		}
 
 		public override long Seek (long offset, SeekOrigin origin)
@@ -112,17 +114,20 @@ namespace CoreDroid
 
 		private T DoStreamAction<T> (StreamAction action, byte[] buffer, long position, long offset, long size)
 		{
-			this.netStream.ProtoSend (new StreamActionMessage (action, position, action != StreamAction.Write ? offset : 0, size));
+			this.netStream.DataSend (new StreamActionMessage (action, position, action != StreamAction.Write ? offset : 0, size));
 
-			if (action == StreamAction.Write)
-				this.netStream.Write (buffer, Convert.ToInt32 (offset), Convert.ToInt32 (size));
+			if (action == StreamAction.Write) {
+				this.netStream.DataSend (buffer.Skip (Convert.ToInt32 (offset)).Take (Convert.ToInt32 (size)).ToArray ());
+			} else if (action == StreamAction.Read) {
+				this.netStream.DataReceive<byte[]> ();
+			}
 
-			OperationResultMessage msg = this.netStream.ProtoReceive<OperationResultMessage> ();
+			OperationResultMessage msg = this.netStream.DataReceive<OperationResultMessage> ();
 
 			if (!msg.Success)
 				throw(new ServiceException (msg));
 
-			return this.netStream.ProtoReceive<T> ();
+			return typeof(T) == typeof(object) ? (T)new object () : this.netStream.DataReceive<T> ();
 		}
 	}
 }

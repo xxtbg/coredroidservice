@@ -26,14 +26,14 @@ namespace CoreDroid
 			client.Connect (IPAddress.Loopback, this.Port);
 			NetworkStream stream = client.GetStream ();
 			
-			stream.ProtoSend (new InitMessage (InitAction.LoadMono));
+			stream.DataSend (new InitMessage (InitAction.LoadMono));
 			
 			using (ServiceStream destStream = this.GetStream(stream)) {
 				dllStream.CopyTo (destStream);
 			}
 			
-			stream.ProtoSend (new SendingPluginFinishedMessage ());
-			OperationResultMessage msg = stream.ProtoReceive<OperationResultMessage> ();
+			stream.DataSend (new SendingPluginFinishedMessage ());
+			OperationResultMessage msg = stream.DataReceive<OperationResultMessage> ();
 			
 			if (!msg.Success)
 				throw(new ServiceException (msg));
@@ -41,11 +41,11 @@ namespace CoreDroid
 		
 		internal ServiceStream GetStream (NetworkStream stream)
 		{
-			StreamAvaliableMessage avalMsg = stream.ProtoReceive<StreamAvaliableMessage> ();
+			StreamAvaliableMessage avalMsg = stream.DataReceive<StreamAvaliableMessage> ();
 			TcpClient streamClient = new TcpClient ();
 			streamClient.Connect (IPAddress.Loopback, this.Port);
-			streamClient.GetStream ().ProtoSend (new InitMessage (InitAction.Stream));
-			streamClient.GetStream ().ProtoSend (avalMsg);
+			streamClient.GetStream ().DataSend (new InitMessage (InitAction.Stream));
+			streamClient.GetStream ().DataSend (avalMsg);
 			
 			return new ServiceStream (streamClient);
 		}
@@ -54,10 +54,10 @@ namespace CoreDroid
 		{
 			TcpClient streamClient = new TcpClient ();
 			streamClient.Connect (IPAddress.Loopback, this.Port);
-			streamClient.GetStream ().ProtoSend (new InitMessage (InitAction.Start));
-			streamClient.GetStream ().ProtoSend (new TypeMessage (typeof(T).Assembly.GetName ().Name + ".Plugin", typeof(T).FullName));
+			streamClient.GetStream ().DataSend (new InitMessage (InitAction.Start));
+			streamClient.GetStream ().DataSend (new TypeMessage (typeof(T).Assembly.GetName ().Name + ".Plugin", typeof(T).FullName));
 			T service = Activator.CreateInstance<T> ();
-			OperationResultMessage msg = streamClient.GetStream ().ProtoReceive<OperationResultMessage> ();
+			OperationResultMessage msg = streamClient.GetStream ().DataReceive<OperationResultMessage> ();
 			
 			if (msg.Success)
 				service.Initialize (this, streamClient);

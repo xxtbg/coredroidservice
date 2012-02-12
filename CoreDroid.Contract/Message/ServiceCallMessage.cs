@@ -2,18 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ProtoBuf;
+ 
 using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [ProtoContract]
+    [DataContract]
 	public class ServiceCallMessage
 	{
-        [ProtoMember(1)]
+        [DataMember]
 		public string ChildName { get; private set; }
 
-        [ProtoMember(2)]
+        [DataMember]
 		public ParameterInfo[] Parameter { get; private set; }
 		
 		private ServiceCallMessage ()
@@ -27,13 +28,13 @@ namespace CoreDroid.Contract.Message
 		}
 	}
 
-    [ProtoContract]
+    [DataContract]
 	public class ParameterInfo
 	{
-		[ProtoMember(1)]
+		[DataMember]
 		public bool IsNull { get; private set; }
 		
-        [ProtoMember(2)]
+        [DataMember]
 		public string AssemblyName { get; private set; }
 
 		private bool assemblySearched = false;
@@ -50,7 +51,7 @@ namespace CoreDroid.Contract.Message
 			}
 		}
 
-        [ProtoMember(3)]
+        [DataMember]
 		public string TypeName { get; private set; }
 
 		private bool typeSearched = false;
@@ -59,7 +60,7 @@ namespace CoreDroid.Contract.Message
 		public Type Type {
 			get {
 				if (!this.typeSearched) {
-					this.type = this.Assembly != null ? this.Assembly.GetTypes ().Where (t => t.Name == this.TypeName).FirstOrDefault () : null;
+					this.type = this.Assembly != null ? this.Assembly.GetTypes ().Where (t => t.FullName == this.TypeName).FirstOrDefault () : null;
 					this.typeSearched = true;
 				}
 
