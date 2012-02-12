@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid", "CoreDroid\Core
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Test", "CoreDroid.Test\CoreDroid.Test.csproj", "{7980B6D9-81EB-4F5D-9F81-BDA49EC19DD8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Test.Plugin", "CoreDroid.Test.Plugin\CoreDroid.Test.Plugin.csproj", "{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,18 @@ Global
 		{A577982D-7391-4260-B770-FE886C8CA732}.Release|Mixed Platforms.Build.0 = Release|x86
 		{A577982D-7391-4260-B770-FE886C8CA732}.Release|x86.ActiveCfg = Release|x86
 		{A577982D-7391-4260-B770-FE886C8CA732}.Release|x86.Build.0 = Release|x86
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Debug|x86.Build.0 = Debug|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Release|x86.ActiveCfg = Release|Any CPU
+		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Release|x86.Build.0 = Release|Any CPU
 		{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

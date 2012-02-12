@@ -11,24 +11,24 @@ namespace CoreDroid.Contract.Message
 	public class ServiceCallMessage
 	{
         [ProtoMember(1)]
-		public string MethodName { get; private set; }
+		public string ChildName { get; private set; }
 
         [ProtoMember(2)]
-		public MethodParameterInfo[] MethodParameterInfos { get; private set; }
+		public ParameterInfo[] Parameter { get; private set; }
 
-		public ServiceCallMessage (string methodName, MethodParameterInfo[] methodParameterInfos)
+		public ServiceCallMessage (string childName, ParameterInfo[] parameterInfos)
 		{
-			this.MethodName = methodName;
-			this.MethodParameterInfos = methodParameterInfos;
+			this.ChildName = childName;
+			this.Parameter = parameterInfos;
 		}
 	}
 
     [ProtoContract]
-	public class MethodParameterInfo
+	public class ParameterInfo
 	{
-        [ProtoMember(1)]
-		public string Name { get; private set; }
-
+		[ProtoMember(1)]
+		public bool IsNull { get; private set; }
+		
         [ProtoMember(2)]
 		public string AssemblyName { get; private set; }
 
@@ -38,7 +38,7 @@ namespace CoreDroid.Contract.Message
 		public Assembly Assembly {
 			get {
 				if (!this.assemblySearched) {
-					this.assembly = AppDomain.CurrentDomain.GetAssemblies ().Where (a => a.GetName ().FullName == this.AssemblyName).FirstOrDefault ();
+					this.assembly = AppDomain.CurrentDomain.GetAssemblies ().Where (a => a.GetName ().Name == this.AssemblyName).FirstOrDefault ();
 					this.assemblySearched = true;
 				}
 
@@ -63,11 +63,15 @@ namespace CoreDroid.Contract.Message
 			}
 		}
 
-		public MethodParameterInfo (string name, Type type)
+		public ParameterInfo (Type type)
 		{
-			this.Name = name;
-			this.AssemblyName = type.Assembly.GetName ().FullName;
-			this.TypeName = type.FullName;
+			if (type != null) {
+				this.IsNull = false;
+				this.AssemblyName = type.Assembly.GetName ().Name;
+				this.TypeName = type.FullName;
+			} else {
+				this.IsNull = true;
+			}
 		}
 	}
 }
