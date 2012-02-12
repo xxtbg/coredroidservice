@@ -27,7 +27,7 @@ namespace CoreDroid
 
 			lock (waitings) {
 				if (waitings.Count > 0)
-					newId = waitings.Keys.Max () + 1;
+					newId = waitings.Count > 0 ? waitings.Keys.Max () + 1 : 0;
 
 				waitings.Add (newId, callback);
 			}
@@ -50,7 +50,7 @@ namespace CoreDroid
 
 				int id = 0;
 				lock (serviceThreads) {
-					id = serviceThreads.Keys.Max () + 1;
+					id = serviceThreads.Count > 0 ? serviceThreads.Keys.Max () + 1 : 0;
 					serviceThreads.Add (id, thread);
 				}
 
@@ -89,7 +89,7 @@ namespace CoreDroid
 
 					AppDomain.CurrentDomain.Load (ms.ToArray ());
 
-					stream.ProtoSend (new OperationResultMessage ());
+					stream.ProtoSend (new OperationResultMessage (true));
 				}
 			} catch (Exception ex) {
 				stream.ProtoSend (new OperationResultMessage (ex));
@@ -138,31 +138,31 @@ namespace CoreDroid
 					case StreamAction.Close:
 						closed = true;
 						streamToSend.Close ();
-						stream.ProtoSend (new OperationResultMessage ());
+						stream.ProtoSend (new OperationResultMessage (true));
 						break;
 					case StreamAction.Flush:
 						streamToSend.Flush ();
-						stream.ProtoSend (new OperationResultMessage ());
+						stream.ProtoSend (new OperationResultMessage (true));
 						break;
 					case StreamAction.Read:
 						byte[] buffer = new byte[Convert.ToInt32 (message.Size)];
 						int read = streamToSend.Read (buffer, 0, Convert.ToInt32 (message.Size));
-						stream.ProtoSend (new OperationResultMessage ());
+						stream.ProtoSend (new OperationResultMessage (true));
 						stream.ProtoSend (read);
 						stream.Write (buffer, 0, read);
 						break;
 					case StreamAction.Seek:
 						long seeked = streamToSend.Seek (message.Offset, message.Position == 0 ? SeekOrigin.Begin : (message.Position == 1 ? SeekOrigin.Current : SeekOrigin.End));
-						stream.ProtoSend (new OperationResultMessage ());
+						stream.ProtoSend (new OperationResultMessage (true));
 						stream.ProtoSend (seeked);
 						break;
 					case StreamAction.SetLength:
 						streamToSend.SetLength (message.Size);
-						stream.ProtoSend (new OperationResultMessage ());
+						stream.ProtoSend (new OperationResultMessage (true));
 						break;
 					case StreamAction.Write:
 						stream.CopyTo (streamToSend, Convert.ToInt32 (message.Size));
-						stream.ProtoSend (new OperationResultMessage ());
+						stream.ProtoSend (new OperationResultMessage (true));
 						break;
 					default:
 						throw (new NotImplementedException ());
@@ -181,7 +181,7 @@ namespace CoreDroid
 
 		private static void ActionFinishedSuccess (this NetworkStream stream)
 		{
-			stream.ProtoSend (new OperationResultMessage ());
+			stream.ProtoSend (new OperationResultMessage (true));
 		}
 
 		private static void SendStream (NetworkStream stream, Stream streamToSend)
@@ -189,8 +189,8 @@ namespace CoreDroid
 			int id = 0;
 
 			lock (waitingStreams) {
-				id = waitingStreams.Keys.Max () + 1;
-				waitingStreams.Add (waitingStreams.Keys.Max () + 1, streamToSend);
+				id = waitingStreams.Count > 0 ? waitingStreams.Keys.Max () + 1 : 0;
+				waitingStreams.Add (id, streamToSend);
 			}
 
 			stream.ProtoSend (new StreamAvaliableMessage (id));
@@ -224,7 +224,7 @@ namespace CoreDroid
 		{
 			bool stopService = false;
 			
-			stream.ProtoSend (new OperationResultMessage ());
+			stream.ProtoSend (new OperationResultMessage (true));
 			
 			while (!stopService) {
 				if (stream.DataAvailable) {
@@ -276,11 +276,11 @@ namespace CoreDroid
 				object returnValue = methodInfo.Invoke (service, parameters.ToArray ());
 
 				if (methodInfo.ReturnType != null) {
-					stream.ProtoSend (new OperationResultMessage ());
+					stream.ProtoSend (new OperationResultMessage (true));
 					if (returnValue != null) {
 						stream.ProtoSend (new TypeMessage (methodInfo.ReturnType));
 					} else {
-						stream.ProtoSend (new TypeMessage ());
+						stream.ProtoSend (new TypeMessage (null));
 					}
 					
 					if (returnValue != null) {

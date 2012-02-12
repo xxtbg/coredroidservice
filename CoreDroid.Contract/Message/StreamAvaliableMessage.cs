@@ -11,7 +11,11 @@ namespace CoreDroid.Contract.Message
 	{
         [ProtoMember(1)]
 		public int Id { get; private set; }
-
+		
+		private StreamAvaliableMessage ()
+		{
+		}
+		
 		public StreamAvaliableMessage (int id)
 		{
 			this.Id = id;

@@ -47,13 +47,11 @@
     <Compile Include="Message\SendingPluginFinishedMessage.cs" />
     <Compile Include="Message\InitMessage.cs" />
     <Compile Include="Message\ServiceCallMessage.cs" />
-    <Compile Include="Message\ServiceReturnMessage.cs" />
     <Compile Include="Message\StreamAvaliableMessage.cs" />
     <Compile Include="Message\StreamActionMessage.cs" />
     <Compile Include="Message\TypeMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceException.cs" />
-    <Compile Include="Message\ServiceActionFinishedMessage.cs" />
     <Compile Include="Message\OperationResultMessage.cs" />
     <Compile Include="Message\ServiceRequestMessage.cs" />
     <Compile Include="ServiceContract.cs" />
