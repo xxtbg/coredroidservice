@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +20,11 @@ namespace CoreDroid.Contract.Message
 
         [ProtoMember(4)]
 		public long Size { get; private set; }
-
+		
+		private StreamActionMessage ()
+		{
+		}
+		
 		public StreamActionMessage (StreamAction action) : this(action, 0, 0, 0)
 		{
 		}

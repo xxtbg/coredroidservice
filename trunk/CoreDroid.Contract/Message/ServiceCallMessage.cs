@@ -15,7 +15,11 @@ namespace CoreDroid.Contract.Message
 
         [ProtoMember(2)]
 		public ParameterInfo[] Parameter { get; private set; }
-
+		
+		private ServiceCallMessage ()
+		{
+		}
+		
 		public ServiceCallMessage (string childName, ParameterInfo[] parameterInfos)
 		{
 			this.ChildName = childName;
@@ -62,7 +66,11 @@ namespace CoreDroid.Contract.Message
 				return this.type;
 			}
 		}
-
+		
+		private ParameterInfo ()
+		{
+		}
+		
 		public ParameterInfo (Type type)
 		{
 			if (type != null) {

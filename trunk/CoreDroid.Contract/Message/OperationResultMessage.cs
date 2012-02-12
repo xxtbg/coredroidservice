@@ -15,9 +15,13 @@ namespace CoreDroid.Contract.Message
         [ProtoMember(2)]
 		public ExceptionInfo Exception { get; private set; }
 		
-		public OperationResultMessage ()
+		private OperationResultMessage ()
 		{
-			this.Success = true;
+		}
+		
+		public OperationResultMessage (bool success)
+		{
+			this.Success = success;
 		}
 
 		public OperationResultMessage (Exception ex)

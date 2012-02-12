@@ -46,7 +46,11 @@ namespace CoreDroid.Contract.Message
 				return this.type;
 			}
 		}
-
+		
+		private TypeMessage ()
+		{
+		}
+		
 		public TypeMessage (string assemblyName, string typeName)
 		{
 			this.IsNull = false;
@@ -56,18 +60,13 @@ namespace CoreDroid.Contract.Message
 		
 		public TypeMessage (Type type)
 		{
-			this.IsNull = false;
-			this.AssemblyName = type.Assembly.GetName ().Name;
-			this.TypeName = type.FullName;
-		}
-		
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CoreDroid.Contract.Message.TypeMessage"/> class.
-		/// Call empty constructor for null
-		/// </summary>
-		public TypeMessage ()
-		{
-			this.IsNull = true;
+			if (type != null) {
+				this.IsNull = false;
+				this.AssemblyName = type.Assembly.GetName ().Name;
+				this.TypeName = type.FullName;
+			} else {
+				this.IsNull = true;
+			}
 		}
 	}
 }

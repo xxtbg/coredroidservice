@@ -78,7 +78,7 @@ Global
 		{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = CoreDroid\CoreDroid.csproj
+		StartupItem = CoreDroid.Test\CoreDroid.Test.csproj
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

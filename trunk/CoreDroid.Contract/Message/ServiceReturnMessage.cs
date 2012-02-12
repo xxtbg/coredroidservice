@@ -43,7 +43,11 @@ namespace CoreDroid.Contract.Message
 				return this.type;
 			}
 		}
-
+		
+		private ServiceReturnMessage ()
+		{
+		}
+		
 		public ServiceReturnMessage (Type type)
 		{
 			if (type != null) {
