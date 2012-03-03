@@ -20,6 +20,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Externalconsole>true</Externalconsole>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Test.exe /data/local/mono/CoreDroid.Test.exe" />
+        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Contract.dll /data/local/mono/CoreDroid.Contract.dll" />
+        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Extensions.dll /data/local/mono/CoreDroid.Extensions.dll" />
+        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Test.Plugin.dll /data/local/mono/CoreDroid.Test.Plugin.dll" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
