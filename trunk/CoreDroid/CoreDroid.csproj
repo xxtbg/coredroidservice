@@ -70,5 +70,6 @@
     <None Include="mono.tar.gz">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="build" />
   </ItemGroup>
 </Project>

@@ -263,34 +263,37 @@ namespace CoreDroid
 			ParameterInfo[] parameterInfos = msg.Parameter;
 
 			List<object > parameters = new List<object> ();
-
+			
 			foreach (ParameterInfo parameterInfo in parameterInfos) {
 				if (!parameterInfo.IsNull)
 					parameters.Add (stream.DataReceive (parameterInfo.Type));
 				else
 					parameters.Add (null);
 			}
-
+			
 			System.Reflection.MethodInfo methodInfo = service.GetType ().GetMethod (methodName);
-
 			if (methodInfo.GetCustomAttributes (true).Where (a => a is ServiceMemberAttribute).Any ()) {
-				object returnValue = methodInfo.Invoke (service, parameters.ToArray ());
-
-				if (methodInfo.ReturnType != null) {
-					stream.DataSend (new OperationResultMessage (true));
-					if (returnValue != null) {
-						stream.DataSend (new TypeMessage (methodInfo.ReturnType));
-					} else {
-						stream.DataSend (new TypeMessage (null));
-					}
-					
-					if (returnValue != null) {
-						if (returnValue is Stream) {
-							SendStream (stream, (Stream)returnValue);
+				try {
+					object returnValue = methodInfo.Invoke (service, parameters.ToArray ());
+				
+					if (methodInfo.ReturnType != null) {
+						stream.DataSend (new OperationResultMessage (true));
+						if (returnValue != null) {
+							stream.DataSend (new TypeMessage (methodInfo.ReturnType));
 						} else {
-							stream.DataSend (returnValue);
+							stream.DataSend (new TypeMessage (null));
+						}
+					
+						if (returnValue != null) {
+							if (returnValue is Stream) {
+								SendStream (stream, (Stream)returnValue);
+							} else {
+								stream.DataSend (returnValue);
+							}
 						}
 					}
+				} catch (System.Reflection.TargetInvocationException ex) {
+					throw(ex.InnerException);
 				}
 			} else {
 				throw (new ArgumentException ("method is not existing"));
