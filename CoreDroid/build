@@ -1,0 +1,26 @@
+#!/bin/sh
+
+echo "BUILD: setting env variables"
+ROOT_PATH=`pwd`
+BIN_PATH="$ROOT_PATH/bin"
+OUT_PATH="$ROOT_PATH/out"
+MONO_PATH="$ROOT_PATH/mono-2.10.9"
+
+export CC="gcc"
+export CXX="g++"
+export LD="ld"
+
+export CFLAGS=""
+export CXXFLAGS="$CFLAGS"
+export LDFLAGS=""
+
+cd $MONO_PATH
+
+#./autogen.sh --prefix=$OUT_PATH --exec-prefix=$OUT_PATH --disable-mcs-build --with-glib=embedded --with-tls=pthread --disable-shared --disable-shared-handles --target=armv5-linux-androideabi --with-gc=sgen --host=armv5-linux-androideabi --enable-small-config
+
+./configure --prefix=$OUT_PATH --exec-prefix=$OUT_PATH --disable-mcs-build #--with-tls=pthread #--enable-static --disable-shared --with-static_mono=yes --with-shared_mono=no
+echo "#define ARM_FPU_NONE 1" >> config.h
+echo "press enter to continue"
+read TMP
+make LDFLAGS="$LDFLAGS -all-static -pthread -lm -lrt -ldl" && make install
+
