@@ -12,6 +12,7 @@
     <AssemblyName>CoreDroid</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <StartupObject>CoreDroid.MainClass</StartupObject>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -22,6 +23,13 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CustomCommands>
+      <CustomCommands>
+        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.exe /data/local/mono/CoreDroid.exe" workingdir="" />
+        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Contract.dll /data/local/mono/CoreDroid.Contract.dll" />
+        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Extensions.dll /data/local/mono/CoreDroid.Extensions.dll" />
+      </CustomCommands>
+    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
