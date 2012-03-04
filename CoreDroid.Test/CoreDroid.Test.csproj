@@ -22,9 +22,9 @@
     <Externalconsole>true</Externalconsole>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Test.exe /data/local/mono/CoreDroid.Test.exe" />
-        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Contract.dll /data/local/mono/CoreDroid.Contract.dll" />
-        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Extensions.dll /data/local/mono/CoreDroid.Extensions.dll" />
+        <Command type="Custom" command="adb push ${TargetDir}/CoreDroid.Test.exe /data/local/mono/CoreDroid.Test.exe" />
+        <Command type="Custom" command="adb push ${TargetDir}/CoreDroid.Contract.dll /data/local/mono/CoreDroid.Contract.dll" />
+        <Command type="Custom" command="adb push ${TargetDir}/CoreDroid.Extensions.dll /data/local/mono/CoreDroid.Extensions.dll" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -51,7 +51,7 @@
     <Compile Include="..\CoreDroidService\ServiceProxy.cs">
       <Link>ServiceProxy.cs</Link>
     </Compile>
-    <Compile Include="TestService.cs" />
+    <Compile Include="FileSystemService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

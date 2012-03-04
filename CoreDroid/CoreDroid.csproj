@@ -25,9 +25,9 @@
     <WarningLevel>4</WarningLevel>
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.exe /data/local/mono/CoreDroid.exe" workingdir="" />
-        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Contract.dll /data/local/mono/CoreDroid.Contract.dll" />
-        <Command type="AfterBuild" command="adb push ${TargetDir}/CoreDroid.Extensions.dll /data/local/mono/CoreDroid.Extensions.dll" />
+        <Command type="Custom" command="adb push ${TargetDir}/CoreDroid.exe /data/local/mono/CoreDroid.exe" workingdir="" />
+        <Command type="Custom" command="adb push ${TargetDir}/CoreDroid.Contract.dll /data/local/mono/CoreDroid.Contract.dll" />
+        <Command type="Custom" command="adb push ${TargetDir}/CoreDroid.Extensions.dll /data/local/mono/CoreDroid.Extensions.dll" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
@@ -71,5 +71,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="build" />
+    <None Include="chmod" />
+    <None Include="chown" />
+    <None Include="stat" />
   </ItemGroup>
 </Project>

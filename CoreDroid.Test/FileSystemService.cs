@@ -1,10 +1,11 @@
 using System;
+using CoreDroid;
 
-namespace CoreDroid.Test
+namespace DiskDroid.FileSystem
 {
-	public class TestService : ServiceProxy
+	public class FileSystemService : ServiceProxy
 	{
-		public TestService ():base()
+		public FileSystemService ():base()
 		{
 		}
 		

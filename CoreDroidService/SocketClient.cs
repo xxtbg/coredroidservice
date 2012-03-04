@@ -69,6 +69,10 @@ namespace CoreDroid
 		
 		public void Close ()
 		{
+			TcpClient streamClient = new TcpClient ();
+			streamClient.Connect (IPAddress.Loopback, this.Port);
+			streamClient.GetStream ().DataSend (new InitMessage (InitAction.Close));
+			streamClient.Close ();
 		}
 		
 		public void Dispose ()

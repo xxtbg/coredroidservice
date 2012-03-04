@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Test", "CoreDroid
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Test.Plugin", "CoreDroid.Test.Plugin\CoreDroid.Test.Plugin.csproj", "{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Test.Contract", "CoreDroid.Test.Contract\CoreDroid.Test.Contract.csproj", "{AC81E2FD-C6FB-440D-96D9-0015311403F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,18 @@ Global
 		{A577982D-7391-4260-B770-FE886C8CA732}.Release|Mixed Platforms.Build.0 = Release|x86
 		{A577982D-7391-4260-B770-FE886C8CA732}.Release|x86.ActiveCfg = Release|x86
 		{A577982D-7391-4260-B770-FE886C8CA732}.Release|x86.Build.0 = Release|x86
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Debug|x86.Build.0 = Debug|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Release|x86.ActiveCfg = Release|Any CPU
+		{AC81E2FD-C6FB-440D-96D9-0015311403F0}.Release|x86.Build.0 = Release|Any CPU
 		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
