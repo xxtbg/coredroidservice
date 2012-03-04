@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
-using Mono.Unix;
+using System.IO;
 using CoreDroid.Contract;
-using Mono.Unix.Native;
+using System.Collections.Generic;
 
 namespace CoreDroid.Test
 {
@@ -12,10 +12,15 @@ namespace CoreDroid.Test
 		[ServiceMember]
 		public string[] List (string path)
 		{
-			UnixDirectoryInfo dirInfo = new UnixDirectoryInfo (path);
-			UnixFileSystemInfo[] entries = dirInfo.GetFileSystemEntries ();
+			List<string > directories = Directory.GetDirectories (path).ToList ();
+			directories.Sort ();
+			List<string > entries = new List<string> (directories);
 			
-			return entries.Select (e => e.FullName).ToArray ();
+			List<string > files = Directory.GetFiles (path).ToList ();
+			files.Sort ();
+			entries.AddRange (files);
+			
+			return entries.ToArray ();
 		}
 	}
 }
