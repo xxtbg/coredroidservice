@@ -4,10 +4,10 @@ using System.IO;
 using CoreDroid.Contract;
 using System.Collections.Generic;
 
-namespace CoreDroid.Test
+namespace DiskDroid.FileSystem
 {
 	[ServiceContract]
-	public class TestService
+	public class FileSystemService
 	{
 		[ServiceMember]
 		public string[] List (string path)

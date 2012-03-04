@@ -41,9 +41,13 @@ namespace CoreDroid
 			listener.Start ();
 
 			while (run) {
-				while (!listener.Pending()) {
+				while (!listener.Pending() && run) {
 					Thread.Sleep (200);
 				}
+				
+				if (!run)
+					break;
+				
 				Socket newSocket = listener.AcceptSocket ();
 
 				Thread thread = new Thread (new ParameterizedThreadStart (Handshaker));
@@ -75,6 +79,9 @@ namespace CoreDroid
 						break;
 					case InitAction.Stream:
 						Stream (id, stream, stream.DataReceive<StreamAvaliableMessage> ().Id);
+						break;
+					case InitAction.Close:
+						run = false;
 						break;
 					}
 				}

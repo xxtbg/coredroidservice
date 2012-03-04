@@ -5,53 +5,36 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}</ProjectGuid>
+    <ProjectGuid>{AC81E2FD-C6FB-440D-96D9-0015311403F0}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>CoreDroid.Test</RootNamespace>
-    <AssemblyName>CoreDroid.Test.Plugin</AssemblyName>
+    <RootNamespace>CoreDroid.Test.Contract</RootNamespace>
+    <AssemblyName>CoreDroid.Test.Contract</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\CoreDroid.Test\bin\Debug</OutputPath>
+    <OutputPath>bin\Debug</OutputPath>
     <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <CustomCommands>
-      <CustomCommands>
-        <Command type="Custom" command="adb push ${TargetDir}/CoreDroid.Test.Plugin.dll /data/local/mono/CoreDroid.Test.Plugin.dll" />
-        <Command type="Custom" command="adb push ${TargetDir}/CoreDroid.Contract.dll /data/local/mono/CoreDroid.Contract.dll" />
-      </CustomCommands>
-    </CustomCommands>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\CoreDroid.Test\bin\Release</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Mono.Posix" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="FileSystemService.cs" />
+    <Compile Include="FileSystemItem.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <ProjectReference Include="..\CoreDroid.Contract\CoreDroid.Contract.csproj">
-      <Project>{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}</Project>
-      <Name>CoreDroid.Contract</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CoreDroid.Test.Contract\CoreDroid.Test.Contract.csproj">
-      <Project>{AC81E2FD-C6FB-440D-96D9-0015311403F0}</Project>
-      <Name>CoreDroid.Test.Contract</Name>
-    </ProjectReference>
-  </ItemGroup>
 </Project>
