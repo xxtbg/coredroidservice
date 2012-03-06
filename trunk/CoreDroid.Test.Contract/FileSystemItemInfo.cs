@@ -4,10 +4,10 @@ using System.Runtime.Serialization;
 using System.Reflection;
 using System.Diagnostics;
 
-namespace DiskDroid.FileSystem
+namespace DiskDroid.FileSystem.Contract
 {
 	[DataContract]
-	public class FileSystemItem
+	public class FileSystemItemInfo
 	{
 		[DataMember]
 		public string ItemPath { get; private set; }
@@ -39,7 +39,7 @@ namespace DiskDroid.FileSystem
 		[DataMember]
 		public FileMode OthersMode { get; private set; }
 		
-		public FileSystemItem (string path)
+		public FileSystemItemInfo (string path)
 		{
 			this.ItemPath = path;
 			
@@ -64,44 +64,44 @@ namespace DiskDroid.FileSystem
 	}
 	
 	[DataContract]
-	public class DirectoryItem : FileSystemItem
+	public class DirectoryItemInfo : FileSystemItemInfo
 	{
-		public DirectoryItem (string path):base(path)
+		public DirectoryItemInfo (string path):base(path)
 		{
 		}
 	}
 	
 	[DataContract]
-	public class FileItem : FileSystemItem
+	public class FileItemInfo : FileSystemItemInfo
 	{
 		[DataMember]
 		public string Extension { get; private set; }
 
-		public FileItem (string path) : base(path)
+		public FileItemInfo (string path) : base(path)
 		{
 			this.Extension = Path.GetExtension (this.ItemPath);
 		}
 	}
 	
 	[DataContract]
-	public class SymbolicLinkItem : FileSystemItem
+	public class SymbolicLinkItemInfo : FileSystemItemInfo
 	{
 		[DataMember]
 		public string Target { get; private set; }
 		
-		public SymbolicLinkItem (string path, string target) : base(path)
+		public SymbolicLinkItemInfo (string path, string target) : base(path)
 		{
 			this.Target = target;
 		}
 	}
 	
 	[DataContract]
-	public class MountItem:FileSystemItem
+	public class MountItemInfo : FileSystemItemInfo
 	{
 		[DataMember]
 		public string Target { get; private set; }
 		
-		public MountItem (string target, string path): base(path)
+		public MountItemInfo (string target, string path): base(path)
 		{
 		}
 	}
