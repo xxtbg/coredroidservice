@@ -6,13 +6,13 @@ using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [DataContract]
+	[DataContract]
 	public class OperationResultMessage
 	{
-        [DataMember]
+		[DataMember(Order = 0)]
 		public bool Success { get; private set; }
 
-        [DataMember]
+		[DataMember(Order = 1)]
 		public ExceptionInfo Exception { get; private set; }
 		
 		private OperationResultMessage ()
