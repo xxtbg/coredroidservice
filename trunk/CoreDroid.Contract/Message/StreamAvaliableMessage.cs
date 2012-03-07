@@ -6,10 +6,10 @@ using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [DataContract]
+	[DataContract]
 	public class StreamAvaliableMessage
 	{
-        [DataMember]
+		[DataMember(Order = 0)]
 		public int Id { get; private set; }
 		
 		private StreamAvaliableMessage ()

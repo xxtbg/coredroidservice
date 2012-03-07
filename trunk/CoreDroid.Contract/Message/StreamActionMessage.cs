@@ -6,19 +6,19 @@ using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [DataContract]
+	[DataContract]
 	public class StreamActionMessage
 	{
-        [DataMember]
+		[DataMember(Order = 0)]
 		public StreamAction Action { get; private set; }
 		
-        [DataMember]
+		[DataMember(Order = 1)]
 		public long Position { get; private set; }
 
-        [DataMember]
+		[DataMember(Order = 2)]
 		public long Offset { get; private set; }
 
-        [DataMember]
+		[DataMember(Order = 3)]
 		public long Size { get; private set; }
 		
 		private StreamActionMessage ()

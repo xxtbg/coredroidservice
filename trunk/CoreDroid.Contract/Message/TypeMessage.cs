@@ -8,13 +8,13 @@ using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [DataContract]
+	[DataContract]
 	public class TypeMessage
 	{
-		[DataMember]
+		[DataMember(Order = 0)]
 		public bool IsNull { get; private set; }
 		
-        [DataMember]
+		[DataMember(Order = 1)]
 		public string AssemblyName { get; private set; }
 
 		private bool assemblySearched = false;
@@ -31,7 +31,7 @@ namespace CoreDroid.Contract.Message
 			}
 		}
 
-        [DataMember]
+		[DataMember(Order = 2)]
 		public string TypeName { get; private set; }
         
 		private bool typeSearched = false;

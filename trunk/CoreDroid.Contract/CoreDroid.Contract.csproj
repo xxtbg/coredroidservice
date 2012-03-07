@@ -11,7 +11,6 @@
     <RootNamespace>CoreDroid.Contract</RootNamespace>
     <AssemblyName>CoreDroid.Contract</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,7 +34,6 @@
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExceptionInfo.cs" />
     <Compile Include="Message\SendingPluginFinishedMessage.cs" />
     <Compile Include="Message\InitMessage.cs" />
     <Compile Include="Message\ServiceCallMessage.cs" />
@@ -47,6 +45,11 @@
     <Compile Include="Message\OperationResultMessage.cs" />
     <Compile Include="Message\ServiceRequestMessage.cs" />
     <Compile Include="ServiceContract.cs" />
+    <Compile Include="OperationService.cs" />
+    <Compile Include="Info\ProgressInfo.cs" />
+    <Compile Include="Info\ExceptionInfo.cs" />
+    <Compile Include="Info\OperationInfo.cs" />
+    <Compile Include="OperationServiceThread.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -56,4 +59,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Info\" />
+  </ItemGroup>
 </Project>

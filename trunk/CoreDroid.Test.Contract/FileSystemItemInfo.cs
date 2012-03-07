@@ -9,41 +9,60 @@ namespace DiskDroid.FileSystem.Contract
 	[DataContract]
 	public class FileSystemItemInfo
 	{
-		[DataMember]
+		[DataMember(Order = 0)]
+		public DateTime LoadTime { get; private set; }
+		
+		[DataMember(Order = 1)]
 		public string ItemPath { get; private set; }
 		
-		[DataMember]
+		[DataMember(Order = 2)]
 		public string DirectoryPath { get ; private set; }
 		
-		[DataMember]
+		[DataMember(Order = 3)]
 		public string Name { get; private set; }
 		
-		[DataMember]
+		[DataMember(Order = 4)]
+		public long Size { get; private set; }
+		
+		[DataMember(Order = 5)]
+		public DateTime AccessTime { get; private set; }
+
+		[DataMember(Order = 6)]
+		public DateTime ModifyTime { get; private set; }
+		
+		[DataMember(Order = 7)]
 		public string User { get; private set; }
 		
-		[DataMember]
+		[DataMember(Order = 8)]
 		public ushort UID { get; private set; }
 		
-		[DataMember]
+		[DataMember(Order = 9)]
 		public FileMode UserMode { get; private set; }
 		
-		[DataMember]
+		[DataMember(Order = 10)]
 		public string Group { get; private set; }
 		
-		[DataMember]
+		[DataMember(Order = 11)]
 		public ushort GID{ get; private set; }
 		
-		[DataMember]
+		[DataMember(Order = 12)]
 		public FileMode GroupMode { get; private set; }
 		
-		[DataMember]
+		[DataMember(Order = 13)]
 		public FileMode OthersMode { get; private set; }
 		
 		public FileSystemItemInfo (string path)
 		{
-			this.ItemPath = path;
+			this.LoadTime = DateTime.UtcNow;
 			
-			this.DirectoryPath = Path.GetDirectoryName (this.ItemPath);
+			FileInfo info = new FileInfo (path);
+			
+			this.ItemPath = info.FullName;
+			this.DirectoryPath = info.DirectoryName;
+			this.Name = info.Name;
+			this.Size = info.Length;
+			this.AccessTime = info.LastAccessTime;
+			this.ModifyTime = info.LastWriteTime;
 		}
 		
 		private void Stat ()
@@ -74,19 +93,21 @@ namespace DiskDroid.FileSystem.Contract
 	[DataContract]
 	public class FileItemInfo : FileSystemItemInfo
 	{
-		[DataMember]
+		[DataMember(Order = 0)]
 		public string Extension { get; private set; }
 
 		public FileItemInfo (string path) : base(path)
 		{
-			this.Extension = Path.GetExtension (this.ItemPath);
+			FileInfo info = new FileInfo (path);
+			
+			this.Extension = info.Extension;
 		}
 	}
 	
 	[DataContract]
 	public class SymbolicLinkItemInfo : FileSystemItemInfo
 	{
-		[DataMember]
+		[DataMember(Order = 0)]
 		public string Target { get; private set; }
 		
 		public SymbolicLinkItemInfo (string path, string target) : base(path)
@@ -96,13 +117,14 @@ namespace DiskDroid.FileSystem.Contract
 	}
 	
 	[DataContract]
-	public class MountItemInfo : FileSystemItemInfo
+	public class MountItemInfo : DirectoryItemInfo
 	{
-		[DataMember]
-		public string Target { get; private set; }
+		[DataMember(Order = 0)]
+		public string Device { get; private set; }
 		
-		public MountItemInfo (string target, string path): base(path)
+		public MountItemInfo (string device, string path): base(path)
 		{
+			this.Device = device;
 		}
 	}
 	

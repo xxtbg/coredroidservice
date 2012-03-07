@@ -6,10 +6,10 @@ using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract.Message
 {
-    [DataContract]
+	[DataContract]
 	public class ServiceRequestMessage
 	{
-        [DataMember]
+		[DataMember(Order = 0)]
 		public ServiceRequestAction Action { get; private set; }
 		
 		private ServiceRequestMessage ()

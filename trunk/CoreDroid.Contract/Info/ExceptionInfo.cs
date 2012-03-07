@@ -6,19 +6,19 @@ using System.Runtime.Serialization;
 
 namespace CoreDroid.Contract
 {
-    [DataContract]
+	[DataContract]
 	public class ExceptionInfo
 	{
-        [DataMember]
+		[DataMember(Order = 0)]
 		public string ExceptionAssemblyName { get; private set; }
 
-        [DataMember]
+		[DataMember(Order = 1)]
 		public string ExceptionTypeName { get; private set; }
 
-        [DataMember]
+		[DataMember(Order = 2)]
 		public string ExceptionMessage { get; private set; }
 
-        [DataMember]
+		[DataMember(Order = 3)]
 		public string ExceptionStackTrace { get; private set; }
 
 		public ExceptionInfo (Exception ex)
