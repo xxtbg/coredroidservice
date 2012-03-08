@@ -10,6 +10,7 @@ namespace DiskDroid.FileSystem.Contract
 	{
 		public static FileSystemItemInfo Get (string path)
 		{
+			Console.WriteLine ("path: " + path);
 			if ((System.IO.File.GetAttributes (path) & System.IO.FileAttributes.Directory) == System.IO.FileAttributes.Directory) {
 				return new DirectoryItemInfo (path);
 			} else {
