@@ -7,9 +7,11 @@ namespace DiskDroid.FileSystem
 {
 	public class FileOperationService : OperationService<FileOperationServiceThread, FileOperationInfo>
 	{
-		public override int Start ()
+		public int Start ()
 		{// TODO todo
 			this.Create (new FileOperationInfo (111));
+			
+			return 0;
 		}
 	}
 }

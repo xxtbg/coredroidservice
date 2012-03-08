@@ -9,7 +9,6 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>CoreDroid.Test</RootNamespace>
     <AssemblyName>CoreDroid.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -51,7 +50,7 @@
     <Compile Include="..\CoreDroidService\ServiceProxy.cs">
       <Link>ServiceProxy.cs</Link>
     </Compile>
-    <Compile Include="FileSystemService.cs" />
+    <Compile Include="DirectoryService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -62,6 +61,10 @@
     <ProjectReference Include="..\CoreDroid.Extensions\CoreDroid.Extensions.csproj">
       <Project>{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}</Project>
       <Name>CoreDroid.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreDroid.Test.Contract\CoreDroid.Test.Contract.csproj">
+      <Project>{AC81E2FD-C6FB-440D-96D9-0015311403F0}</Project>
+      <Name>CoreDroid.Test.Contract</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
