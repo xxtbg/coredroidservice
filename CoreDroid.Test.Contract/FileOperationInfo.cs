@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 using CoreDroid.Contract;
 
 namespace DiskDroid.FileSystem.Contract

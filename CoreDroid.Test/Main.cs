@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using CoreDroid.Contract;
 using DiskDroid.FileSystem;
+using DiskDroid.FileSystem.Contract;
 
 namespace CoreDroid.Test
 {
@@ -14,11 +15,12 @@ namespace CoreDroid.Test
 				SocketClient client = new SocketClient (Convert.ToInt32 (Console.ReadLine ()));
 			
 				client.LoadMono (File.OpenRead (Path.Combine (Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location), "CoreDroid.Test.Plugin.dll")));
-				FileSystemService service = client.GetService<FileSystemService> ();
-				string[] contents = service.List ("/");
+				DirectoryService service = client.GetService<DirectoryService> ();
+				DirectoryItemInfo directory = service.Get ("/") as DirectoryItemInfo;
+				FileSystemItemInfo[] contents = service.GetContents (directory);
 			
-				foreach (string content in contents)
-					Console.WriteLine (content);
+				foreach (FileSystemItemInfo content in contents)
+					Console.WriteLine (content.Path);
 			
 				service.Close ();
 				client.Close ();

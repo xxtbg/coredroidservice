@@ -3,26 +3,34 @@ using System.Threading;
 
 namespace CoreDroid.Contract
 {
-	public class OperationServiceThread
+	public abstract class OperationServiceThread : IDisposable
 	{
 		public OperationInfo Info { get; private set; }
 
 		public Thread Thread { get; private set; }
 		
-		public OperationServiceThread (OperationInfo info, ThreadStart worker)
+		protected abstract ThreadStart Worker { get; }
+		
+		public OperationServiceThread (OperationInfo info)
 		{
 			this.Info = info;
-			this.Thread = new Thread (worker);
 		}
 		
 		public void Start ()
 		{
+			this.Thread = new Thread (this.Worker);
 			this.Thread.Start ();
 		}
 		
 		public void Stop ()
 		{
-			this.Thread.Abort ();
+			if (this.Thread != null && this.Thread.ThreadState == ThreadState.Running)
+				this.Thread.Abort ();
+		}
+		
+		public void Dispose ()
+		{
+			this.Stop ();
 		}
 	}
 }
