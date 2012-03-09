@@ -2,6 +2,7 @@ using System;
 using CoreDroid;
 
 using DiskDroid.FileSystem.Contract;
+using System.Collections.Generic;
 
 namespace DiskDroid.FileSystem
 {
@@ -20,17 +21,17 @@ namespace DiskDroid.FileSystem
 		
 		public FileSystemItemInfo Get (string path, int lifeTime)
 		{
-			return this.Call ("Get", typeof(FileSystemItemInfo), path, lifeTime) as FileSystemItemInfo;
+			return this.Call ("Get", path, lifeTime) as FileSystemItemInfo;
 		}
 		
-		public FileSystemItemInfo[] GetContents (DirectoryItemInfo directory)
+		public IEnumerable<FileSystemItemInfo> GetContents (DirectoryItemInfo directory)
 		{
 			return this.GetContents (directory, DefaultLifeTime);
 		}
 		
-		public FileSystemItemInfo[] GetContents (DirectoryItemInfo directory, int lifeTime)
+		public IEnumerable<FileSystemItemInfo> GetContents (DirectoryItemInfo directory, int lifeTime)
 		{
-			return this.Call ("GetContents", typeof(FileSystemItemInfo[]), directory, lifeTime) as FileSystemItemInfo[];
+			return this.Call ("GetContents", directory, lifeTime) as IEnumerable<FileSystemItemInfo>;
 		}
 	}
 }

@@ -74,8 +74,12 @@ namespace CoreDroid
 						LoadMono (stream);
 						break;
 					case InitAction.Start:
-						TypeMessage msg = stream.DataReceive<TypeMessage> ();
-						ServiceStarter (id, stream, msg.Type);
+						TypeInfo msg = stream.DataReceive<TypeInfo> ();
+						if (msg.Type != null)
+							ServiceStarter (id, stream, msg.Type);
+						else
+							stream.DataSend (new OperationResultMessage (
+								new ArgumentException (string.Concat ("could not find requested service <", msg.TypeName, "> in assembly <", msg.AssemblyName, ">"))));
 						break;
 					case InitAction.Stream:
 						Stream (id, stream, stream.DataReceive<StreamAvaliableMessage> ().Id);
@@ -267,11 +271,11 @@ namespace CoreDroid
 		{
 			ServiceCallMessage msg = stream.DataReceive<ServiceCallMessage> ();
 			string methodName = msg.ChildName;
-			ParameterInfo[] parameterInfos = msg.Parameter;
+			TypeInfo[] parameterInfos = msg.Parameter;
 
 			List<object > parameters = new List<object> ();
 			
-			foreach (ParameterInfo parameterInfo in parameterInfos) {
+			foreach (TypeInfo parameterInfo in parameterInfos) {
 				if (!parameterInfo.IsNull)
 					parameters.Add (stream.DataReceive (parameterInfo.Type));
 				else
@@ -286,9 +290,9 @@ namespace CoreDroid
 					if (methodInfo.ReturnType != null) {
 						stream.DataSend (new OperationResultMessage (true));
 						if (returnValue != null) {
-							stream.DataSend (new TypeMessage (methodInfo.ReturnType));
+							stream.DataSend (new TypeInfo (returnValue.GetType ()));
 						} else {
-							stream.DataSend (new TypeMessage (null));
+							stream.DataSend (new TypeInfo (null));
 						}
 					
 						if (returnValue != null) {

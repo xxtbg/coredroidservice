@@ -55,7 +55,7 @@ namespace CoreDroid
 			TcpClient streamClient = new TcpClient ();
 			streamClient.Connect (IPAddress.Loopback, this.Port);
 			streamClient.GetStream ().DataSend (new InitMessage (InitAction.Start));
-			streamClient.GetStream ().DataSend (new TypeMessage (typeof(T).Assembly.GetName ().Name + ".Plugin", typeof(T).FullName));
+			streamClient.GetStream ().DataSend (new TypeInfo (typeof(T).Assembly.GetName ().Name + ".Plugin", typeof(T).FullName));
 			T service = Activator.CreateInstance<T> ();
 			OperationResultMessage msg = streamClient.GetStream ().DataReceive<OperationResultMessage> ();
 			
@@ -67,7 +67,7 @@ namespace CoreDroid
 			return service;
 		}
 		
-		public void Close ()
+		public void Shutdown ()
 		{
 			TcpClient streamClient = new TcpClient ();
 			streamClient.Connect (IPAddress.Loopback, this.Port);
@@ -78,7 +78,6 @@ namespace CoreDroid
 		public void Dispose ()
 		{
 			try {
-				this.Close ();
 			} catch {
 			}
 		}
