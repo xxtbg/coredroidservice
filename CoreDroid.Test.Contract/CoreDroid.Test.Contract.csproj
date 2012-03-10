@@ -36,13 +36,16 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="FileSystemItemInfo.cs" />
     <Compile Include="FileOperationInfo.cs" />
-    <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\CoreDroid.Contract\CoreDroid.Contract.csproj">
       <Project>{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}</Project>
       <Name>CoreDroid.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreDroid.Extensions\CoreDroid.Extensions.csproj">
+      <Project>{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}</Project>
+      <Name>CoreDroid.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

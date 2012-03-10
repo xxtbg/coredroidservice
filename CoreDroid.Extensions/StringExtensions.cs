@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace DiskDroid.FileSystem.Contract
+namespace CoreDroid.Extensions
 {
 	public static class StringExtensions
 	{
