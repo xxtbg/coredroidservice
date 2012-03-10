@@ -10,10 +10,6 @@ namespace DiskDroid.FileSystem
 	{
 		public const int DefaultLifeTime = 60;
 		
-		public DirectoryService ():base()
-		{
-		}
-		
 		public FileSystemItemInfo Get (string path)
 		{
 			return this.Get (path, DefaultLifeTime);

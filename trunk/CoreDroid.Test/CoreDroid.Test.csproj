@@ -51,6 +51,10 @@
       <Link>ServiceProxy.cs</Link>
     </Compile>
     <Compile Include="DirectoryService.cs" />
+    <Compile Include="..\CoreDroidService\OperationServiceProxy.cs">
+      <Link>OperationServiceProxy.cs</Link>
+    </Compile>
+    <Compile Include="FileOperationService.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

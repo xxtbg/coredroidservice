@@ -20,6 +20,12 @@ namespace CoreDroid.Contract
 		[DataMember(Order = 3)]
 		public bool IsFinished { get; set; }
 		
+		public bool IsRunning {
+			get {
+				return !this.IsFinished && this.Exception == null;
+			}
+		}
+		
 		public OperationInfo ()
 		{
 			this.ID = lastID++;

@@ -29,7 +29,7 @@ namespace CoreDroid.Contract
 		[ServiceMember]
 		public I GetInfo (int id)
 		{
-			return (I)this.operations [id].Info;
+			return this.operations.ContainsKey (id) ? (I)this.operations [id].Info : null;
 		}
 		
 		[ServiceMember]
