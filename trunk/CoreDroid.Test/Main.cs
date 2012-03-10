@@ -15,6 +15,7 @@ namespace CoreDroid.Test
 			try {
 				SocketClient client = new SocketClient (10000);//Convert.ToInt32 (Console.ReadLine ()));
 			
+				//client.LoadMono (File.OpenRead (Path.Combine (Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location), "CoreDroid.Extensions.dll")));
 				//client.LoadMono (File.OpenRead (Path.Combine (Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location), "CoreDroid.Test.Contract.dll")));
 				//client.LoadMono (File.OpenRead (Path.Combine (Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location), "CoreDroid.Test.Plugin.dll")));
 				DirectoryService service = client.GetService<DirectoryService> ();
