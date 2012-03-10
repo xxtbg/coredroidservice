@@ -16,15 +16,29 @@ namespace CoreDroid.Contract
 		}
 		
 		[ServiceMember]
-		public void Stop (int id)
+		public I Remove (int id)
 		{
 			this.operations [id].Stop ();
+			I info = this.GetInfo (id);
+			this.operations [id].Dispose ();
+			this.operations.Remove (id);
+			
+			return info;
 		}
 		
 		[ServiceMember]
 		public I GetInfo (int id)
 		{
 			return (I)this.operations [id].Info;
+		}
+		
+		[ServiceMember]
+		public void CleanUp ()
+		{
+			foreach (int id in this.operations.Keys) {
+				if (this.operations [id].Info.IsFinished || this.operations [id].Info.Exception != null)
+					this.Remove (id);
+			}
 		}
 	}
 }

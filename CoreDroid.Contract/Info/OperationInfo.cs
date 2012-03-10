@@ -15,6 +15,9 @@ namespace CoreDroid.Contract
 		public ExceptionInfo Exception { get; set; }
 		
 		[DataMember(Order = 2)]
+		public ProgressInfo OverallProgress { get; set; }
+		
+		[DataMember(Order = 3)]
 		public bool IsFinished { get; set; }
 		
 		public OperationInfo ()
