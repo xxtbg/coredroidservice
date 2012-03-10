@@ -39,8 +39,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CoreDroid.Extensions\ExceptionExtensions.cs">
+      <Link>ExceptionExtensions.cs</Link>
+    </Compile>
     <Compile Include="..\CoreDroid.Extensions\StreamExtensions.cs">
       <Link>StreamExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\CoreDroid.Extensions\StringExtensions.cs">
+      <Link>StringExtensions.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

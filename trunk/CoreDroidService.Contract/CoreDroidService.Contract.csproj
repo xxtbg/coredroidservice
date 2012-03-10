@@ -39,35 +39,44 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CoreDroid.Contract\ExceptionInfo.cs">
-      <Link>ExceptionInfo.cs</Link>
+    <Compile Include="..\CoreDroid.Contract\Info\ExceptionInfo.cs">
+      <Link>Info\ExceptionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\CoreDroid.Contract\Info\OperationInfo.cs">
+      <Link>Info\OperationInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\CoreDroid.Contract\Info\ProgressInfo.cs">
+      <Link>Info\ProgressInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\CoreDroid.Contract\Info\TypeInfo.cs">
+      <Link>Info\TypeInfo.cs</Link>
     </Compile>
     <Compile Include="..\CoreDroid.Contract\Message\InitMessage.cs">
       <Link>Message\InitMessage.cs</Link>
     </Compile>
-    <Compile Include="..\CoreDroid.Contract\Message\RequestMessage.cs">
-      <Link>Message\RequestMessage.cs</Link>
+    <Compile Include="..\CoreDroid.Contract\Message\OperationResultMessage.cs">
+      <Link>Message\OperationResultMessage.cs</Link>
     </Compile>
     <Compile Include="..\CoreDroid.Contract\Message\SendingPluginFinishedMessage.cs">
       <Link>Message\SendingPluginFinishedMessage.cs</Link>
     </Compile>
+    <Compile Include="..\CoreDroid.Contract\Message\ServiceActionFinishedMessage.cs">
+      <Link>Message\ServiceActionFinishedMessage.cs</Link>
+    </Compile>
     <Compile Include="..\CoreDroid.Contract\Message\ServiceCallMessage.cs">
       <Link>Message\ServiceCallMessage.cs</Link>
     </Compile>
-    <Compile Include="..\CoreDroid.Contract\Message\ServiceInitializedMessage.cs">
-      <Link>Message\ServiceInitializedMessage.cs</Link>
+    <Compile Include="..\CoreDroid.Contract\Message\ServiceInitializationMessage.cs">
+      <Link>Message\ServiceInitializationMessage.cs</Link>
     </Compile>
     <Compile Include="..\CoreDroid.Contract\Message\ServiceInitzializationErrorMessage.cs">
       <Link>Message\ServiceInitzializationErrorMessage.cs</Link>
     </Compile>
+    <Compile Include="..\CoreDroid.Contract\Message\ServiceRequestMessage.cs">
+      <Link>Message\ServiceRequestMessage.cs</Link>
+    </Compile>
     <Compile Include="..\CoreDroid.Contract\Message\ServiceReturnMessage.cs">
       <Link>Message\ServiceReturnMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\CoreDroid.Contract\Message\ServiceRuntimeErrorMessage.cs">
-      <Link>Message\ServiceRuntimeErrorMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\CoreDroid.Contract\Message\StreamActionFinishedMessage.cs">
-      <Link>Message\StreamActionFinishedMessage.cs</Link>
     </Compile>
     <Compile Include="..\CoreDroid.Contract\Message\StreamActionMessage.cs">
       <Link>Message\StreamActionMessage.cs</Link>
@@ -75,8 +84,17 @@
     <Compile Include="..\CoreDroid.Contract\Message\StreamAvaliableMessage.cs">
       <Link>Message\StreamAvaliableMessage.cs</Link>
     </Compile>
-    <Compile Include="..\CoreDroid.Contract\Message\TypeMessage.cs">
-      <Link>Message\TypeMessage.cs</Link>
+    <Compile Include="..\CoreDroid.Contract\OperationService.cs">
+      <Link>OperationService.cs</Link>
+    </Compile>
+    <Compile Include="..\CoreDroid.Contract\OperationServiceThread.cs">
+      <Link>OperationServiceThread.cs</Link>
+    </Compile>
+    <Compile Include="..\CoreDroid.Contract\ServiceContract.cs">
+      <Link>ServiceContract.cs</Link>
+    </Compile>
+    <Compile Include="..\CoreDroid.Contract\ServiceException.cs">
+      <Link>ServiceException.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

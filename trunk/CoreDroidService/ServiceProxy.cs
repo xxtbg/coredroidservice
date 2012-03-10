@@ -10,7 +10,7 @@ using CoreDroid.Contract;
 
 namespace CoreDroid
 {
-	public class ServiceProxy
+	public abstract class ServiceProxy
 	{
 		private SocketClient client;
 		private TcpClient tcpClient;
