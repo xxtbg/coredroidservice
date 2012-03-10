@@ -19,12 +19,42 @@ namespace CoreDroid.Test
 				//client.LoadMono (File.OpenRead (Path.Combine (Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location), "CoreDroid.Test.Contract.dll")));
 				//client.LoadMono (File.OpenRead (Path.Combine (Path.GetDirectoryName (Assembly.GetEntryAssembly ().Location), "CoreDroid.Test.Plugin.dll")));
 				DirectoryService service = client.GetService<DirectoryService> ();
-				DirectoryItemInfo directory = service.Get ("/") as DirectoryItemInfo;
-				IEnumerable<FileSystemItemInfo> contents = service.GetContents (directory);
+				
+				// testing copy service
+				CopyFileOperationService copyService = client.GetService<CopyFileOperationService> ();
+				DirectoryItemInfo tmpDir = (DirectoryItemInfo)service.Get ("/home/ralph/tmp");
+				DirectoryItemInfo testDir = (DirectoryItemInfo)service.Get ("/home/ralph/Downloads");
+				int opID = copyService.Start (testDir, tmpDir);
+				
+				bool finished = false;
+				while (!finished) {
+					CopyFileOperationInfo info = (CopyFileOperationInfo)copyService.GetInfo (opID);
+					if (info != null) {
+						if (info.IsRunning) {
+							Console.WriteLine ("<" + info.Actual.Path + "> " + info.ActualProgress.Current + "\t/" + info.ActualProgress.Max);
+						} else {
+							if (info.Exception != null) {
+								Console.WriteLine ("EXCEPTION: " + info.Exception.ExceptionTypeName + ", " + info.Exception.ExceptionTypeName);
+								Console.WriteLine ("Message:");
+								Console.WriteLine (info.Exception.ExceptionMessage);
+								Console.WriteLine ("StackTrace:");
+								Console.WriteLine (info.Exception.ExceptionStackTrace);
+							}
+							////////////////// TODO: DER POSTWORKER SOLL DAS ERGEBNISSOBJEKT IN DIE INFO HINEIN SCHREIBEN
+							finished = true;
+						}
+					} else {
+						finished = true;
+					}
+				}
+				
+				/*
+				 DirectoryItemInfo directory = service.Get ("/") as DirectoryItemInfo;
+				 IEnumerable<FileSystemItemInfo> contents = service.GetContents (directory);
 			
 				foreach (FileSystemItemInfo content in contents)
-					Console.WriteLine (content.Path);
-			
+					Console.WriteLine (content.Path);*/
+				
 				service.Close ();
 			} catch (ServiceException ex) {
 				Console.WriteLine ("ServiceException");
