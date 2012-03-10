@@ -15,6 +15,7 @@ namespace CoreDroid.Contract
 		public ProgressInfo (long max)
 		{
 			this.Max = max;
+			this.Current = 0;
 		}
 	}
 }
