@@ -28,23 +28,32 @@ namespace DiskDroid.FileSystem.Contract
 		[DataMember(Order = 1)]
 		public ProgressInfo ActualProgress { get; set; }
 		
-		public CopyFileOperationInfo (FileSystemItemInfo item, DirectoryItemInfo targetItem):base(item)
+		[DataMember(Order = 2)]
+		public bool Quiet { get; private set; }
+		
+		[DataMember(Order = 3)]
+		public FileSystemItemInfo ConflictItem { get; set; }
+		
+		[DataMember(Order = 4)]
+		public bool ConflictOverwriteable { get; set; }
+		
+		public CopyFileOperationInfo (FileSystemItemInfo item, DirectoryItemInfo targetItem, bool quiet):base(item)
 		{
 			this.TargetItem = targetItem;
+			this.Quiet = quiet;
+		}
+		
+		public void RemoveConflict ()
+		{
+			this.ConflictItem = null;
+			this.ConflictOverwriteable = false;
 		}
 	}
 	
-	public class MoveFileOperationInfo:FileOperationInfo
-	{
-		[DataMember(Order = 0)]
-		public DirectoryItemInfo TargetItem { get; private set; }
-		
-		[DataMember(Order = 1)]
-		public ProgressInfo ActualProgress { get; set; }
-		
-		public MoveFileOperationInfo (FileSystemItemInfo item, DirectoryItemInfo targetItem) : base(item)
+	public class MoveFileOperationInfo:CopyFileOperationInfo
+	{		
+		public MoveFileOperationInfo (FileSystemItemInfo item, DirectoryItemInfo targetItem, bool quiet) : base(item, targetItem, quiet)
 		{
-			this.TargetItem = targetItem;
 		}
 	}
 	

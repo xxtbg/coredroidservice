@@ -9,23 +9,41 @@ namespace DiskDroid.FileSystem
 	public class CopyFileOperationService : OperationService<CopyFileOperationServiceThread, CopyFileOperationInfo>
 	{
 		[ServiceMember]
-		public int Start (FileSystemItemInfo sourceItem, DirectoryItemInfo targetItem)
+		public int Start (FileSystemItemInfo sourceItem, DirectoryItemInfo targetItem, bool quiet)
 		{
-			FileOperationServiceThread thread = this.Create (new CopyFileOperationInfo (sourceItem, targetItem));
-			
+			FileOperationServiceThread thread = this.Create (new CopyFileOperationInfo (sourceItem, targetItem, quiet));
+			thread.Start ();
 			return thread.Info.ID;
+		}
+		
+		[ServiceMember]
+		public void ResolveConflict (int id, bool overwrite)
+		{
+			if (!overwrite)
+				this.Get (id).BlockedItems.Add (((CopyFileOperationInfo)this.Get (id).Info).Actual.Path);
+			((CopyFileOperationInfo)this.Get (id).Info).RemoveConflict ();
+			this.Get (id).InConflict = false;
 		}
 	}
 		
 	[ServiceContract]
-	public class MoveFileOperationService : OperationService<MoveFileOperationServiceThread, MoveFileOperationInfo>
+	public class MoveFileOperationService : OperationService<CopyFileOperationServiceThread, MoveFileOperationInfo>
 	{
 		[ServiceMember]
-		public int Start (FileSystemItemInfo sourceItem, DirectoryItemInfo targetItem)
+		public int Start (FileSystemItemInfo sourceItem, DirectoryItemInfo targetItem, bool quiet)
 		{
-			FileOperationServiceThread thread = this.Create (new MoveFileOperationInfo (sourceItem, targetItem));
-			
+			FileOperationServiceThread thread = this.Create (new MoveFileOperationInfo (sourceItem, targetItem, quiet));
+			thread.Start ();
 			return thread.Info.ID;
+		}
+		
+		[ServiceMember]
+		public void ResolveConflict (int id, bool overwrite)
+		{
+			if (!overwrite)
+				this.Get (id).BlockedItems.Add (((MoveFileOperationInfo)this.Get (id).Info).Actual.Path);
+			((MoveFileOperationInfo)this.Get (id).Info).RemoveConflict ();
+			this.Get (id).InConflict = false;
 		}
 	}
 		
@@ -36,7 +54,7 @@ namespace DiskDroid.FileSystem
 		public int Start (FileSystemItemInfo item)
 		{
 			FileOperationServiceThread thread = this.Create (new DeleteFileOperationInfo (item));
-			
+			thread.Start ();
 			return thread.Info.ID;
 		}
 	}
@@ -48,7 +66,7 @@ namespace DiskDroid.FileSystem
 		public int Start (FileSystemItemInfo item, ushort newUID, ushort newGID, bool recursive)
 		{
 			FileOperationServiceThread thread = this.Create (new ChangeOwnerFileOperationInfo (item, newUID, newGID, recursive));
-			
+			thread.Start ();
 			return thread.Info.ID;
 		}
 	}
@@ -60,7 +78,7 @@ namespace DiskDroid.FileSystem
 		public int Start (FileSystemItemInfo item, ushort newMode, bool recursive)
 		{
 			FileOperationServiceThread thread = this.Create (new ChangeModeFileOperationInfo (item, newMode, recursive));
-			
+			thread.Start ();
 			return thread.Info.ID;
 		}
 	}

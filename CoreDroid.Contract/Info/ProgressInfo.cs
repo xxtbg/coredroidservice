@@ -10,11 +10,11 @@ namespace CoreDroid.Contract
 		public long Current { get; set; }
 		
 		[DataMember(Order = 1)]
-		public long Max { get; private set; }
+		public long Max { get; set; }
 		
-		public ProgressInfo (long max)
+		public ProgressInfo ()
 		{
-			this.Max = max;
+			this.Max = 0;
 			this.Current = 0;
 		}
 	}

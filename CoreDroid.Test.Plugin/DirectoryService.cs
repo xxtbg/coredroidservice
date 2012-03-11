@@ -10,23 +10,11 @@ namespace DiskDroid.FileSystem
 {
 	[ServiceContract]
 	public class DirectoryService
-	{
-		private Dictionary<string, FileSystemItemInfo> cache = new Dictionary<string, FileSystemItemInfo> ();
-		
+	{		
 		[ServiceMember]
 		public FileSystemItemInfo Get (string path, int lifeTime)
-		{
-			if (path.Length > 1 && path.EndsWith ("/"))
-				path = path.Remove (path.Length - 1);
-			
-			if (this.cache.ContainsKey (path) && DateTime.UtcNow > this.cache [path].LoadTime.AddSeconds (lifeTime))
-				this.cache.Remove (path);
-			
-			if (!this.cache.ContainsKey (path)) {
-				this.cache.Add (path, FileSystemItemInfo.Get (path));
-			}
-			
-			return this.cache [path];
+		{			
+			return FileSystemItemInfo.Get (path, lifeTime);
 		}
 		
 		[ServiceMember]

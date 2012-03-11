@@ -30,6 +30,7 @@ namespace CoreDroid.Contract
 		{
 			this.ID = lastID++;
 			this.IsFinished = false;
+			this.OverallProgress = new ProgressInfo ();
 		}
 	}
 }

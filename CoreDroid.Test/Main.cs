@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using System.IO;
 using System.Reflection;
 using CoreDroid.Contract;
 using DiskDroid.FileSystem;
 using DiskDroid.FileSystem.Contract;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace CoreDroid.Test
 {
@@ -21,17 +23,65 @@ namespace CoreDroid.Test
 				DirectoryService service = client.GetService<DirectoryService> ();
 				
 				// testing copy service
-				CopyFileOperationService copyService = client.GetService<CopyFileOperationService> ();
+				MoveFileOperationService copyService = client.GetService<MoveFileOperationService> ();
 				DirectoryItemInfo tmpDir = (DirectoryItemInfo)service.Get ("/home/ralph/tmp");
-				DirectoryItemInfo testDir = (DirectoryItemInfo)service.Get ("/home/ralph/Downloads");
-				int opID = copyService.Start (testDir, tmpDir);
+				DirectoryItemInfo testDir = (DirectoryItemInfo)service.Get ("/home/ghost.old/Downloads");
+				int opID = copyService.Start (testDir, tmpDir, false);
 				
 				bool finished = false;
+				bool overwriteAll = false;
 				while (!finished) {
 					CopyFileOperationInfo info = (CopyFileOperationInfo)copyService.GetInfo (opID);
 					if (info != null) {
+						Console.Clear ();
+							
+						if (info.Actual != null)
+							Console.WriteLine (info.Actual.Path);
+							
+						if (info.ActualProgress != null) {
+							Console.WriteLine ("Progress:\t" + (info.ActualProgress != null ? info.ActualProgress.Current + "\t/" + info.ActualProgress.Max : string.Empty));
+							Console.WriteLine ("Overall:\t" + info.OverallProgress.Current + "\t/" + info.OverallProgress.Max);
+						}
+						
 						if (info.IsRunning) {
-							Console.WriteLine ("<" + info.Actual.Path + "> " + info.ActualProgress.Current + "\t/" + info.ActualProgress.Max);
+							if (info.ConflictItem != null) {
+								char key;
+								
+								if (info.ConflictOverwriteable) {
+									if (!overwriteAll) {
+										Console.WriteLine ("Conflict: " + info.Actual.Path + " vs. " + info.ConflictItem.Path);
+										Console.Write ("(k)eep/(o)verwrite/(a)all/(c)ancel: ");
+										key = Console.ReadKey ().KeyChar;
+										Console.WriteLine ();
+									} else {
+										key = 'o';
+									}
+								} else {
+									Console.WriteLine ("Conflict(not overwriteable): " + info.Actual.Path + " vs. " + info.ConflictItem.Path);
+									Console.Write ("(k)eep/(c)ancel: ");
+									key = Console.ReadKey ().KeyChar;
+									Console.WriteLine ();
+								}
+								
+								switch (key) {
+								case 'k':
+									copyService.ResolveConflict (opID, false);
+									break;
+								case 'o':
+									copyService.ResolveConflict (opID, true);
+									break;
+								case 'a':
+									overwriteAll = true;
+									copyService.ResolveConflict (opID, true);
+									break;
+								case 'c':
+									copyService.Remove (opID);
+									finished = true;
+									break;
+								}
+							} else {
+								Thread.Sleep (50);	
+							}
 						} else {
 							if (info.Exception != null) {
 								Console.WriteLine ("EXCEPTION: " + info.Exception.ExceptionTypeName + ", " + info.Exception.ExceptionTypeName);
@@ -40,13 +90,20 @@ namespace CoreDroid.Test
 								Console.WriteLine ("StackTrace:");
 								Console.WriteLine (info.Exception.ExceptionStackTrace);
 							}
-							////////////////// TODO: DER POSTWORKER SOLL DAS ERGEBNISSOBJEKT IN DIE INFO HINEIN SCHREIBEN
+							
 							finished = true;
 						}
 					} else {
 						finished = true;
 					}
 				}
+				
+				FileSystemItemInfo targetItem = service.GetContents (tmpDir).Where (i => i.Name == "Downloads").FirstOrDefault ();
+				
+				if (targetItem != null)
+					Console.WriteLine (targetItem.Path);
+				else
+					Console.WriteLine ("something went wrong");
 				
 				/*
 				 DirectoryItemInfo directory = service.Get ("/") as DirectoryItemInfo;

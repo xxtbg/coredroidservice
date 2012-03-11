@@ -7,17 +7,27 @@ namespace DiskDroid.FileSystem
 {
 	public class CopyFileOperationService : OperationServiceProxy
 	{
-		public int Start (FileSystemItemInfo item, DirectoryItemInfo targetItem)
+		public int Start (FileSystemItemInfo item, DirectoryItemInfo targetItem, bool quiet)
 		{
-			return (int)this.Call ("Start", item, targetItem);
+			return (int)this.Call ("Start", item, targetItem, quiet);
+		}
+		
+		public void ResolveConflict (int id, bool overwrite)
+		{
+			this.Call ("ResolveConflict", id, overwrite);
 		}
 	}
 	
 	public class MoveFileOperationService : OperationServiceProxy
 	{
-		public int Start (FileSystemItemInfo item, DirectoryItemInfo targetItem)
+		public int Start (FileSystemItemInfo item, DirectoryItemInfo targetItem, bool quiet)
 		{
-			return (int)this.Call ("Start", item, targetItem);
+			return (int)this.Call ("Start", item, targetItem, quiet);
+		}
+		
+		public void ResolveConflict (int id, bool overwrite)
+		{
+			this.Call ("ResolveConflict", id, overwrite);
 		}
 	}
 	
