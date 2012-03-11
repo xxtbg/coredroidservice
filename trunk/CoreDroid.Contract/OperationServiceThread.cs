@@ -24,7 +24,7 @@ namespace CoreDroid.Contract
 		
 		public void Stop ()
 		{
-			if (this.Thread != null && this.Thread.ThreadState == ThreadState.Running)
+			if (this.Thread != null)
 				this.Thread.Abort ();
 		}
 		

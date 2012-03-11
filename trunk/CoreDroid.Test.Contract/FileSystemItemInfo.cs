@@ -9,6 +9,7 @@ namespace DiskDroid.FileSystem.Contract
 	[DataContract]
 	public abstract class FileSystemItemInfo
 	{
+		private static Dictionary<string, FileSystemItemInfo> cache = new Dictionary<string, FileSystemItemInfo> ();
 		private static ushort? currentUID = null;
 		
 		protected static ushort CurrentUID {
@@ -35,10 +36,39 @@ namespace DiskDroid.FileSystem.Contract
 		
 		public static FileSystemItemInfo Get (string path)
 		{
+			return Get (path, 0);
+		}
+		
+		public static FileSystemItemInfo Get (string path, int lifeTime)
+		{
+			if (path.Length > 1 && path.EndsWith ("/"))
+				path = path.Remove (path.Length - 1);
+			
+			if (cache.ContainsKey (path) && DateTime.UtcNow > cache [path].LoadTime.AddSeconds (lifeTime))
+				cache.Remove (path);
+			
+			if (!cache.ContainsKey (path)) {
+				cache.Add (path, InternalGet (path));
+			}
+			
+			return cache [path];
+		}
+		
+		private static FileSystemItemInfo InternalGet (string path)
+		{
 			if ((System.IO.File.GetAttributes (path) & System.IO.FileAttributes.Directory) == System.IO.FileAttributes.Directory) {
 				return new DirectoryItemInfo (path);
 			} else {
 				return new FileItemInfo (path);
+			}
+		}
+		
+		public static FileSystemItemInfo GetOrNull (string path)
+		{
+			try {
+				return Get (path);
+			} catch (Exception ex) {
+				return null;
 			}
 		}
 		
@@ -61,47 +91,53 @@ namespace DiskDroid.FileSystem.Contract
 
 		[DataMember(Order = 5)]
 		public DateTime ModifyTime { get; private set; }
-
-		[DataMember(Order = 6)]
-		public long Size { get; private set; }
 		
-		[DataMember(Order = 7)]
+		[DataMember(Order = 6)]
 		public string LinkTarget { get; private set; }
 		
-		[DataMember(Order = 8)]
+		[DataMember(Order = 7)]
 		public string User { get; private set; }
 		
-		[DataMember(Order = 9)]
+		[DataMember(Order = 8)]
 		public ushort UID { get; private set; }
 		
-		[DataMember(Order = 10)]
+		[DataMember(Order = 9)]
 		public string Group { get; private set; }
 		
-		[DataMember(Order = 11)]
+		[DataMember(Order = 10)]
 		public ushort GID{ get; private set; }
 		
-		[DataMember(Order = 12)]
+		[DataMember(Order = 11)]
 		public FilePermission UserMode { get; private set; }
 		
-		[DataMember(Order = 13)]
+		[DataMember(Order = 12)]
 		public FilePermission GroupMode { get; private set; }
 		
-		[DataMember(Order = 14)]
+		[DataMember(Order = 13)]
 		public FilePermission OthersMode { get; private set; }
 		
 		public FileSystemItemInfo (string path)
 		{
 			this.LoadTime = DateTime.UtcNow;
+			this.Path = path;
 			
-			System.IO.FileInfo info = new System.IO.FileInfo (path);
-			
+			this.ReloadInfo ();
+			this.ReloadStat ();
+		}
+		
+		public void ReloadInfo ()
+		{
+			System.IO.FileInfo info = new System.IO.FileInfo (this.Path);
 			this.OnParseInfo (info);
+		}
+		
+		public void ReloadStat ()
+		{
 			this.ParseStat (this.Stat ());
 		}
 		
 		protected virtual void OnParseInfo (System.IO.FileInfo info)
 		{
-			this.Path = info.FullName;
 			if (this.Path != "/")
 				this.DirectoryPath = info.DirectoryName;
 			this.Name = info.Name;
@@ -127,8 +163,6 @@ Change: 2012-03-06 18:37:40.912285837 +0100*/
 			string[] fileNameParts = statInfos.Dequeue ().Split (new string[]{"\" -> \""}, StringSplitOptions.None);
 			this.LinkTarget = fileNameParts.Length > 1 ? fileNameParts [1].Remove (fileNameParts [1].Length - 1) : null;
 			
-			this.Size = Convert.ToInt64 (statInfos.Dequeue ());
-			
 			string accessString = statInfos.Dequeue ();
 			this.UserMode = (FilePermission)Convert.ToUInt16 (accessString [0]);
 			this.GroupMode = (FilePermission)Convert.ToUInt16 (accessString [1]);
@@ -149,7 +183,7 @@ Change: 2012-03-06 18:37:40.912285837 +0100*/
 		private string Stat ()
 		{			
 			try {
-				return "stat".Run ("-c \"%N|%s|%a|%u|%U|%g|%G" + (!string.IsNullOrEmpty (this.StatFormat) ? "|" + this.StatFormat : string.Empty) + "\"", this.Path);				
+				return "stat".Run ("-c \"%N|%a|%u|%U|%g|%G" + (!string.IsNullOrEmpty (this.StatFormat) ? "|" + this.StatFormat : string.Empty) + "\"", this.Path);				
 			} catch (Exception ex) {
 				throw(new ArgumentException ("could not stat <" + this.Path + ">\n" + ex.Message));
 			}	
@@ -310,11 +344,14 @@ Change: 2012-03-06 18:37:40.912285837 +0100*/
 	{		
 		[DataMember(Order = 0)]
 		public string Extension { get; private set; }
-		
+
 		[DataMember(Order = 1)]
-		public bool IsBlockDevice { get; private set; }
+		public long Size { get; private set; }
 		
 		[DataMember(Order = 2)]
+		public bool IsBlockDevice { get; private set; }
+		
+		[DataMember(Order = 3)]
 		public bool IsCharacterDevice { get; private set; }
 
 		public FileItemInfo (string path) : base(path)
@@ -325,7 +362,8 @@ Change: 2012-03-06 18:37:40.912285837 +0100*/
 		{
 			base.OnParseInfo (info);
 			
-			this.Extension = info.Extension;			
+			this.Extension = info.Extension;
+			this.Size = info.Length;
 		}
 		
 		protected override void InternalCopy (DirectoryItemInfo target)

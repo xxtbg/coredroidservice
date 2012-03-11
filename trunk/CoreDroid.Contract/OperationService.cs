@@ -15,6 +15,11 @@ namespace CoreDroid.Contract
 			return this.operations [info.ID];
 		}
 		
+		protected T Get (int id)
+		{
+			return this.operations [id];
+		}
+		
 		[ServiceMember]
 		public I Remove (int id)
 		{
