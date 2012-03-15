@@ -36,7 +36,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Mono.Posix" />
     <Reference Include="System.Runtime.Serialization" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +53,10 @@
     <ProjectReference Include="..\CoreDroid.Test.Contract\CoreDroid.Test.Contract.csproj">
       <Project>{AC81E2FD-C6FB-440D-96D9-0015311403F0}</Project>
       <Name>CoreDroid.Test.Contract</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CoreDroid.Native\CoreDroid.Native.csproj">
+      <Project>{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}</Project>
+      <Name>CoreDroid.Native</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
