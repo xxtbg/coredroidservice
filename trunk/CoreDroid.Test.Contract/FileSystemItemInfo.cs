@@ -8,72 +8,7 @@ namespace DiskDroid.FileSystem.Contract
 {
 	[DataContract]
 	public abstract class FileSystemItemInfo
-	{
-		private static Dictionary<string, FileSystemItemInfo> cache = new Dictionary<string, FileSystemItemInfo> ();
-		private static ushort? currentUID = null;
-		
-		protected static ushort CurrentUID {
-			get {
-				if (currentUID == null) {
-					currentUID = Convert.ToUInt16 ("id".Run ("-u"));
-				}
-				
-				return currentUID.Value;
-			}
-		}
-		
-		private static IEnumerable<ushort> currentGID = null;
-		
-		protected static IEnumerable<ushort> CurrentGID {
-			get {
-				if (currentGID == null) {
-					currentGID = "id".Run ("-G").Split (' ').Select (g => Convert.ToUInt16 (g));
-				}
-				
-				return currentGID;
-			}
-		}
-		
-		public static FileSystemItemInfo Get (string path)
-		{
-			return Get (path, 0);
-		}
-		
-		public static FileSystemItemInfo Get (string path, int lifeTime)
-		{
-			if (path.Length > 1 && path.EndsWith ("/"))
-				path = path.Remove (path.Length - 1);
-			
-			if (cache.ContainsKey (path) && DateTime.UtcNow > cache [path].LoadTime.AddSeconds (lifeTime))
-				cache.Remove (path);
-			
-			if (!cache.ContainsKey (path)) {
-				cache.Add (path, InternalGet (path));
-			}
-			
-			return cache [path];
-		}
-		
-		private static FileSystemItemInfo InternalGet (string path)
-		{
-			if ((System.IO.File.GetAttributes (path) & System.IO.FileAttributes.Directory) == System.IO.FileAttributes.Directory) {
-				return new DirectoryItemInfo (path);
-			} else {
-				return new FileItemInfo (path);
-			}
-		}
-		
-		public static FileSystemItemInfo GetOrNull (string path)
-		{
-			try {
-				return Get (path);
-			} catch (Exception ex) {
-				return null;
-			}
-		}
-		
-		protected virtual string StatFormat { get { return null; } }
-		
+	{		
 		[DataMember(Order = 0)]
 		public DateTime LoadTime { get; private set; }
 		
@@ -120,73 +55,8 @@ namespace DiskDroid.FileSystem.Contract
 		{
 			this.LoadTime = DateTime.UtcNow;
 			this.Path = path;
-			
-			this.ReloadInfo ();
-			this.ReloadStat ();
-		}
-		
-		public void ReloadInfo ()
-		{
-			System.IO.FileInfo info = new System.IO.FileInfo (this.Path);
-			this.OnParseInfo (info);
-		}
-		
-		public void ReloadStat ()
-		{
-			this.ParseStat (this.Stat ());
-		}
-		
-		protected virtual void OnParseInfo (System.IO.FileInfo info)
-		{
-			if (this.Path != "/")
-				this.DirectoryPath = info.DirectoryName;
-			this.Name = info.Name;
-			this.AccessTime = info.LastAccessTime;
-			this.ModifyTime = info.LastWriteTime;
-		}
-
-		/*
-		 File: „/“
-  Size: 4096      	Blocks: 8          IO Block: 4096   Verzeichnis
-Device: 802h/2050d	Inode: 2           Links: 22
-Access: (0755/drwxr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
-Access: 2012-03-07 18:37:48.324771274 +0100
-Modify: 2012-03-06 18:37:40.912285837 +0100
-Change: 2012-03-06 18:37:40.912285837 +0100*/
-		
-		private void ParseStat (string statOutput)
-		{
-			Queue<string> statInfos = new Queue<string> ();
-			foreach (string statInfo in statOutput.Split ('|'))
-				statInfos.Enqueue (statInfo);
-			
-			string[] fileNameParts = statInfos.Dequeue ().Split (new string[]{"\" -> \""}, StringSplitOptions.None);
-			this.LinkTarget = fileNameParts.Length > 1 ? fileNameParts [1].Remove (fileNameParts [1].Length - 1) : null;
-			
-			string accessString = statInfos.Dequeue ();
-			this.UserMode = (FilePermission)Convert.ToUInt16 (accessString [0]);
-			this.GroupMode = (FilePermission)Convert.ToUInt16 (accessString [1]);
-			this.OthersMode = (FilePermission)Convert.ToUInt16 (accessString [2]);
-			
-			this.UID = Convert.ToUInt16 (statInfos.Dequeue ());
-			this.User = statInfos.Dequeue ();
-			this.GID = Convert.ToUInt16 (statInfos.Dequeue ());
-			this.Group = statInfos.Dequeue ();
-			
-			this.OnParseStat (statInfos);
-		}
-		
-		protected virtual void OnParseStat (Queue<string> statInfos)
-		{
-		}
-		
-		private string Stat ()
-		{			
-			try {
-				return "stat".Run ("-c \"%N|%a|%u|%U|%g|%G" + (!string.IsNullOrEmpty (this.StatFormat) ? "|" + this.StatFormat : string.Empty) + "\"", this.Path);				
-			} catch (Exception ex) {
-				throw(new ArgumentException ("could not stat <" + this.Path + ">\n" + ex.Message));
-			}	
+			this.Name = System.IO.Path.GetFileName (path);
+			this.DirectoryPath = System.IO.Path.GetDirectoryName (path);
 		}
 		
 		protected bool HasPermission (FilePermission mode)
@@ -232,94 +102,9 @@ Change: 2012-03-06 18:37:40.912285837 +0100*/
 			return this.CanWrite ();
 		}
 		
-		private void InternalLink (DirectoryItemInfo target)
+		public void SetExpired ()
 		{
-			"ln".Run ("-s", this.LinkTarget, System.IO.Path.Combine (target.Path, this.Name));
-		}
-		
-		protected virtual void InternalCopy (DirectoryItemInfo target)
-		{
-			"cp".Run ("-fr", System.IO.Path.Combine (target.Path, this.Name));
-		}
-		
-		protected virtual void InternalMove (DirectoryItemInfo target)
-		{
-			"mv".Run (this.Path, System.IO.Path.Combine (target.Path, this.Name));
-		}
-		
-		private void InternalDeleteLink ()
-		{
-			"rm".Run (this.Path);
-		}
-		
-		protected virtual void InternalDelete ()
-		{	
-			"rm".Run ("-fr", this.Path);
-		}
-		
-		protected virtual void InternalChangeOwner (ushort newUID, ushort newGID)
-		{
-			"chown".Run (newUID.ToString () + ":" + newGID.ToString (), this.Path);
-		}
-		
-		protected virtual void InternalChangeMode (ushort newMode)
-		{
-			"chmod".Run ("0" + newMode.ToString (), this.Path);
-		}
-		
-		public void Copy (DirectoryItemInfo target)
-		{
-			if (!this.CanCopy ())
-				throw(new AccessViolationException ("you are not allowed to copy <" + this.Path + ">"));
-			
-			if (string.IsNullOrEmpty (this.LinkTarget)) {
-				this.InternalCopy (target);
-			} else {					
-				this.InternalLink (target);
-			}
-		}
-		
-		public void Move (DirectoryItemInfo target)
-		{
-			if (!this.CanMove ())
-				throw(new AccessViolationException ("you are not allowed to move <" + this.Path + ">"));
-			
-			if (string.IsNullOrEmpty (this.LinkTarget)) {
-				this.InternalMove (target);
-			} else {					
-				this.InternalLink (target);
-				this.InternalDeleteLink ();				
-			}
-		}
-		
-		public void Delete ()
-		{
-			if (!this.CanDelete ())
-				throw(new AccessViolationException ("you are not allowed to move <" + this.Path + ">"));
-			
-			if (string.IsNullOrEmpty (this.LinkTarget)) {
-				this.InternalDelete ();
-			} else {					
-				this.InternalDeleteLink ();
-			}
-			
 			this.LoadTime = DateTime.MinValue;
-		}
-		
-		public void ChangeOwner (ushort newUID, ushort newGID)
-		{
-			if (!this.CanChange ())
-				throw(new AccessViolationException ("you are not allowed to change <" + this.Path + ">"));
-			
-			this.InternalChangeOwner (newUID, newGID);
-		}
-		
-		public void ChangeMode (ushort newMode)
-		{
-			if (!this.CanChange ())
-				throw(new AccessViolationException ("you are not allowed to change <" + this.Path + ">"));
-			
-			this.InternalChangeMode (newMode);
 		}
 	}
 	
@@ -331,11 +116,6 @@ Change: 2012-03-06 18:37:40.912285837 +0100*/
 		
 		public DirectoryItemInfo (string path):base(path)
 		{
-		}
-		
-		protected override void InternalDelete ()
-		{
-			System.IO.Directory.Delete (this.Path);
 		}
 	}
 	
@@ -356,29 +136,6 @@ Change: 2012-03-06 18:37:40.912285837 +0100*/
 
 		public FileItemInfo (string path) : base(path)
 		{
-		}
-		
-		protected override void OnParseInfo (System.IO.FileInfo info)
-		{
-			base.OnParseInfo (info);
-			
-			this.Extension = info.Extension;
-			this.Size = info.Length;
-		}
-		
-		protected override void InternalCopy (DirectoryItemInfo target)
-		{
-			System.IO.File.Copy (this.Path, System.IO.Path.Combine (this.Path, System.IO.Path.Combine (target.Path, this.Name)));
-		}
-		
-		protected override void InternalMove (DirectoryItemInfo target)
-		{
-			System.IO.File.Move (this.Path, System.IO.Path.Combine (this.Path, System.IO.Path.Combine (target.Path, this.Name)));
-		}
-		
-		protected override void InternalDelete ()
-		{
-			System.IO.File.Delete (this.Path);
 		}
 	}
 	
