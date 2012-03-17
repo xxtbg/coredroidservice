@@ -12,7 +12,7 @@ namespace DiskDroid.FileSystem
 	{
 		public List<string> BlockedItems { get; private set; }
 		
-		private DirectoryService directoryService = new DirectoryService ();
+		protected DirectoryService directoryService = new DirectoryService ();
 
 		protected sealed override ThreadStart Worker { get { return new ThreadStart (this.FileOperationWorker); } }
 		
@@ -124,7 +124,7 @@ namespace DiskDroid.FileSystem
 			if (!item.CanCopy ())
 				throw new AccessViolationException ("you have no permission to copy <" + item.Path + ">");
 			
-			FileSystemItemInfo targetItem = FileSystemItemInfo.GetOrNull (Path.Combine (this.GetTargetPath (item), item.Name));
+			FileSystemItemInfo targetItem = this.directoryService.Get (Path.Combine (this.GetTargetPath (item), item.Name), 0);
 			if (targetItem is FileItemInfo && !((CopyFileOperationInfo)this.Info).Quiet) {
 				((CopyFileOperationInfo)this.Info).ConflictItem = targetItem;
 				if (targetItem.CanDelete ()) {
@@ -149,10 +149,10 @@ namespace DiskDroid.FileSystem
 			if (item is DirectoryItemInfo && string.IsNullOrEmpty (item.LinkTarget)) {
 				string targetPath = this.GetTargetPath (item);
 				
-				FileSystemItemInfo targetItem = FileSystemItemInfo.GetOrNull (Path.Combine (targetPath, item.Name));
+				FileSystemItemInfo targetItem = this.directoryService.Get (Path.Combine (targetPath, item.Name), 0);
 				
 				if (targetItem is FileItemInfo)
-					targetItem.Delete ();
+					directoryService.Delete (targetItem);
 				
 				if (targetItem == null || targetItem is FileItemInfo)
 					Directory.CreateDirectory (Path.Combine (targetPath, item.Name));
@@ -173,22 +173,26 @@ namespace DiskDroid.FileSystem
 			
 			
 			if (item is FileItemInfo || (item is DirectoryItemInfo && !string.IsNullOrEmpty (item.LinkTarget))) {
-				FileSystemItemInfo targetItem = FileSystemItemInfo.GetOrNull (Path.Combine (this.GetTargetPath (item), item.Name));
+				FileSystemItemInfo targetItem = this.directoryService.Get (Path.Combine (this.GetTargetPath (item), item.Name), 0);
 					
 				if (targetItem != null)
-					targetItem.Delete ();
+					this.directoryService.Delete (targetItem);
 				
 				FileProgressWatcher watcher = new FileProgressWatcher (Path.Combine (targetPath, item.Name), info.ActualProgress);
 				try {
 					if (info is MoveFileOperationInfo)
-						item.Move ((DirectoryItemInfo)FileSystemItemInfo.Get (targetPath));
-					else
-						item.Copy ((DirectoryItemInfo)FileSystemItemInfo.Get (targetPath));
+						this.directoryService.Move (item, ((DirectoryItemInfo)this.directoryService.Get (targetPath, 0)));
+					else {
+						this.directoryService.Copy (item, ((DirectoryItemInfo)this.directoryService.Get (targetPath, 0)));
+						FileSystemItemInfo newItem = this.directoryService.Get (System.IO.Path.Combine (targetPath, item.Name), 0);
+						this.directoryService.ChangePermissions (newItem, item.UserMode, item.GroupMode, item.OtherMode, item.UIDBit, item.GIDBit, item.StickyBit);
+						this.directoryService.ChangeOwner (newItem, item.UID, item.GID);
+					}
 				} finally {
 					watcher.Stop ();
 				}
 			} else if (info is MoveFileOperationInfo && Directory.GetDirectories (item.Path).Length == 0 && Directory.GetFiles (item.Path).Length == 0) {
-				item.Delete ();
+				this.directoryService.Delete (item);
 			}
 			
 			if (item is FileItemInfo) {
@@ -212,7 +216,7 @@ namespace DiskDroid.FileSystem
 		
 		protected override void Action (FileSystemItemInfo item)
 		{
-			item.Delete ();
+			this.directoryService.Delete (item);
 		}
 		
 		protected override void CheckAction (FileSystemItemInfo item)
@@ -238,7 +242,7 @@ namespace DiskDroid.FileSystem
 		protected override void Action (FileSystemItemInfo item)
 		{
 			ChangeOwnerFileOperationInfo info = (ChangeOwnerFileOperationInfo)this.Info;
-			item.ChangeOwner (info.NewUID, info.NewGID);
+			this.directoryService.ChangeOwner (item, info.NewUID, info.NewGID);
 		}
 		
 		protected override void CheckAction (FileSystemItemInfo item)
@@ -264,7 +268,13 @@ namespace DiskDroid.FileSystem
 		protected override void Action (FileSystemItemInfo item)
 		{
 			ChangeModeFileOperationInfo info = (ChangeModeFileOperationInfo)this.Info;
-			item.ChangeMode (info.NewMode);
+			this.directoryService.ChangePermissions (item,
+			                                        info.UserMode.HasValue ? info.UserMode.Value : item.UserMode,
+			                                        info.GroupMode.HasValue ? info.GroupMode.Value : item.GroupMode,
+			                                        info.OtherMode.HasValue ? info.OtherMode.Value : item.OtherMode,
+			                                        info.UIDBit.HasValue ? info.UIDBit.Value : item.UIDBit,
+			                                        info.GIDBit.HasValue ? info.GIDBit.Value : item.GIDBit,
+			                                        info.StickyBit.HasValue ? info.StickyBit.Value : item.StickyBit);
 		}
 		
 		protected override void CheckAction (FileSystemItemInfo item)

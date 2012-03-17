@@ -43,6 +43,7 @@
     <Compile Include="FileOperationService.cs" />
     <Compile Include="FileOperationServiceThread.cs" />
     <Compile Include="DirectoryService.cs" />
+    <Compile Include="FileProgressWatcher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -54,9 +55,9 @@
       <Project>{AC81E2FD-C6FB-440D-96D9-0015311403F0}</Project>
       <Name>CoreDroid.Test.Contract</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CoreDroid.Native\CoreDroid.Native.csproj">
-      <Project>{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}</Project>
-      <Name>CoreDroid.Native</Name>
+    <ProjectReference Include="..\Mono.Posix\Mono.Posix.csproj">
+      <Project>{11E80475-2C13-45EA-89CB-AB288725F270}</Project>
+      <Name>Mono.Posix</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

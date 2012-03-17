@@ -3,10 +3,11 @@ using System.Threading;
 using CoreDroid.Contract;
 using DiskDroid.FileSystem.Contract;
 
-namespace DiskDroid.FileSystem.Contract
+namespace DiskDroid.FileSystem
 {
 	public class FileProgressWatcher
 	{
+		private DirectoryService directoryService = new DirectoryService ();
 		private string path;
 		private ProgressInfo info;
 		private Thread thread;
@@ -27,13 +28,9 @@ namespace DiskDroid.FileSystem.Contract
 		
 		private void Worker ()
 		{
-			FileItemInfo item = null;
 			while (!this.stopped) {
 				try {
-					if (item == null)
-						item = FileSystemItemInfo.Get (this.path) as FileItemInfo;
-					else
-						item.ReloadInfo ();
+					FileItemInfo item = this.directoryService.Get (this.path, 0) as FileItemInfo;
 					
 					if (item != null) {
 						this.info.Current = item.Size;

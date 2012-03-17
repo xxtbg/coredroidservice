@@ -75,9 +75,9 @@ namespace DiskDroid.FileSystem
 	public class ChangeModeFileOperationService : OperationService<ChangeModeFileOperationServiceThread, ChangeModeFileOperationInfo>
 	{		
 		[ServiceMember]
-		public int Start (FileSystemItemInfo item, ushort newMode, bool recursive)
+		public int Start (FileSystemItemInfo item, FilePermission? userMode, FilePermission? groupMode, FilePermission? otherMode, bool? uidBit, bool? gidBit, bool? stickyBit, bool recursive)
 		{
-			FileOperationServiceThread thread = this.Create (new ChangeModeFileOperationInfo (item, newMode, recursive));
+			FileOperationServiceThread thread = this.Create (new ChangeModeFileOperationInfo (item, userMode, groupMode, otherMode, uidBit, gidBit, stickyBit, recursive));
 			thread.Start ();
 			return thread.Info.ID;
 		}

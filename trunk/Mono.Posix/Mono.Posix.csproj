@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{11E80475-2C13-45EA-89CB-AB288725F270}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mono.Posix</RootNamespace>
+    <AssemblyName>Mono.Posix</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Mono.Posix\Catalog.cs" />
+    <Compile Include="Mono.Posix\PeerCred.cs" />
+    <Compile Include="Mono.Posix\Syscall.cs" />
+    <Compile Include="Mono.Posix\UnixEndPoint.cs" />
+    <Compile Include="Mono.Unix\AbstractUnixEndPoint.cs" />
+    <Compile Include="Mono.Unix\Catalog.cs" />
+    <Compile Include="Mono.Unix\FileAccessPattern.cs" />
+    <Compile Include="Mono.Unix\FileAccessPermissions.cs" />
+    <Compile Include="Mono.Unix\FileHandleOperations.cs" />
+    <Compile Include="Mono.Unix\FileSpecialAttributes.cs" />
+    <Compile Include="Mono.Unix\FileTypes.cs" />
+    <Compile Include="Mono.Unix\PeerCred.cs" />
+    <Compile Include="Mono.Unix\StdioFileStream.cs" />
+    <Compile Include="Mono.Unix\UnixClient.cs" />
+    <Compile Include="Mono.Unix\UnixDirectoryInfo.cs" />
+    <Compile Include="Mono.Unix\UnixDriveInfo.cs" />
+    <Compile Include="Mono.Unix\UnixEncoding.cs" />
+    <Compile Include="Mono.Unix\UnixEndPoint.cs" />
+    <Compile Include="Mono.Unix\UnixEnvironment.cs" />
+    <Compile Include="Mono.Unix\UnixFileInfo.cs" />
+    <Compile Include="Mono.Unix\UnixFileSystemInfo.cs" />
+    <Compile Include="Mono.Unix\UnixGroupInfo.cs" />
+    <Compile Include="Mono.Unix\UnixIOException.cs" />
+    <Compile Include="Mono.Unix\UnixListener.cs" />
+    <Compile Include="Mono.Unix\UnixMarshal.cs" />
+    <Compile Include="Mono.Unix\UnixPath.cs" />
+    <Compile Include="Mono.Unix\UnixPipes.cs" />
+    <Compile Include="Mono.Unix\UnixProcess.cs" />
+    <Compile Include="Mono.Unix\UnixSignal.cs" />
+    <Compile Include="Mono.Unix\UnixStream.cs" />
+    <Compile Include="Mono.Unix\UnixSymbolicLinkInfo.cs" />
+    <Compile Include="Mono.Unix\UnixUserInfo.cs" />
+    <Compile Include="Mono.Unix.Native\CdeclFunction.cs" />
+    <Compile Include="Mono.Unix.Native\FileNameMarshaler.cs" />
+    <Compile Include="Mono.Unix.Native\MapAttribute.cs" />
+    <Compile Include="Mono.Unix.Native\NativeConvert.cs" />
+    <Compile Include="Mono.Unix.Native\NativeConvert.generated.cs" />
+    <Compile Include="Mono.Unix.Native\RealTimeSignum.cs" />
+    <Compile Include="Mono.Unix.Native\Stdlib.cs" />
+    <Compile Include="Mono.Unix.Native\Syscall.cs" />
+    <Compile Include="Mono.Unix.Native\TypeAttributes.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Mono.Posix\" />
+    <Folder Include="Mono.Unix\" />
+    <Folder Include="Mono.Unix.Native\" />
+  </ItemGroup>
+</Project>

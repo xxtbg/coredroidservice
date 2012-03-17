@@ -78,12 +78,12 @@ namespace DiskDroid.FileSystem.Contract
 	public class ChangeOwnerFileOperationInfo:ChangeFileOperationInfo
 	{
 		[DataMember(Order = 0)]
-		public ushort NewUID { get; private set; }
+		public uint NewUID { get; private set; }
 		
 		[DataMember(Order = 1)]
-		public ushort NewGID { get; private set; }
+		public uint NewGID { get; private set; }
 		
-		public ChangeOwnerFileOperationInfo (FileSystemItemInfo item, ushort newUID, ushort newGID, bool recursive):base(item, recursive)
+		public ChangeOwnerFileOperationInfo (FileSystemItemInfo item, uint newUID, uint newGID, bool recursive):base(item, recursive)
 		{
 			this.NewUID = newUID;
 			this.NewGID = newGID;
@@ -93,11 +93,31 @@ namespace DiskDroid.FileSystem.Contract
 	public class ChangeModeFileOperationInfo:ChangeFileOperationInfo
 	{
 		[DataMember(Order = 0)]
-		public ushort NewMode { get; private set; }
+		public FilePermission? UserMode { get; private set; }
+
+		[DataMember(Order = 1)]
+		public FilePermission? GroupMode { get; private set; }
+
+		[DataMember(Order = 2)]
+		public FilePermission? OtherMode { get; private set; }
+
+		[DataMember(Order = 3)]
+		public bool? UIDBit { get; private set; }
+
+		[DataMember(Order = 4)]
+		public bool? GIDBit { get; private set; }
+
+		[DataMember(Order = 5)]
+		public bool? StickyBit { get; private set; }
 		
-		public ChangeModeFileOperationInfo (FileSystemItemInfo item, ushort newMode, bool recursive):base(item, recursive)
+		public ChangeModeFileOperationInfo (FileSystemItemInfo item, FilePermission? userMode, FilePermission? groupMode, FilePermission? otherMode, bool? uidBit, bool? gidBit, bool? stickyBit, bool recursive):base(item, recursive)
 		{
-			this.NewMode = newMode;
+			this.UserMode = userMode;
+			this.GroupMode = groupMode;
+			this.OtherMode = otherMode;
+			this.UIDBit = uidBit;
+			this.GIDBit = gidBit;
+			this.StickyBit = stickyBit;
 		}
 	}
 }
