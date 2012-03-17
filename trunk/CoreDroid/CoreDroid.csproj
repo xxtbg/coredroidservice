@@ -56,10 +56,6 @@
       <Project>{ECD2F63B-1F2D-4E56-A02A-A46D1A12C238}</Project>
       <Name>CoreDroid.Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CoreDroid.Test.Plugin\CoreDroid.Test.Plugin.csproj">
-      <Project>{B069CD42-EE75-4C98-BEAD-922FDC25B2C7}</Project>
-      <Name>CoreDroid.Test.Plugin</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
