@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Test.Plugin", "Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Test.Contract", "CoreDroid.Test.Contract\CoreDroid.Test.Contract.csproj", "{AC81E2FD-C6FB-440D-96D9-0015311403F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreDroid.Native", "CoreDroid.Native\CoreDroid.Native.csproj", "{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Posix", "Mono.Posix\Mono.Posix.csproj", "{11E80475-2C13-45EA-89CB-AB288725F270}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +25,18 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Debug|x86.Build.0 = Debug|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Release|x86.ActiveCfg = Release|Any CPU
+		{11E80475-2C13-45EA-89CB-AB288725F270}.Release|x86.Build.0 = Release|Any CPU
 		{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -35,18 +47,6 @@ Global
 		{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{25BF3DD4-9E9F-451A-AE5D-7478076E0DD1}.Release|x86.ActiveCfg = Release|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Debug|x86.Build.0 = Debug|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Release|x86.ActiveCfg = Release|Any CPU
-		{2E9D116A-32B3-4EF3-BA7F-A6E81F5D100A}.Release|x86.Build.0 = Release|Any CPU
 		{7980B6D9-81EB-4F5D-9F81-BDA49EC19DD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7980B6D9-81EB-4F5D-9F81-BDA49EC19DD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7980B6D9-81EB-4F5D-9F81-BDA49EC19DD8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

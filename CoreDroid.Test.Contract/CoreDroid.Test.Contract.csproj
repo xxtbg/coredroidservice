@@ -36,7 +36,6 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="FileSystemItemInfo.cs" />
     <Compile Include="FileOperationInfo.cs" />
-    <Compile Include="FileProgressWatcher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

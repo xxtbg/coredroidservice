@@ -10,6 +10,7 @@ namespace CoreDroid
 	{
 		static void Main (string[] args)
 		{
+			Type t = typeof(DiskDroid.FileSystem.DirectoryService);
 			int port = 10000;
 			IPGlobalProperties ipGlobalProperties = IPGlobalProperties.GetIPGlobalProperties ();
 			TcpConnectionInformation[] tcpConnInfoArray = ipGlobalProperties.GetActiveTcpConnections ();
