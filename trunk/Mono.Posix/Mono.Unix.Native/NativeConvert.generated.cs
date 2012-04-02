@@ -15,7 +15,7 @@ namespace Mono.Unix.Native
 		{
 		}
 
-		private const string LIB = "MonoPosixHelper";
+		private const string LIB = "__Internal";
 
 		private static void ThrowArgumentException (object value)
 		{

@@ -12,6 +12,9 @@ namespace CoreDroid.Contract.Message
 		[DataMember(Order = 0)]
 		public InitAction Action { get; private set; }
 		
+		[DataMember(Order = 1)]
+		public object Parameter { get; private set; }
+		
 		private InitMessage ()
 		{
 		}
@@ -19,6 +22,11 @@ namespace CoreDroid.Contract.Message
 		public InitMessage (InitAction action)
 		{
 			this.Action = action;
+		}
+		
+		public InitMessage (InitAction action, object parameter) : this(action)
+		{
+			this.Parameter = parameter;
 		}
 	}
 

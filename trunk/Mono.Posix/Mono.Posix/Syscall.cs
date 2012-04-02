@@ -36,9 +36,9 @@
 //
 //    The [Map] attributes have been removed.  The naming and methodology of
 //    the mapping routines has changed.  The old map functions still exist in
-//    MonoPosixHelper, but they will not be updated any further.
+//    __Internal, but they will not be updated any further.
 //    Consequently, there is little point in maintaining the [Map] attributes
-//    in this file, as they would only bloat MonoPosixHelper.
+//    in this file, as they would only bloat __Internal.
 //
 
 //
@@ -192,10 +192,10 @@ namespace Mono.Posix
 		[DllImport ("__Internal", EntryPoint="open", SetLastError=true)]
 		internal static extern int syscall_open (string pathname, int flags, int mode);
 
-		[DllImport ("MonoPosixHelper")]
+		[DllImport ("__Internal")]
 		internal extern static int map_Mono_Posix_OpenFlags (OpenFlags flags);
 
-		[DllImport ("MonoPosixHelper")]
+		[DllImport ("__Internal")]
 		internal extern static int map_Mono_Posix_FileMode (FileMode mode);
 		
 		public static int open (string pathname, OpenFlags flags)
@@ -221,7 +221,7 @@ namespace Mono.Posix
 		[DllImport ("__Internal", EntryPoint="waitpid", SetLastError=true)]
 		unsafe internal static extern int syscall_waitpid (int pid, int * status, int options);
 
-		[DllImport ("MonoPosixHelper")]
+		[DllImport ("__Internal")]
 		internal extern static int map_Mono_Posix_WaitOptions (WaitOptions wait_options);
 		
 		public static int waitpid (int pid, out int status, WaitOptions options)
@@ -241,22 +241,22 @@ namespace Mono.Posix
 			}
 		}
 
-		[DllImport ("MonoPosixHelper", EntryPoint="wifexited")]
+		[DllImport ("__Internal", EntryPoint="wifexited")]
 		public static extern int WIFEXITED (int status);
 
-		[DllImport ("MonoPosixHelper", EntryPoint="wexitstatus")]
+		[DllImport ("__Internal", EntryPoint="wexitstatus")]
 		public static extern int WEXITSTATUS (int status);
 
-		[DllImport ("MonoPosixHelper", EntryPoint="wifsignaled")]
+		[DllImport ("__Internal", EntryPoint="wifsignaled")]
 		public static extern int WIFSIGNALED (int status);
 
-		[DllImport ("MonoPosixHelper", EntryPoint="wtermsig")]
+		[DllImport ("__Internal", EntryPoint="wtermsig")]
 		public static extern int WTERMSIG (int status);
 
-		[DllImport ("MonoPosixHelper", EntryPoint="wifstopped")]
+		[DllImport ("__Internal", EntryPoint="wifstopped")]
 		public static extern int WIFSTOPPED (int status);
 
-		[DllImport ("MonoPosixHelper", EntryPoint="wstopsig")]
+		[DllImport ("__Internal", EntryPoint="wstopsig")]
 		public static extern int WSTOPSIG (int status);
 
 		[DllImport ("__Internal", EntryPoint="creat", SetLastError=true)]
@@ -328,7 +328,7 @@ namespace Mono.Posix
 		[DllImport ("__Internal", EntryPoint="access", SetLastError=true)]
 		internal extern static int syscall_access (string pathname, int mode);
 
-		[DllImport ("MonoPosixHelper")]
+		[DllImport ("__Internal")]
 		internal extern static int map_Mono_Posix_AccessMode (AccessMode mode);
 
 		public static int access (string pathname, AccessMode mode)
@@ -419,10 +419,10 @@ namespace Mono.Posix
 
 		// these don't exactly match POSIX, but it's a nice way to get user/group names
 		
-		[DllImport ("MonoPosixHelper", SetLastError=true)]
+		[DllImport ("__Internal", SetLastError=true)]
 		private static extern string helper_Mono_Posix_GetUserName (int uid);
 
-		[DllImport ("MonoPosixHelper", SetLastError=true)]
+		[DllImport ("__Internal", SetLastError=true)]
 		private static extern string helper_Mono_Posix_GetGroupName (int gid);
 		
 		public static string getusername (int uid)
@@ -477,7 +477,7 @@ namespace Mono.Posix
 				return false;
 		}
 
-		[DllImport ("MonoPosixHelper")]
+		[DllImport ("__Internal")]
 		internal extern static int helper_Mono_Posix_Stat (string filename, bool dereference,
 			out int device, out int inode, out int mode,
 			out int nlinks, out int uid, out int gid,
@@ -547,7 +547,7 @@ namespace Mono.Posix
 		[DllImport ("__Internal")]
 		public static extern int closedir (IntPtr dir);
 		
-		[DllImport ("MonoPosixHelper", EntryPoint="helper_Mono_Posix_readdir")]
+		[DllImport ("__Internal", EntryPoint="helper_Mono_Posix_readdir")]
 		public static extern string readdir (IntPtr dir);
 		
 	}

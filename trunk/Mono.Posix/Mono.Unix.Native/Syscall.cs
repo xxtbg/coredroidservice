@@ -52,7 +52,6 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
@@ -60,13 +59,14 @@ using System.Security;
 using System.Text;
 using Mono.Unix.Native;
 
-namespace Mono.Unix.Native {
+namespace Mono.Unix.Native
+{
 
 	#region Enumerations
-
 	[Flags][Map]
 	
-	public enum SyslogOptions {
+	public enum SyslogOptions
+	{
 		LOG_PID    = 0x01,  // log the pid with each message
 		LOG_CONS   = 0x02,  // log on the console if errors in sending
 		LOG_ODELAY = 0x04,  // delay open until first syslog (default)
@@ -77,7 +77,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum SyslogFacility {
+	public enum SyslogFacility
+	{
 		LOG_KERN      = 0 << 3,
 		LOG_USER      = 1 << 3,
 		LOG_MAIL      = 2 << 3,
@@ -102,7 +103,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum SyslogLevel {
+	public enum SyslogLevel
+	{
 		LOG_EMERG   = 0,  // system is unusable
 		LOG_ALERT   = 1,  // action must be taken immediately
 		LOG_CRIT    = 2,  // critical conditions
@@ -115,7 +117,8 @@ namespace Mono.Unix.Native {
 
 	[Map][Flags]
 	
-	public enum OpenFlags : int {
+	public enum OpenFlags : int
+	{
 		//
 		// One of these
 		//
@@ -139,7 +142,7 @@ namespace Mono.Unix.Native {
 		// non-supported platforms.
 		//
 		// (For example, "C-wrapped" system calls -- calls with implementation in
-		// MonoPosixHelper -- will return -1 with errno=EINVAL.  C#-wrapped system
+		// __Internal -- will return -1 with errno=EINVAL.  C#-wrapped system
 		// calls will generate an exception in NativeConvert, as the value can't be
 		// converted on the target platform.)
 		//
@@ -154,7 +157,8 @@ namespace Mono.Unix.Native {
 	// mode_t
 	[Flags][Map]
 	
-	public enum FilePermissions : uint {
+	public enum FilePermissions : uint
+	{
 		S_ISUID     = 0x0800, // Set user ID on execution
 		S_ISGID     = 0x0400, // Set group ID on execution
 		S_ISVTX     = 0x0200, // Save swapped text after use (sticky).
@@ -196,7 +200,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum FcntlCommand : int {
+	public enum FcntlCommand : int
+	{
 		// Form /usr/include/bits/fcntl.h
 		F_DUPFD    =    0, // Duplicate file descriptor.
 		F_GETFD    =    1, // Get file descriptor flags.
@@ -217,7 +222,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum LockType : short {
+	public enum LockType : short
+	{
 		F_RDLCK = 0, // Read lock.
 		F_WRLCK = 1, // Write lock.
 		F_UNLCK = 2, // Remove lock.
@@ -225,7 +231,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum SeekFlags : short {
+	public enum SeekFlags : short
+	{
 		// values liberally copied from /usr/include/unistd.h
 		SEEK_SET = 0, // Seek from beginning of file.
 		SEEK_CUR = 1, // Seek from current position.
@@ -238,7 +245,8 @@ namespace Mono.Unix.Native {
 	
 	[Map, Flags]
 	
-	public enum DirectoryNotifyFlags : int {
+	public enum DirectoryNotifyFlags : int
+	{
 		// from /usr/include/bits/fcntl.h
 		DN_ACCESS    = 0x00000001, // File accessed.
 		DN_MODIFY    = 0x00000002, // File modified.
@@ -251,7 +259,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum PosixFadviseAdvice : int {
+	public enum PosixFadviseAdvice : int
+	{
 		POSIX_FADV_NORMAL     = 0,  // No further special treatment.
 		POSIX_FADV_RANDOM     = 1,  // Expect random page references.
 		POSIX_FADV_SEQUENTIAL = 2,  // Expect sequential page references.
@@ -262,7 +271,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum PosixMadviseAdvice : int {
+	public enum PosixMadviseAdvice : int
+	{
 		POSIX_MADV_NORMAL     = 0,  // No further special treatment.
 		POSIX_MADV_RANDOM     = 1,  // Expect random page references.
 		POSIX_MADV_SEQUENTIAL = 2,  // Expect sequential page references.
@@ -271,7 +281,8 @@ namespace Mono.Unix.Native {
 	}
 
 	[Map]
-	public enum Signum : int {
+	public enum Signum : int
+	{
 		SIGHUP    =  1, // Hangup (POSIX).
 		SIGINT    =  2, // Interrupt (ANSI).
 		SIGQUIT   =  3, // Quit (POSIX).
@@ -310,14 +321,16 @@ namespace Mono.Unix.Native {
 	}
 
 	[Flags][Map]
-	public enum WaitOptions : int {
+	public enum WaitOptions : int
+	{
 		WNOHANG   = 1,  // Don't block waiting
 		WUNTRACED = 2,  // Report status of stopped children
 	}
 
-  [Flags][Map]
+	[Flags][Map]
 	
-	public enum AccessModes : int {
+	public enum AccessModes : int
+	{
 		R_OK = 1,
 		W_OK = 2,
 		X_OK = 4,
@@ -326,7 +339,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum PathconfName : int {
+	public enum PathconfName : int
+	{
 		_PC_LINK_MAX,
 		_PC_MAX_CANON,
 		_PC_MAX_INPUT,
@@ -352,7 +366,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum SysconfName : int {
+	public enum SysconfName : int
+	{
 		_SC_ARG_MAX,
 		_SC_CHILD_MAX,
 		_SC_CLK_TCK,
@@ -561,7 +576,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum ConfstrName : int {
+	public enum ConfstrName : int
+	{
 		_CS_PATH,			/* The default search path.  */
 		_CS_V6_WIDTH_RESTRICTED_ENVS,
 		_CS_GNU_LIBC_VERSION,
@@ -610,7 +626,8 @@ namespace Mono.Unix.Native {
 
 	[Map]
 	
-	public enum LockfCommand : int {
+	public enum LockfCommand : int
+	{
 		F_ULOCK = 0, // Unlock a previously locked region.
 		F_LOCK  = 1, // Lock a region for exclusive use.
 		F_TLOCK = 2, // Test and lock a region for exclusive use.
@@ -618,7 +635,8 @@ namespace Mono.Unix.Native {
 	}
 
 	[Map][Flags]
-	public enum PollEvents : short {
+	public enum PollEvents : short
+	{
 		POLLIN      = 0x0001, // There is data to read
 		POLLPRI     = 0x0002, // There is urgent data to read
 		POLLOUT     = 0x0004, // Writing now will not block
@@ -634,7 +652,8 @@ namespace Mono.Unix.Native {
 
 	[Map][Flags]
 	
-	public enum XattrFlags : int {
+	public enum XattrFlags : int
+	{
 		XATTR_AUTO = 0,
 		XATTR_CREATE = 1,
 		XATTR_REPLACE = 2,
@@ -642,7 +661,8 @@ namespace Mono.Unix.Native {
 
 	[Map][Flags]
 	
-	public enum MountFlags : ulong {
+	public enum MountFlags : ulong
+	{
 		ST_RDONLY      =    1,  // Mount read-only
 		ST_NOSUID      =    2,  // Ignore suid and sgid bits
 		ST_NODEV       =    4,  // Disallow access to device special files
@@ -660,7 +680,8 @@ namespace Mono.Unix.Native {
 
 	[Map][Flags]
 	
-	public enum MmapFlags : int {
+	public enum MmapFlags : int
+	{
 		MAP_SHARED      = 0x01,     // Share changes.
 		MAP_PRIVATE     = 0x02,     // Changes are private.
 		MAP_TYPE        = 0x0f,     // Mask for type of mapping.
@@ -681,20 +702,22 @@ namespace Mono.Unix.Native {
 
 	[Map][Flags]
 	
-	public enum MmapProts : int {
+	public enum MmapProts : int
+	{
 		PROT_READ       = 0x1,  // Page can be read.
 		PROT_WRITE      = 0x2,  // Page can be written.
 		PROT_EXEC       = 0x4,  // Page can be executed.
 		PROT_NONE       = 0x0,  // Page can not be accessed.
 		PROT_GROWSDOWN  = 0x01000000, // Extend change to start of
-		                              //   growsdown vma (mprotect only).
+		//   growsdown vma (mprotect only).
 		PROT_GROWSUP    = 0x02000000, // Extend change to start of
-		                              //   growsup vma (mprotect only).
+		//   growsup vma (mprotect only).
 	}
 
 	[Map][Flags]
 	
-	public enum MsyncFlags : int {
+	public enum MsyncFlags : int
+	{
 		MS_ASYNC      = 0x1,  // Sync memory asynchronously.
 		MS_SYNC       = 0x4,  // Synchronous memory sync.
 		MS_INVALIDATE = 0x2,  // Invalidate the caches.
@@ -702,14 +725,16 @@ namespace Mono.Unix.Native {
 
 	[Map][Flags]
 	
-	public enum MlockallFlags : int {
+	public enum MlockallFlags : int
+	{
 		MCL_CURRENT	= 0x1,	// Lock all currently mapped pages.
 		MCL_FUTURE  = 0x2,	// Lock all additions to address
 	}
 
 	[Map][Flags]
 	
-	public enum MremapFlags : ulong {
+	public enum MremapFlags : ulong
+	{
 		MREMAP_MAYMOVE = 0x1,
 	}
 
@@ -727,9 +752,12 @@ namespace Mono.Unix.Native {
 		public LockType         l_type;    // Type of lock: F_RDLCK, F_WRLCK, F_UNLCK
 		
 		public SeekFlags        l_whence;  // How to interpret l_start
-		[off_t] public long     l_start;   // Starting offset for lock
-		[off_t] public long     l_len;     // Number of bytes to lock
-		[pid_t] public int      l_pid;     // PID of process blocking our lock (F_GETLK only)
+		[off_t]
+		public long     l_start;   // Starting offset for lock
+		[off_t]
+		public long     l_len;     // Number of bytes to lock
+		[pid_t]
+		public int      l_pid;     // PID of process blocking our lock (F_GETLK only)
 
 		public override int GetHashCode ()
 		{
@@ -742,7 +770,7 @@ namespace Mono.Unix.Native {
 		{
 			if ((obj == null) || (obj.GetType () != GetType ()))
 				return false;
-			Flock value = (Flock) obj;
+			Flock value = (Flock)obj;
 			return l_type == value.l_type && l_whence == value.l_whence && 
 				l_start == value.l_start && l_len == value.l_len && 
 				l_pid == value.l_pid;
@@ -773,9 +801,7 @@ namespace Mono.Unix.Native {
 #endif
 	{
 		public int fd;
-		
 		public PollEvents events;
-		
 		public PollEvents revents;
 
 		public override int GetHashCode ()
@@ -787,7 +813,7 @@ namespace Mono.Unix.Native {
 		{
 			if (obj == null || obj.GetType () != GetType ())
 				return false;
-			Pollfd value = (Pollfd) obj;
+			Pollfd value = (Pollfd)obj;
 			return value.events == events && value.revents == revents;
 		}
 
@@ -814,29 +840,41 @@ namespace Mono.Unix.Native {
 #endif
 	{
 		
-		[dev_t]     public ulong    st_dev;     // device
+		[dev_t]
+		public ulong    st_dev;     // device
 		
-		[ino_t]     public  ulong   st_ino;     // inode
+		[ino_t]
+		public  ulong   st_ino;     // inode
 		
 		public  FilePermissions     st_mode;    // protection
 		[NonSerialized]
-#pragma warning disable 169		
+		#pragma warning disable 169		
 		private uint                _padding_;  // padding for structure alignment
 #pragma warning restore 169		
 		
-		[nlink_t]   public  ulong   st_nlink;   // number of hard links
+		[nlink_t]
+		public  ulong   st_nlink;   // number of hard links
 		
-		[uid_t]     public  uint    st_uid;     // user ID of owner
+		[uid_t]
+		public  uint    st_uid;     // user ID of owner
 		
-		[gid_t]     public  uint    st_gid;     // group ID of owner
+		[gid_t]
+		public  uint    st_gid;     // group ID of owner
 		
-		[dev_t]     public  ulong   st_rdev;    // device type (if inode device)
-		[off_t]     public  long    st_size;    // total size, in bytes
-		[blksize_t] public  long    st_blksize; // blocksize for filesystem I/O
-		[blkcnt_t]  public  long    st_blocks;  // number of blocks allocated
-		[time_t]    public  long    st_atime;   // time of last access
-		[time_t]    public  long    st_mtime;   // time of last modification
-		[time_t]    public  long    st_ctime;   // time of last status change
+		[dev_t]
+		public  ulong   st_rdev;    // device type (if inode device)
+		[off_t]
+		public  long    st_size;    // total size, in bytes
+		[blksize_t]
+		public  long    st_blksize; // blocksize for filesystem I/O
+		[blkcnt_t]
+		public  long    st_blocks;  // number of blocks allocated
+		[time_t]
+		public  long    st_atime;   // time of last access
+		[time_t]
+		public  long    st_mtime;   // time of last modification
+		[time_t]
+		public  long    st_ctime;   // time of last status change
 
 		public override int GetHashCode ()
 		{
@@ -857,9 +895,9 @@ namespace Mono.Unix.Native {
 
 		public override bool Equals (object obj)
 		{
-			if (obj == null || obj.GetType() != GetType ())
+			if (obj == null || obj.GetType () != GetType ())
 				return false;
-			Stat value = (Stat) obj;
+			Stat value = (Stat)obj;
 			return value.st_dev == st_dev &&
 				value.st_ino == st_ino &&
 				value.st_mode == st_mode &&
@@ -913,12 +951,18 @@ namespace Mono.Unix.Native {
 	{
 		public                  ulong f_bsize;	  // file system block size
 		public                  ulong f_frsize;   // fragment size
-		[fsblkcnt_t] public     ulong f_blocks;   // size of fs in f_frsize units
-		[fsblkcnt_t] public     ulong f_bfree;    // # free blocks
-		[fsblkcnt_t] public     ulong f_bavail;   // # free blocks for non-root
-		[fsfilcnt_t] public     ulong f_files;    // # inodes
-		[fsfilcnt_t] public     ulong f_ffree;    // # free inodes
-		[fsfilcnt_t] public     ulong f_favail;   // # free inodes for non-root
+		[fsblkcnt_t]
+		public     ulong f_blocks;   // size of fs in f_frsize units
+		[fsblkcnt_t]
+		public     ulong f_bfree;    // # free blocks
+		[fsblkcnt_t]
+		public     ulong f_bavail;   // # free blocks for non-root
+		[fsfilcnt_t]
+		public     ulong f_files;    // # inodes
+		[fsfilcnt_t]
+		public     ulong f_ffree;    // # free inodes
+		[fsfilcnt_t]
+		public     ulong f_favail;   // # free inodes for non-root
 		public                  ulong f_fsid;     // file system id
 		public MountFlags             f_flag;     // mount flags
 		public                  ulong f_namemax;  // maximum filename length
@@ -940,9 +984,9 @@ namespace Mono.Unix.Native {
 
 		public override bool Equals (object obj)
 		{
-			if (obj == null || obj.GetType() != GetType ())
+			if (obj == null || obj.GetType () != GetType ())
 				return false;
-			Statvfs value = (Statvfs) obj;
+			Statvfs value = (Statvfs)obj;
 			return value.f_bsize == f_bsize &&
 				value.f_frsize == f_frsize &&
 				value.f_blocks == f_blocks &&
@@ -988,8 +1032,10 @@ namespace Mono.Unix.Native {
 		: IEquatable <Timeval>
 #endif
 	{
-		[time_t]      public long tv_sec;   // seconds
-		[suseconds_t] public long tv_usec;  // microseconds
+		[time_t]
+		public long tv_sec;   // seconds
+		[suseconds_t]
+		public long tv_usec;  // microseconds
 
 		public override int GetHashCode ()
 		{
@@ -1000,7 +1046,7 @@ namespace Mono.Unix.Native {
 		{
 			if (obj == null || obj.GetType () != GetType ())
 				return false;
-			Timeval value = (Timeval) obj;
+			Timeval value = (Timeval)obj;
 			return value.tv_sec == tv_sec && value.tv_usec == tv_usec;
 		}
 
@@ -1040,7 +1086,7 @@ namespace Mono.Unix.Native {
 		{
 			if (obj == null || obj.GetType () != GetType ())
 				return false;
-			Timezone value = (Timezone) obj;
+			Timezone value = (Timezone)obj;
 			return value.tz_minuteswest == tz_minuteswest;
 		}
 
@@ -1066,8 +1112,10 @@ namespace Mono.Unix.Native {
 		: IEquatable <Utimbuf>
 #endif
 	{
-		[time_t] public long    actime;   // access time
-		[time_t] public long    modtime;  // modification time
+		[time_t]
+		public long    actime;   // access time
+		[time_t]
+		public long    modtime;  // modification time
 
 		public override int GetHashCode ()
 		{
@@ -1078,7 +1126,7 @@ namespace Mono.Unix.Native {
 		{
 			if (obj == null || obj.GetType () != GetType ())
 				return false;
-			Utimbuf value = (Utimbuf) obj;
+			Utimbuf value = (Utimbuf)obj;
 			return value.actime == actime && value.modtime == modtime;
 		}
 
@@ -1104,7 +1152,8 @@ namespace Mono.Unix.Native {
 		: IEquatable <Timespec>
 #endif
 	{
-		[time_t] public long    tv_sec;   // Seconds.
+		[time_t]
+		public long    tv_sec;   // Seconds.
 		public          long    tv_nsec;  // Nanoseconds.
 
 		public override int GetHashCode ()
@@ -1116,7 +1165,7 @@ namespace Mono.Unix.Native {
 		{
 			if (obj == null || obj.GetType () != GetType ())
 				return false;
-			Timespec value = (Timespec) obj;
+			Timespec value = (Timespec)obj;
 			return value.tv_sec == tv_sec && value.tv_nsec == tv_nsec;
 		}
 
@@ -1137,14 +1186,16 @@ namespace Mono.Unix.Native {
 	}
 
 	[Flags][Map]
-	public enum EpollFlags {
+	public enum EpollFlags
+	{
 		EPOLL_CLOEXEC = 02000000,
 		EPOLL_NONBLOCK = 04000,
 	}
 
 	[Flags][Map]
 	
-	public enum EpollEvents : uint {
+	public enum EpollEvents : uint
+	{
 		EPOLLIN = 0x001,
 		EPOLLPRI = 0x002,
 		EPOLLOUT = 0x004,
@@ -1157,10 +1208,11 @@ namespace Mono.Unix.Native {
 		EPOLLHUP = 0x010,
 		EPOLLRDHUP = 0x2000,
 		EPOLLONESHOT = 1 << 30,
-		EPOLLET = unchecked ((uint) (1 << 31))
+		EPOLLET = unchecked ((uint)(1 << 31))
 	}
 
-	public enum EpollOp {
+	public enum EpollOp
+	{
 		EPOLL_CTL_ADD = 1,
 		EPOLL_CTL_DEL = 2,
 		EPOLL_CTL_MOD = 3,
@@ -1168,7 +1220,8 @@ namespace Mono.Unix.Native {
 
 	[StructLayout (LayoutKind.Explicit, Size=12, Pack=1)]
 	
-	public struct EpollEvent {
+	public struct EpollEvent
+	{
 		[FieldOffset (0)]
 		public EpollEvents events;
 		[FieldOffset (4)]
@@ -1192,7 +1245,6 @@ namespace Mono.Unix.Native {
 		
 		public /* ino_t */ ulong  d_ino;
 		public /* off_t */ long   d_off;
-		
 		public ushort             d_reclen;
 		public byte               d_type;
 		public string             d_name;
@@ -1206,9 +1258,9 @@ namespace Mono.Unix.Native {
 
 		public override bool Equals (object obj)
 		{
-			if (obj == null || GetType() != obj.GetType())
+			if (obj == null || GetType () != obj.GetType ())
 				return false;
-			Dirent d = (Dirent) obj;
+			Dirent d = (Dirent)obj;
 			return Equals (d);
 		}
 
@@ -1259,9 +1311,9 @@ namespace Mono.Unix.Native {
 
 		public override bool Equals (object obj)
 		{
-			if (obj == null || GetType() != obj.GetType())
+			if (obj == null || GetType () != obj.GetType ())
 				return false;
-			Fstab f = (Fstab) obj;
+			Fstab f = (Fstab)obj;
 			return Equals (f);
 		}
 
@@ -1298,7 +1350,6 @@ namespace Mono.Unix.Native {
 	{
 		public string           gr_name;
 		public string           gr_passwd;
-		
 		public /* gid_t */ uint gr_gid;
 		public string[]         gr_mem;
 
@@ -1306,7 +1357,7 @@ namespace Mono.Unix.Native {
 		{
 			int memhc = 0;
 			for (int i = 0; i < gr_mem.Length; ++i)
-				memhc ^= gr_mem[i].GetHashCode ();
+				memhc ^= gr_mem [i].GetHashCode ();
 
 			return gr_name.GetHashCode () ^ gr_passwd.GetHashCode () ^ 
 				gr_gid.GetHashCode () ^ memhc;
@@ -1314,9 +1365,9 @@ namespace Mono.Unix.Native {
 
 		public override bool Equals (object obj)
 		{
-			if (obj == null || GetType() != obj.GetType())
+			if (obj == null || GetType () != obj.GetType ())
 				return false;
-			Group g = (Group) obj;
+			Group g = (Group)obj;
 			return Equals (g);
 		}
 
@@ -1335,7 +1386,7 @@ namespace Mono.Unix.Native {
 				if (value.gr_mem.Length != gr_mem.Length)
 					return false;
 				for (int i = 0; i < gr_mem.Length; ++i)
-					if (gr_mem[i] != value.gr_mem[i])
+					if (gr_mem [i] != value.gr_mem [i])
 						return false;
 				return true;
 			}
@@ -1355,10 +1406,10 @@ namespace Mono.Unix.Native {
 		private static void GetMembers (StringBuilder sb, string[] members)
 		{
 			if (members.Length > 0)
-				sb.Append (members[0]);
+				sb.Append (members [0]);
 			for (int i = 1; i < members.Length; ++i) {
 				sb.Append (",");
-				sb.Append (members[i]);
+				sb.Append (members [i]);
 			}
 		}
 
@@ -1380,9 +1431,7 @@ namespace Mono.Unix.Native {
 	{
 		public string           pw_name;
 		public string           pw_passwd;
-		
 		public /* uid_t */ uint pw_uid;
-		
 		public /* gid_t */ uint pw_gid;
 		public string           pw_gecos;
 		public string           pw_dir;
@@ -1398,9 +1447,9 @@ namespace Mono.Unix.Native {
 
 		public override bool Equals (object obj)
 		{
-			if (obj == null || GetType() != obj.GetType())
+			if (obj == null || GetType () != obj.GetType ())
 				return false;
-			Passwd p = (Passwd) obj;
+			Passwd p = (Passwd)obj;
 			return Equals (p);
 		}
 
@@ -1453,9 +1502,9 @@ namespace Mono.Unix.Native {
 
 		public override bool Equals (object obj)
 		{
-			if (obj == null || GetType() != obj.GetType())
+			if (obj == null || GetType () != obj.GetType ())
 				return false;
-			Utsname u = (Utsname) obj;
+			Utsname u = (Utsname)obj;
 			return Equals (u);
 		}
 
@@ -1519,7 +1568,7 @@ namespace Mono.Unix.Native {
 	//        check errno to see if any errors occurred.  This sequence can't 
 	//        be done safely in managed code, as errno may change as part of 
 	//        the P/Invoke mechanism.
-	//        Instead, add a MonoPosixHelper export which does:
+	//        Instead, add a __Internal export which does:
 	//          errno = 0;
 	//          INVOKE SYSCALL;
 	//          return errno == 0 ? 0 : -1;
@@ -1581,26 +1630,28 @@ namespace Mono.Unix.Native {
 	//    we can afford to clean things up whenever possible.
 	//    - Examples: 
 	//    	- Syscall.statfs: Solaris/Mac OS X provide statfs(2), Linux provides
-	//        statvfs(2).  MonoPosixHelper will "thunk" between the two,
+	//        statvfs(2).  __Internal will "thunk" between the two,
 	//        exporting a statvfs that works across platforms.
 	//    	- Syscall.getfsent: Glibc export which Solaris lacks, while Solaris
-	//    	  instead provides getvfsent(3).  MonoPosixHelper provides wrappers
+	//    	  instead provides getvfsent(3).  __Internal provides wrappers
 	//    	  to convert getvfsent(3) into Fstab data.
 	//    - Exception: If it isn't possible to cleanly wrap platforms, then the
 	//      method shouldn't be exported.  The user will be expected to do their
 	//      own platform check and their own DllImports.
 	//      Examples: mount(2), umount(2), etc.
 	//    - Note: if a platform doesn't support a function AT ALL, the
-	//      MonoPosixHelper wrapper won't be compiled, resulting in a
+	//      __Internal wrapper won't be compiled, resulting in a
 	//      EntryPointNotFoundException.  This is also consistent with a missing 
 	//      P/Invoke into libc.so.
 	//
 	
 	public sealed class Syscall : Stdlib
 	{
-		new internal const string LIBC  = "__Internal";
+		new internal const string LIBC = "__Internal";
 
-		private Syscall () {}
+		private Syscall ()
+		{
+		}
 
 		//
 		// <aio.h>
@@ -1635,12 +1686,12 @@ namespace Mono.Unix.Native {
 
 		public static int setxattr (string path, string name, byte [] value, XattrFlags flags)
 		{
-			return setxattr (path, name, value, (ulong) value.Length, flags);
+			return setxattr (path, name, value, (ulong)value.Length, flags);
 		}
 
 		public static int setxattr (string path, string name, byte [] value)
 		{
-			return setxattr (path, name, value, (ulong) value.Length);
+			return setxattr (path, name, value, (ulong)value.Length);
 		}
 
 		// lsetxattr(2)
@@ -1661,12 +1712,12 @@ namespace Mono.Unix.Native {
 
 		public static int lsetxattr (string path, string name, byte [] value, XattrFlags flags)
 		{
-			return lsetxattr (path, name, value, (ulong) value.Length, flags);
+			return lsetxattr (path, name, value, (ulong)value.Length, flags);
 		}
 
 		public static int lsetxattr (string path, string name, byte [] value)
 		{
-			return lsetxattr (path, name, value, (ulong) value.Length);
+			return lsetxattr (path, name, value, (ulong)value.Length);
 		}
 
 		// fsetxattr(2)
@@ -1685,12 +1736,12 @@ namespace Mono.Unix.Native {
 
 		public static int fsetxattr (int fd, string name, byte [] value, XattrFlags flags)
 		{
-			return fsetxattr (fd, name, value, (ulong) value.Length, flags);
+			return fsetxattr (fd, name, value, (ulong)value.Length, flags);
 		}
 
 		public static int fsetxattr (int fd, string name, byte [] value)
 		{
-			return fsetxattr (fd, name, value, (ulong) value.Length);
+			return fsetxattr (fd, name, value, (ulong)value.Length);
 		}
 
 		// getxattr(2)
@@ -1706,7 +1757,7 @@ namespace Mono.Unix.Native {
 
 		public static long getxattr (string path, string name, byte [] value)
 		{
-			return getxattr (path, name, value, (ulong) value.Length);
+			return getxattr (path, name, value, (ulong)value.Length);
 		}
 
 		public static long getxattr (string path, string name, out byte [] value)
@@ -1717,7 +1768,7 @@ namespace Mono.Unix.Native {
 				return size;
 
 			value = new byte [size];
-			return getxattr (path, name, value, (ulong) size);
+			return getxattr (path, name, value, (ulong)size);
 		}
 
 		// lgetxattr(2)
@@ -1733,7 +1784,7 @@ namespace Mono.Unix.Native {
 
 		public static long lgetxattr (string path, string name, byte [] value)
 		{
-			return lgetxattr (path, name, value, (ulong) value.Length);
+			return lgetxattr (path, name, value, (ulong)value.Length);
 		}
 
 		public static long lgetxattr (string path, string name, out byte [] value)
@@ -1744,7 +1795,7 @@ namespace Mono.Unix.Native {
 				return size;
 
 			value = new byte [size];
-			return lgetxattr (path, name, value, (ulong) size);
+			return lgetxattr (path, name, value, (ulong)size);
 		}
 
 		// fgetxattr(2)
@@ -1757,7 +1808,7 @@ namespace Mono.Unix.Native {
 
 		public static long fgetxattr (int fd, string name, byte [] value)
 		{
-			return fgetxattr (fd, name, value, (ulong) value.Length);
+			return fgetxattr (fd, name, value, (ulong)value.Length);
 		}
 
 		public static long fgetxattr (int fd, string name, out byte [] value)
@@ -1768,7 +1819,7 @@ namespace Mono.Unix.Native {
 				return size;
 
 			value = new byte [size];
-			return fgetxattr (fd, name, value, (ulong) size);
+			return fgetxattr (fd, name, value, (ulong)size);
 		}
 
 		// listxattr(2)
@@ -1787,12 +1838,12 @@ namespace Mono.Unix.Native {
 			if (size == 0)
 				values = new string [0];
 			if (size <= 0)
-				return (int) size;
+				return (int)size;
 
 			byte[] list = new byte [size];
-			long ret = listxattr (path, list, (ulong) size);
+			long ret = listxattr (path, list, (ulong)size);
 			if (ret < 0)
-				return (int) ret;
+				return (int)ret;
 
 			GetValues (list, encoding, out values);
 			return 0;
@@ -1816,7 +1867,7 @@ namespace Mono.Unix.Native {
 			for (int i = 0; i < list.Length; ++i) {
 				if (list [i] == 0) {
 					values [num_values++] = encoding.GetString (list, str_start, i - str_start);
-					str_start = i+1;
+					str_start = i + 1;
 				}
 			}
 		}
@@ -1837,12 +1888,12 @@ namespace Mono.Unix.Native {
 			if (size == 0)
 				values = new string [0];
 			if (size <= 0)
-				return (int) size;
+				return (int)size;
 
 			byte[] list = new byte [size];
-			long ret = llistxattr (path, list, (ulong) size);
+			long ret = llistxattr (path, list, (ulong)size);
 			if (ret < 0)
-				return (int) ret;
+				return (int)ret;
 
 			GetValues (list, encoding, out values);
 			return 0;
@@ -1867,12 +1918,12 @@ namespace Mono.Unix.Native {
 			if (size == 0)
 				values = new string [0];
 			if (size <= 0)
-				return (int) size;
+				return (int)size;
 
 			byte[] list = new byte [size];
-			long ret = flistxattr (fd, list, (ulong) size);
+			long ret = flistxattr (fd, list, (ulong)size);
 			if (ret < 0)
-				return (int) ret;
+				return (int)ret;
 
 			GetValues (list, encoding, out values);
 			return 0;
@@ -1937,9 +1988,12 @@ namespace Mono.Unix.Native {
 				EntryPoint="Mono_Posix_Syscall_rewinddir")]
 		public static extern int rewinddir (IntPtr dir);
 
-		private struct _Dirent {
-			[ino_t] public ulong      d_ino;
-			[off_t] public long       d_off;
+		private struct _Dirent
+		{
+			[ino_t]
+			public ulong      d_ino;
+			[off_t]
+			public long       d_off;
 			public ushort             d_reclen;
 			public byte               d_type;
 			public IntPtr             d_name;
@@ -1948,13 +2002,12 @@ namespace Mono.Unix.Native {
 		private static void CopyDirent (Dirent to, ref _Dirent from)
 		{
 			try {
-				to.d_ino    = from.d_ino;
-				to.d_off    = from.d_off;
+				to.d_ino = from.d_ino;
+				to.d_off = from.d_off;
 				to.d_reclen = from.d_reclen;
-				to.d_type   = from.d_type;
-				to.d_name   = UnixMarshal.PtrToString (from.d_name);
-			}
-			finally {
+				to.d_type = from.d_type;
+				to.d_name = UnixMarshal.PtrToString (from.d_name);
+			} finally {
 				Stdlib.free (from.d_name);
 				from.d_name = IntPtr.Zero;
 			}
@@ -1986,11 +2039,11 @@ namespace Mono.Unix.Native {
 
 		public static int readdir_r (IntPtr dirp, Dirent entry, out IntPtr result)
 		{
-			entry.d_ino    = 0;
-			entry.d_off    = 0;
+			entry.d_ino = 0;
+			entry.d_off = 0;
 			entry.d_reclen = 0;
-			entry.d_type   = 0;
-			entry.d_name   = null;
+			entry.d_type = 0;
+			entry.d_name = null;
 
 			_Dirent _d;
 			int r = sys_readdir_r (dirp, out _d, out result);
@@ -2074,7 +2127,8 @@ namespace Mono.Unix.Native {
 		// <fstab.h>  -- COMPLETE
 		//
 		[Map]
-		private struct _Fstab {
+		private struct _Fstab
+		{
 			public IntPtr fs_spec;
 			public IntPtr fs_file;
 			public IntPtr fs_vfstype;
@@ -2088,15 +2142,14 @@ namespace Mono.Unix.Native {
 		private static void CopyFstab (Fstab to, ref _Fstab from)
 		{
 			try {
-				to.fs_spec     = UnixMarshal.PtrToString (from.fs_spec);
-				to.fs_file     = UnixMarshal.PtrToString (from.fs_file);
-				to.fs_vfstype  = UnixMarshal.PtrToString (from.fs_vfstype);
-				to.fs_mntops   = UnixMarshal.PtrToString (from.fs_mntops);
-				to.fs_type     = UnixMarshal.PtrToString (from.fs_type);
-				to.fs_freq     = from.fs_freq;
-				to.fs_passno   = from.fs_passno;
-			}
-			finally {
+				to.fs_spec = UnixMarshal.PtrToString (from.fs_spec);
+				to.fs_file = UnixMarshal.PtrToString (from.fs_file);
+				to.fs_vfstype = UnixMarshal.PtrToString (from.fs_vfstype);
+				to.fs_mntops = UnixMarshal.PtrToString (from.fs_mntops);
+				to.fs_type = UnixMarshal.PtrToString (from.fs_type);
+				to.fs_freq = from.fs_freq;
+				to.fs_passno = from.fs_passno;
+			} finally {
 				Stdlib.free (from._fs_buf_);
 				from._fs_buf_ = IntPtr.Zero;
 			}
@@ -2200,7 +2253,7 @@ namespace Mono.Unix.Native {
 
 		public static int setgroups (uint [] list)
 		{
-			return setgroups ((ulong) list.Length, list);
+			return setgroups ((ulong)list.Length, list);
 		}
 
 		[Map]
@@ -2208,7 +2261,8 @@ namespace Mono.Unix.Native {
 		{
 			public IntPtr           gr_name;
 			public IntPtr           gr_passwd;
-			[gid_t] public uint     gr_gid;
+			[gid_t]
+			public uint     gr_gid;
 			public int              _gr_nmem_;
 			public IntPtr           gr_mem;
 			public IntPtr           _gr_buf_;
@@ -2217,15 +2271,14 @@ namespace Mono.Unix.Native {
 		private static void CopyGroup (Group to, ref _Group from)
 		{
 			try {
-				to.gr_gid    = from.gr_gid;
-				to.gr_name   = UnixMarshal.PtrToString (from.gr_name);
+				to.gr_gid = from.gr_gid;
+				to.gr_name = UnixMarshal.PtrToString (from.gr_name);
 				to.gr_passwd = UnixMarshal.PtrToString (from.gr_passwd);
-				to.gr_mem    = UnixMarshal.PtrToStringArray (from._gr_nmem_, from.gr_mem);
-			}
-			finally {
+				to.gr_mem = UnixMarshal.PtrToStringArray (from._gr_nmem_, from.gr_mem);
+			} finally {
 				Stdlib.free (from.gr_mem);
 				Stdlib.free (from._gr_buf_);
-				from.gr_mem   = IntPtr.Zero;
+				from.gr_mem = IntPtr.Zero;
 				from._gr_buf_ = IntPtr.Zero;
 			}
 		}
@@ -2322,7 +2375,7 @@ namespace Mono.Unix.Native {
 			}
 			if (r != 0)
 				return null;
-			Group gr = new Group();
+			Group gr = new Group ();
 			CopyGroup (gr, ref group);
 			return gr;
 		}
@@ -2381,8 +2434,10 @@ namespace Mono.Unix.Native {
 		{
 			public IntPtr           pw_name;
 			public IntPtr           pw_passwd;
-			[uid_t] public uint     pw_uid;
-			[gid_t] public uint     pw_gid;
+			[uid_t]
+			public uint     pw_uid;
+			[gid_t]
+			public uint     pw_gid;
 			public IntPtr           pw_gecos;
 			public IntPtr           pw_dir;
 			public IntPtr           pw_shell;
@@ -2392,15 +2447,14 @@ namespace Mono.Unix.Native {
 		private static void CopyPasswd (Passwd to, ref _Passwd from)
 		{
 			try {
-				to.pw_name   = UnixMarshal.PtrToString (from.pw_name);
+				to.pw_name = UnixMarshal.PtrToString (from.pw_name);
 				to.pw_passwd = UnixMarshal.PtrToString (from.pw_passwd);
-				to.pw_uid    = from.pw_uid;
-				to.pw_gid    = from.pw_gid;
-				to.pw_gecos  = UnixMarshal.PtrToString (from.pw_gecos);
-				to.pw_dir    = UnixMarshal.PtrToString (from.pw_dir);
-				to.pw_shell  = UnixMarshal.PtrToString (from.pw_shell);
-			}
-			finally {
+				to.pw_uid = from.pw_uid;
+				to.pw_gid = from.pw_gid;
+				to.pw_gecos = UnixMarshal.PtrToString (from.pw_gecos);
+				to.pw_dir = UnixMarshal.PtrToString (from.pw_dir);
+				to.pw_shell = UnixMarshal.PtrToString (from.pw_shell);
+			} finally {
 				Stdlib.free (from._pw_buf_);
 				from._pw_buf_ = IntPtr.Zero;
 			}
@@ -2602,7 +2656,6 @@ namespace Mono.Unix.Native {
 		private static extern int _L_cuserid ();
 
 		public static readonly int L_cuserid = _L_cuserid ();
-
 		internal static object getlogin_lock = new object ();
 
 		[DllImport (LIBC, SetLastError=true, EntryPoint="cuserid")]
@@ -2662,7 +2715,7 @@ namespace Mono.Unix.Native {
 
 		public static int strerror_r (Errno errnum, StringBuilder buf)
 		{
-			return strerror_r (errnum, buf, (ulong) buf.Capacity);
+			return strerror_r (errnum, buf, (ulong)buf.Capacity);
 		}
 
 		#endregion
@@ -2781,7 +2834,8 @@ namespace Mono.Unix.Native {
 		// <sys/poll.h> -- COMPLETE
 		//
 
-		private struct _pollfd {
+		private struct _pollfd
+		{
 			public int fd;
 			public short events;
 			public short revents;
@@ -2798,7 +2852,7 @@ namespace Mono.Unix.Native {
 			_pollfd[] send = new _pollfd[nfds];
 
 			for (int i = 0; i < send.Length; i++) {
-				send [i].fd     = fds [i].fd;
+				send [i].fd = fds [i].fd;
 				send [i].events = NativeConvert.FromPollEvents (fds [i].events);
 			}
 
@@ -2813,7 +2867,7 @@ namespace Mono.Unix.Native {
 
 		public static int poll (Pollfd [] fds, int timeout)
 		{
-			return poll (fds, (uint) fds.Length, timeout);
+			return poll (fds, (uint)fds.Length, timeout);
 		}
 
 		//
@@ -3075,14 +3129,13 @@ namespace Mono.Unix.Native {
 		{
 			try {
 				to = new Utsname ();
-				to.sysname     = UnixMarshal.PtrToString (from.sysname);
-				to.nodename    = UnixMarshal.PtrToString (from.nodename);
-				to.release     = UnixMarshal.PtrToString (from.release);
-				to.version     = UnixMarshal.PtrToString (from.version);
-				to.machine     = UnixMarshal.PtrToString (from.machine);
-				to.domainname  = UnixMarshal.PtrToString (from.domainname);
-			}
-			finally {
+				to.sysname = UnixMarshal.PtrToString (from.sysname);
+				to.nodename = UnixMarshal.PtrToString (from.nodename);
+				to.release = UnixMarshal.PtrToString (from.release);
+				to.version = UnixMarshal.PtrToString (from.version);
+				to.machine = UnixMarshal.PtrToString (from.machine);
+				to.domainname = UnixMarshal.PtrToString (from.domainname);
+			} finally {
 				Stdlib.free (from._buf_);
 				from._buf_ = IntPtr.Zero;
 			}
@@ -3187,7 +3240,7 @@ namespace Mono.Unix.Native {
 		public static int openlog (IntPtr ident, SyslogOptions option, 
 				SyslogFacility defaultFacility)
 		{
-			int _option   = NativeConvert.FromSyslogOptions (option);
+			int _option = NativeConvert.FromSyslogOptions (option);
 			int _facility = NativeConvert.FromSyslogFacility (defaultFacility);
 
 			return sys_openlog (ident, _option, _facility);
@@ -3223,11 +3276,11 @@ namespace Mono.Unix.Native {
 			int _facility = NativeConvert.FromSyslogFacility (facility);
 			int _level = NativeConvert.FromSyslogLevel (level);
 
-			object[] _parameters = new object[checked(parameters.Length+2)];
+			object[] _parameters = new object[checked(parameters.Length + 2)];
 			_parameters [0] = _facility | _level;
 			_parameters [1] = format;
 			Array.Copy (parameters, 0, _parameters, 2, parameters.Length);
-			return (int) XPrintfFunctions.syslog (_parameters);
+			return (int)XPrintfFunctions.syslog (_parameters);
 		}
 
 		[Obsolete ("Not necessarily portable due to cdecl restrictions.\n" +
@@ -3237,11 +3290,11 @@ namespace Mono.Unix.Native {
 		{
 			int _level = NativeConvert.FromSyslogLevel (level);
 
-			object[] _parameters = new object[checked(parameters.Length+2)];
+			object[] _parameters = new object[checked(parameters.Length + 2)];
 			_parameters [0] = _level;
 			_parameters [1] = format;
 			Array.Copy (parameters, 0, _parameters, 2, parameters.Length);
-			return (int) XPrintfFunctions.syslog (_parameters);
+			return (int)XPrintfFunctions.syslog (_parameters);
 		}
 
 		[DllImport (MPH, SetLastError=true,
@@ -3321,7 +3374,7 @@ namespace Mono.Unix.Native {
 			return sys_lseek (fd, offset, _whence);
 		}
 
-    [DllImport (LIBC, SetLastError=true)]
+		[DllImport (LIBC, SetLastError=true)]
 		public static extern int close (int fd);
 
 		// read(2)
@@ -3332,7 +3385,7 @@ namespace Mono.Unix.Native {
 
 		public static unsafe long read (int fd, void *buf, ulong count)
 		{
-			return read (fd, (IntPtr) buf, count);
+			return read (fd, (IntPtr)buf, count);
 		}
 
 		// write(2)
@@ -3343,7 +3396,7 @@ namespace Mono.Unix.Native {
 
 		public static unsafe long write (int fd, void *buf, ulong count)
 		{
-			return write (fd, (IntPtr) buf, count);
+			return write (fd, (IntPtr)buf, count);
 		}
 
 		// pread(2)
@@ -3354,7 +3407,7 @@ namespace Mono.Unix.Native {
 
 		public static unsafe long pread (int fd, void *buf, ulong count, long offset)
 		{
-			return pread (fd, (IntPtr) buf, count, offset);
+			return pread (fd, (IntPtr)buf, count, offset);
 		}
 
 		// pwrite(2)
@@ -3365,7 +3418,7 @@ namespace Mono.Unix.Native {
 
 		public static unsafe long pwrite (int fd, void *buf, ulong count, long offset)
 		{
-			return pwrite (fd, (IntPtr) buf, count, offset);
+			return pwrite (fd, (IntPtr)buf, count, offset);
 		}
 
 		[DllImport (MPH, SetLastError=true, 
@@ -3380,8 +3433,8 @@ namespace Mono.Unix.Native {
 			}
 			int reading, writing;
 			int r = pipe (out reading, out writing);
-			filedes[0] = reading;
-			filedes[1] = writing;
+			filedes [0] = reading;
+			filedes [1] = writing;
 			return r;
 		}
 
@@ -3432,7 +3485,7 @@ namespace Mono.Unix.Native {
 
 		public static StringBuilder getcwd (StringBuilder buf)
 		{
-			getcwd (buf, (ulong) buf.Capacity);
+			getcwd (buf, (ulong)buf.Capacity);
 			return buf;
 		}
 
@@ -3477,7 +3530,7 @@ namespace Mono.Unix.Native {
 
 		public static long fpathconf (int filedes, PathconfName name)
 		{
-			return fpathconf (filedes, name, (Errno) 0);
+			return fpathconf (filedes, name, (Errno)0);
 		}
 
 		[DllImport (MPH, SetLastError=true,
@@ -3488,7 +3541,7 @@ namespace Mono.Unix.Native {
 
 		public static long pathconf (string path, PathconfName name)
 		{
-			return pathconf (path, name, (Errno) 0);
+			return pathconf (path, name, (Errno)0);
 		}
 
 		[DllImport (MPH, SetLastError=true,
@@ -3497,7 +3550,7 @@ namespace Mono.Unix.Native {
 
 		public static long sysconf (SysconfName name)
 		{
-			return sysconf (name, (Errno) 0);
+			return sysconf (name, (Errno)0);
 		}
 
 		// confstr(3)
@@ -3661,7 +3714,7 @@ namespace Mono.Unix.Native {
 
 		public static int ttyname_r (int fd, StringBuilder buf)
 		{
-			return ttyname_r (fd, buf, (ulong) buf.Capacity);
+			return ttyname_r (fd, buf, (ulong)buf.Capacity);
 		}
 
 		[DllImport (LIBC, EntryPoint="isatty")]
@@ -3696,7 +3749,7 @@ namespace Mono.Unix.Native {
 
 		public static int readlink (string path, [Out] StringBuilder buf)
 		{
-			return readlink (path, buf, (ulong) buf.Capacity);
+			return readlink (path, buf, (ulong)buf.Capacity);
 		}
 
 		[DllImport (LIBC, SetLastError=true)]
@@ -3738,7 +3791,7 @@ namespace Mono.Unix.Native {
 
 		public static int getlogin_r (StringBuilder name)
 		{
-			return getlogin_r (name, (ulong) name.Capacity);
+			return getlogin_r (name, (ulong)name.Capacity);
 		}
 
 		[DllImport (LIBC, SetLastError=true)]
@@ -3752,7 +3805,7 @@ namespace Mono.Unix.Native {
 
 		public static int gethostname (StringBuilder name)
 		{
-			return gethostname (name, (ulong) name.Capacity);
+			return gethostname (name, (ulong)name.Capacity);
 		}
 
 		// sethostname(2)
@@ -3763,7 +3816,7 @@ namespace Mono.Unix.Native {
 
 		public static int sethostname (string name)
 		{
-			return sethostname (name, (ulong) name.Length);
+			return sethostname (name, (ulong)name.Length);
 		}
 
 		[DllImport (MPH, SetLastError=true,
@@ -3782,7 +3835,7 @@ namespace Mono.Unix.Native {
 
 		public static int getdomainname (StringBuilder name)
 		{
-			return getdomainname (name, (ulong) name.Capacity);
+			return getdomainname (name, (ulong)name.Capacity);
 		}
 
 		// setdomainname(2)
@@ -3793,7 +3846,7 @@ namespace Mono.Unix.Native {
 
 		public static int setdomainname (string name)
 		{
-			return setdomainname (name, (ulong) name.Length);
+			return setdomainname (name, (ulong)name.Length);
 		}
 
 		[DllImport (LIBC, SetLastError=true)]
@@ -3933,7 +3986,7 @@ namespace Mono.Unix.Native {
 
 		public static unsafe void swab (void* from, void* to, long n)
 		{
-			swab ((IntPtr) from, (IntPtr) to, n);
+			swab ((IntPtr)from, (IntPtr)to, n);
 		}
 
 		#endregion
