@@ -69,9 +69,15 @@ namespace CoreDroid
 
 			using (socket) {
 				using (NetworkStream stream = new NetworkStream(socket)) {
-					switch (stream.DataReceive<InitMessage> ().Action) {
+					InitMessage initMsg = stream.DataReceive<InitMessage> ();
+					switch (initMsg.Action) {
 					case InitAction.LoadMono:
-						LoadMono (stream);
+						if (initMsg.Parameter != null) {
+							LoadMono (stream, initMsg.Parameter as string);
+						} else {
+							LoadMono (stream);
+						}
+						
 						break;
 					case InitAction.Start:
 						TypeInfo msg = stream.DataReceive<TypeInfo> ();
@@ -89,6 +95,17 @@ namespace CoreDroid
 						break;
 					}
 				}
+			}
+		}
+		
+		private static void LoadMono (NetworkStream stream, string assemblyString)
+		{
+			try {
+				AppDomain.CurrentDomain.Load (assemblyString);
+
+				stream.DataSend (new OperationResultMessage (true));
+			} catch (Exception ex) {
+				stream.DataSend (new OperationResultMessage (ex));
 			}
 		}
 

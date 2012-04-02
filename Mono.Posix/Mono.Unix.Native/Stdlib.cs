@@ -25,7 +25,6 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-
 using System;
 using System.Collections;
 using System.IO;
@@ -33,12 +32,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Mono.Unix.Native;
 
-namespace Mono.Unix.Native {
+namespace Mono.Unix.Native
+{
 
 	#region Enumerations
-
 	[Map]
-	public enum Errno : int {
+	public enum Errno : int
+	{
 		// errors & their values liberally copied from
 		// FC2 /usr/include/asm/errno.h
 		
@@ -183,7 +183,6 @@ namespace Mono.Unix.Native {
 
 		private static readonly int FilePositionDumpSize = 
 			Stdlib.DumpFilePosition (null, new HandleRef (null, IntPtr.Zero), 0);
-
 		private HandleRef pos;
 
 		public FilePosition ()
@@ -195,7 +194,7 @@ namespace Mono.Unix.Native {
 		}
 
 		internal HandleRef Handle {
-			get {return pos;}
+			get { return pos;}
 		}
 
 		public void Dispose ()
@@ -222,9 +221,9 @@ namespace Mono.Unix.Native {
 			if (FilePositionDumpSize <= 0)
 				return "internal error";
 
-			StringBuilder buf = new StringBuilder (FilePositionDumpSize+1);
+			StringBuilder buf = new StringBuilder (FilePositionDumpSize + 1);
 
-			if (Stdlib.DumpFilePosition (buf, Handle, FilePositionDumpSize+1) <= 0)
+			if (Stdlib.DumpFilePosition (buf, Handle, FilePositionDumpSize + 1) <= 0)
 				return "internal error dumping fpos_t";
 
 			return buf.ToString ();
@@ -235,14 +234,14 @@ namespace Mono.Unix.Native {
 			FilePosition fp = obj as FilePosition;
 			if (obj == null || fp == null)
 				return false;
-			return ToString().Equals (obj.ToString());
+			return ToString ().Equals (obj.ToString ());
 		}
 
 		public bool Equals (FilePosition value)
 		{
 			if (object.ReferenceEquals (this, value))
 				return true;
-			return ToString().Equals (value.ToString());
+			return ToString ().Equals (value.ToString ());
 		}
 
 		public override int GetHashCode ()
@@ -266,8 +265,8 @@ namespace Mono.Unix.Native {
 		}
 	}
 
-
-	public enum SignalAction {
+	public enum SignalAction
+	{
 		Default,
 		Ignore,
 		Error
@@ -283,7 +282,8 @@ namespace Mono.Unix.Native {
 	public delegate void SignalHandler (int signal);
 
 #if !NET_2_0
-	internal sealed class SignalWrapper {
+	internal sealed class SignalWrapper
+	{
 		private IntPtr handler;
 
 		internal SignalWrapper (IntPtr handler)
@@ -352,7 +352,7 @@ namespace Mono.Unix.Native {
 	//        check errno to see if any errors occurred.  This sequence can't 
 	//        be done safely in managed code, as errno may change as part of 
 	//        the P/Invoke mechanism.
-	//        Instead, add a MonoPosixHelper export which does:
+	//        Instead, add a __Internal export which does:
 	//          errno = 0;
 	//          INVOKE SYSCALL;
 	//          return errno == 0 ? 0 : -1;
@@ -368,9 +368,11 @@ namespace Mono.Unix.Native {
 	public class Stdlib
 	{
 		internal const string LIBC = "msvcrt";
-		internal const string MPH  = "MonoPosixHelper";
+		internal const string MPH = "__Internal"; //"MonoPosixHelper";
 
-		internal Stdlib () {}
+		internal Stdlib ()
+		{
+		}
 
 		#region <errno.h> Declarations
 		//
@@ -435,20 +437,16 @@ namespace Mono.Unix.Native {
 			Console.Error.WriteLine ("Ignore handler invoked for signum " + 
 					signum + ".  Don't do that.");
 		}
-
 		
 		public static readonly SignalHandler SIG_DFL = new SignalHandler (_DefaultHandler);
-		
 		public static readonly SignalHandler SIG_ERR = new SignalHandler (_ErrorHandler);
-		
 		public static readonly SignalHandler SIG_IGN = new SignalHandler (_IgnoreHandler);
-
 		private static readonly SignalHandler[] registered_signals;
 
 		static Stdlib ()
 		{
-			Array signals = Enum.GetValues(typeof(Signum));
-			registered_signals = new SignalHandler [(int) signals.GetValue (signals.Length-1)];
+			Array signals = Enum.GetValues (typeof(Signum));
+			registered_signals = new SignalHandler [(int)signals.GetValue (signals.Length - 1)];
 		}
 
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl,
@@ -458,7 +456,6 @@ namespace Mono.Unix.Native {
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl,
 				SetLastError=true, EntryPoint="signal")]
 		private static extern IntPtr sys_signal (int signum, IntPtr handler);
-
 		
 		[Obsolete ("This is not safe; " + 
 				"use Mono.Unix.UnixSignal for signal delivery or SetSignalAction()")]
@@ -472,7 +469,7 @@ namespace Mono.Unix.Native {
 			}
 
 			lock (registered_signals) {
-				registered_signals [(int) signum] = handler;
+				registered_signals [(int)signum] = handler;
 			}
 
 			IntPtr r;
@@ -516,17 +513,17 @@ namespace Mono.Unix.Native {
 		{
 			IntPtr handler = IntPtr.Zero;
 			switch (action) {
-				case SignalAction.Default:
-					handler = _SIG_DFL;
-					break;
-				case SignalAction.Ignore:
-					handler = _SIG_IGN;
-					break;
-				case SignalAction.Error:
-					handler = _SIG_ERR;
-					break;
-				default:
-					throw new ArgumentException ("Invalid action value.", "action");
+			case SignalAction.Default:
+				handler = _SIG_DFL;
+				break;
+			case SignalAction.Ignore:
+				handler = _SIG_IGN;
+				break;
+			case SignalAction.Error:
+				handler = _SIG_ERR;
+				break;
+			default:
+				throw new ArgumentException ("Invalid action value.", "action");
 			}
 			IntPtr r = sys_signal (signum, handler);
 			if (r == _SIG_ERR)
@@ -536,7 +533,6 @@ namespace Mono.Unix.Native {
 
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl, EntryPoint="raise")]
 		private static extern int sys_raise (int sig);
-
 		
 		public static int raise (Signum sig)
 		{
@@ -609,28 +605,19 @@ namespace Mono.Unix.Native {
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				EntryPoint="Mono_Posix_Stdlib_TMP_MAX")]
 		private static extern int GetTmpMax ();
-
 		
-		public static readonly int    _IOFBF       = GetFullyBuffered ();
-		
-		public static readonly int    _IOLBF       = GetLineBuffered ();
-		
-		public static readonly int    _IONBF       = GetNonBuffered ();
-		
-		public static readonly int    BUFSIZ       = GetBufferSize ();
-		
-		public static readonly int    EOF          = GetEOF ();
-		
-		public static readonly int    FOPEN_MAX    = GetFopenMax ();
-		
+		public static readonly int    _IOFBF = GetFullyBuffered ();
+		public static readonly int    _IOLBF = GetLineBuffered ();
+		public static readonly int    _IONBF = GetNonBuffered ();
+		public static readonly int    BUFSIZ = GetBufferSize ();
+		public static readonly int    EOF = GetEOF ();
+		public static readonly int    FOPEN_MAX = GetFopenMax ();
 		public static readonly int    FILENAME_MAX = GetFilenameMax ();
-		
-		public static readonly int    L_tmpnam     = GetTmpnamLength ();
-		public static readonly IntPtr stderr       = GetStandardError ();
-		public static readonly IntPtr stdin        = GetStandardInput ();
-		public static readonly IntPtr stdout       = GetStandardOutput ();
-		
-		public static readonly int    TMP_MAX      = GetTmpMax ();
+		public static readonly int    L_tmpnam = GetTmpnamLength ();
+		public static readonly IntPtr stderr = GetStandardError ();
+		public static readonly IntPtr stdin = GetStandardInput ();
+		public static readonly IntPtr stdout = GetStandardOutput ();
+		public static readonly int    TMP_MAX = GetTmpMax ();
 
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl, SetLastError=true)]
 		public static extern int remove (
@@ -692,22 +679,19 @@ namespace Mono.Unix.Native {
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl, 
 				SetLastError=true, EntryPoint="Mono_Posix_Stdlib_setbuf")]
 		public static extern int setbuf (IntPtr stream, IntPtr buf);
-
 		
 		public static unsafe int setbuf (IntPtr stream, byte* buf)
 		{
-			return setbuf (stream, (IntPtr) buf);
+			return setbuf (stream, (IntPtr)buf);
 		}
-
 		
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				SetLastError=true, EntryPoint="Mono_Posix_Stdlib_setvbuf")]
 		public static extern int setvbuf (IntPtr stream, IntPtr buf, int mode, ulong size);
-
 		
 		public static unsafe int setvbuf (IntPtr stream, byte* buf, int mode, ulong size)
 		{
-			return setvbuf (stream, (IntPtr) buf, mode, size);
+			return setvbuf (stream, (IntPtr)buf, mode, size);
 		}
 
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl,
@@ -723,11 +707,11 @@ namespace Mono.Unix.Native {
 				"Use fprintf (IntPtr, string) instead.")]
 		public static int fprintf (IntPtr stream, string format, params object[] parameters)
 		{
-			object[] _parameters = new object[checked(parameters.Length+2)];
+			object[] _parameters = new object[checked(parameters.Length + 2)];
 			_parameters [0] = stream;
 			_parameters [1] = format;
 			Array.Copy (parameters, 0, _parameters, 2, parameters.Length);
-			return (int) XPrintfFunctions.fprintf (_parameters);
+			return (int)XPrintfFunctions.fprintf (_parameters);
 		}
 
 		/* SKIP: fscanf(3) */
@@ -745,10 +729,10 @@ namespace Mono.Unix.Native {
 				"Use printf (string) instead.")]
 		public static int printf (string format, params object[] parameters)
 		{
-			object[] _parameters = new object[checked(parameters.Length+1)];
+			object[] _parameters = new object[checked(parameters.Length + 1)];
 			_parameters [0] = format;
 			Array.Copy (parameters, 0, _parameters, 1, parameters.Length);
-			return (int) XPrintfFunctions.printf (_parameters);
+			return (int)XPrintfFunctions.printf (_parameters);
 		}
 
 		/* SKIP: scanf(3) */
@@ -757,49 +741,46 @@ namespace Mono.Unix.Native {
 				EntryPoint="Mono_Posix_Stdlib_snprintf")]
 		private static extern int sys_snprintf (StringBuilder s, ulong n, 
 				string format, string message);
-
 		
 		public static int snprintf (StringBuilder s, ulong n, string message)
 		{
-			if (n > (ulong) s.Capacity)
+			if (n > (ulong)s.Capacity)
 				throw new ArgumentOutOfRangeException ("n", "n must be <= s.Capacity");
 			return sys_snprintf (s, n, "%s", message);
 		}
 
 		public static int snprintf (StringBuilder s, string message)
 		{
-			return sys_snprintf (s, (ulong) s.Capacity, "%s", message);
+			return sys_snprintf (s, (ulong)s.Capacity, "%s", message);
 		}
-
 		
 		[Obsolete ("Not necessarily portable due to cdecl restrictions.\n" +
 				"Use snprintf (StringBuilder, string) instead.")]
 		public static int snprintf (StringBuilder s, ulong n, 
 				string format, params object[] parameters)
 		{
-			if (n > (ulong) s.Capacity)
+			if (n > (ulong)s.Capacity)
 				throw new ArgumentOutOfRangeException ("n", "n must be <= s.Capacity");
 
-			object[] _parameters = new object[checked(parameters.Length+3)];
+			object[] _parameters = new object[checked(parameters.Length + 3)];
 			_parameters [0] = s;
 			_parameters [1] = n;
 			_parameters [2] = format;
 			Array.Copy (parameters, 0, _parameters, 3, parameters.Length);
-			return (int) XPrintfFunctions.snprintf (_parameters);
+			return (int)XPrintfFunctions.snprintf (_parameters);
 		}
-
 		
 		[Obsolete ("Not necessarily portable due to cdecl restrictions.\n" +
 				"Use snprintf (StringBuilder, string) instead.")]
 		public static int snprintf (StringBuilder s,
 				string format, params object[] parameters)
 		{
-			object[] _parameters = new object[checked(parameters.Length+3)];
+			object[] _parameters = new object[checked(parameters.Length + 3)];
 			_parameters [0] = s;
-			_parameters [1] = (ulong) s.Capacity;
+			_parameters [1] = (ulong)s.Capacity;
 			_parameters [2] = format;
 			Array.Copy (parameters, 0, _parameters, 3, parameters.Length);
-			return (int) XPrintfFunctions.snprintf (_parameters);
+			return (int)XPrintfFunctions.snprintf (_parameters);
 		}
 
 		/*
@@ -860,65 +841,57 @@ namespace Mono.Unix.Native {
 
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl, SetLastError=true)]
 		public static extern int ungetc (int c, IntPtr stream);
-
 		
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				SetLastError=true, EntryPoint="Mono_Posix_Stdlib_fread")]
 		public static extern ulong fread (IntPtr ptr, ulong size, ulong nmemb, IntPtr stream);
-
 		
 		public static unsafe ulong fread (void* ptr, ulong size, ulong nmemb, IntPtr stream)
 		{
-			return fread ((IntPtr) ptr, size, nmemb, stream);
+			return fread ((IntPtr)ptr, size, nmemb, stream);
 		}
 
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				SetLastError=true, EntryPoint="Mono_Posix_Stdlib_fread")]
 		private static extern ulong sys_fread ([Out] byte[] ptr, 
 				ulong size, ulong nmemb, IntPtr stream);
-
 		
 		public static ulong fread (byte[] ptr, ulong size, ulong nmemb, IntPtr stream)
 		{
-			if ((size * nmemb) > (ulong) ptr.Length)
+			if ((size * nmemb) > (ulong)ptr.Length)
 				throw new ArgumentOutOfRangeException ("nmemb");
 			return sys_fread (ptr, size, nmemb, stream);
 		}
-
 		
 		public static ulong fread (byte[] ptr, IntPtr stream)
 		{
-			return fread (ptr, 1, (ulong) ptr.Length, stream);
+			return fread (ptr, 1, (ulong)ptr.Length, stream);
 		}
-
 		
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				SetLastError=true, EntryPoint="Mono_Posix_Stdlib_fwrite")]
 		public static extern ulong fwrite (IntPtr ptr, ulong size, ulong nmemb, IntPtr stream);
-
 		
 		public static unsafe ulong fwrite (void* ptr, ulong size, ulong nmemb, IntPtr stream)
 		{
-			return fwrite ((IntPtr) ptr, size, nmemb, stream);
+			return fwrite ((IntPtr)ptr, size, nmemb, stream);
 		}
 
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				SetLastError=true, EntryPoint="Mono_Posix_Stdlib_fwrite")]
 		private static extern ulong sys_fwrite (byte[] ptr, 
 				ulong size, ulong nmemb, IntPtr stream);
-
 		
 		public static ulong fwrite (byte[] ptr, ulong size, ulong nmemb, IntPtr stream)
 		{
-			if ((size * nmemb) > (ulong) ptr.Length)
+			if ((size * nmemb) > (ulong)ptr.Length)
 				throw new ArgumentOutOfRangeException ("nmemb");
 			return sys_fwrite (ptr, size, nmemb, stream);
 		}
-
 		
 		public static ulong fwrite (byte[] ptr, IntPtr stream)
 		{
-			return fwrite (ptr, 1, (ulong) ptr.Length, stream);
+			return fwrite (ptr, 1, (ulong)ptr.Length, stream);
 		}
 
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
@@ -933,7 +906,6 @@ namespace Mono.Unix.Native {
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				SetLastError=true, EntryPoint="Mono_Posix_Stdlib_fseek")]
 		private static extern int sys_fseek (IntPtr stream, long offset, int origin);
-
 		
 		public static int fseek (IntPtr stream, long offset, SeekFlags origin)
 		{
@@ -982,7 +954,7 @@ namespace Mono.Unix.Native {
 		//
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				EntryPoint="Mono_Posix_Stdlib_EXIT_FAILURE")]
-		private static extern int GetExitFailure();
+		private static extern int GetExitFailure ();
 
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				EntryPoint="Mono_Posix_Stdlib_EXIT_SUCCESS")]
@@ -995,19 +967,14 @@ namespace Mono.Unix.Native {
 		[DllImport (MPH, CallingConvention=CallingConvention.Cdecl,
 				EntryPoint="Mono_Posix_Stdlib_RAND_MAX")]
 		private static extern int GetRandMax ();
-
 		
 		public static readonly int  EXIT_FAILURE = GetExitFailure ();
-		
 		public static readonly int  EXIT_SUCCESS = GetExitSuccess ();
-		
-		public static readonly int  MB_CUR_MAX   = GetMbCurMax ();
-		
-		public static readonly int  RAND_MAX     = GetRandMax ();
+		public static readonly int  MB_CUR_MAX = GetMbCurMax ();
+		public static readonly int  RAND_MAX = GetRandMax ();
 
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl)]
 		public static extern int rand ();
-
 		
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl)]
 		public static extern void srand (uint seed);
@@ -1044,7 +1011,6 @@ namespace Mono.Unix.Native {
 
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl)]
 		public static extern void exit (int status);
-
 		
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl)]
 		public static extern void _Exit (int status);
@@ -1057,7 +1023,6 @@ namespace Mono.Unix.Native {
 			IntPtr r = sys_getenv (name);
 			return UnixMarshal.PtrToString (r);
 		}
-
 		
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl, SetLastError=true)]
 		public static extern int system (string @string);
@@ -1071,7 +1036,6 @@ namespace Mono.Unix.Native {
 		[DllImport (LIBC, CallingConvention=CallingConvention.Cdecl,
 				SetLastError=true, EntryPoint="strerror")]
 		private static extern IntPtr sys_strerror (int errnum);
-
 		
 		public static string strerror (Errno errnum)
 		{

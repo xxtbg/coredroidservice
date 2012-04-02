@@ -20,13 +20,27 @@ namespace CoreDroid
 			this.Port = port;
 		}
 		
+		public void LoadMono (string assemblyString)
+		{
+			TcpClient client = new TcpClient ();
+			client.Connect (IPAddress.Loopback, this.Port);
+			NetworkStream stream = client.GetStream ();
+			
+			stream.DataSend (new InitMessage (InitAction.LoadMono, assemblyString));
+			
+			OperationResultMessage msg = stream.DataReceive<OperationResultMessage> ();
+			
+			if (!msg.Success)
+				throw(new ServiceException (msg));
+		}
+		
 		public void LoadMono (Stream dllStream)
 		{
 			TcpClient client = new TcpClient ();
 			client.Connect (IPAddress.Loopback, this.Port);
 			NetworkStream stream = client.GetStream ();
 			
-			stream.DataSend (new InitMessage (InitAction.LoadMono));
+			stream.DataSend (new InitMessage (InitAction.LoadMono, null));
 			
 			using (ServiceStream destStream = this.GetStream(stream)) {
 				dllStream.CopyTo (destStream);
