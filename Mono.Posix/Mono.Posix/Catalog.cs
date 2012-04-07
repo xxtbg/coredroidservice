@@ -29,20 +29,22 @@
 //    Methods that require tuning are bound as `internal syscal_NAME' methods
 //    and then a `NAME' method is exposed.
 //
-
 using System;
 using System.Runtime.InteropServices;
 
-namespace Mono.Posix {
-
+namespace Mono.Posix
+{
 	[Obsolete ("Use Mono.Unix.Catalog")]
-	public class Catalog {
-		[DllImport("intl")]
+	public class Catalog
+	{
+		[DllImport ("__Internal")]
 		static extern IntPtr bindtextdomain (IntPtr domainname, IntPtr dirname);
-		[DllImport("intl")]
+
+		[DllImport ("__Internal")]
 		static extern IntPtr bind_textdomain_codeset (IntPtr domainname,
 			IntPtr codeset);
-		[DllImport("intl")]
+
+		[DllImport ("__Internal")]
 		static extern IntPtr textdomain (IntPtr domainname);
 		
 		public static void Init (String package, String localedir)
@@ -58,7 +60,7 @@ namespace Mono.Posix {
 			Marshal.FreeHGlobal (iutf8);
 		}
 	
-		[DllImport("intl")]
+		[DllImport ("__Internal")]
 		static extern IntPtr gettext (IntPtr instring);
 		
 		public static String GetString (String s)
@@ -69,7 +71,7 @@ namespace Mono.Posix {
 			return t;
 		}
 	
-		[DllImport("intl")]
+		[DllImport ("__Internal")]
 		static extern IntPtr ngettext (IntPtr singular, IntPtr plural, Int32 n);
 		
 		public static String GetPluralString (String s, String p, Int32 n)

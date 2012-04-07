@@ -130,5 +130,17 @@ namespace CoreDroid.Test
 				
 			service.Close ();
 		}
+		
+		private static void PrintException (ExceptionInfo info)
+		{
+			Console.WriteLine ("EXCEPTION: " + info.ExceptionTypeName + ", " + info.ExceptionTypeName);
+			Console.WriteLine ("Message:");
+			Console.WriteLine (info.ExceptionMessage);
+			Console.WriteLine ("StackTrace:");
+			Console.WriteLine (info.ExceptionStackTrace);
+			
+			if (info.Inner != null)
+				PrintException (info.Inner);
+		}
 	}
 }
