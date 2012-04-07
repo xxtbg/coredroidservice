@@ -31,21 +31,25 @@
 //    Methods that require tuning are bound as `internal syscal_NAME' methods
 //    and then a `NAME' method is exposed.
 //
-
 using System;
 using System.Runtime.InteropServices;
 
-namespace Mono.Unix {
+namespace Mono.Unix
+{
+	public class Catalog
+	{
+		private Catalog ()
+		{
+		}
 
-	public class Catalog {
-		private Catalog () {}
-
-		[DllImport("intl")]
+		[DllImport ("__Internal")]
 		static extern IntPtr bindtextdomain (IntPtr domainname, IntPtr dirname);
-		[DllImport("intl")]
+
+		[DllImport ("__Internal")]
 		static extern IntPtr bind_textdomain_codeset (IntPtr domainname,
 			IntPtr codeset);
-		[DllImport("intl")]
+
+		[DllImport ("__Internal")]
 		static extern IntPtr textdomain (IntPtr domainname);
 		
 		public static void Init (String package, String localedir)
@@ -60,8 +64,7 @@ namespace Mono.Unix {
 					throw new UnixIOException (Native.Errno.ENOMEM);
 				if (textdomain (ipackage) == IntPtr.Zero)
 					throw new UnixIOException (Native.Errno.ENOMEM);
-			}
-			finally {
+			} finally {
 				UnixMarshal.FreeHeap (ipackage);
 				UnixMarshal.FreeHeap (ilocaledir);
 				UnixMarshal.FreeHeap (iutf8);
@@ -81,8 +84,7 @@ namespace Mono.Unix {
 				if (s3 != null)
 					p3 = UnixMarshal.StringToHeap (s3);
 				cleanup = false;
-			}
-			finally {
+			} finally {
 				if (cleanup) {
 					UnixMarshal.FreeHeap (p1);
 					UnixMarshal.FreeHeap (p2);
@@ -91,7 +93,7 @@ namespace Mono.Unix {
 			}
 		}
 	
-		[DllImport("intl")]
+		[DllImport ("__Internal")]
 		static extern IntPtr gettext (IntPtr instring);
 		
 		public static String GetString (String s)
@@ -103,13 +105,12 @@ namespace Mono.Unix {
 				if (r != ints)
 					return UnixMarshal.PtrToStringUnix (r);
 				return s;
-			}
-			finally {
+			} finally {
 				UnixMarshal.FreeHeap (ints);
 			}
 		}
 	
-		[DllImport("intl")]
+		[DllImport ("__Internal")]
 		static extern IntPtr ngettext (IntPtr singular, IntPtr plural, Int32 n);
 		
 		public static String GetPluralString (String s, String p, Int32 n)
@@ -125,8 +126,7 @@ namespace Mono.Unix {
 				if (r == intp)
 					return p;
 				return UnixMarshal.PtrToStringUnix (r); 
-			}
-			finally {
+			} finally {
 				UnixMarshal.FreeHeap (ints);
 				UnixMarshal.FreeHeap (intp);
 			}

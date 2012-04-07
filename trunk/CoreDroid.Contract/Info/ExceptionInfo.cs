@@ -20,6 +20,9 @@ namespace CoreDroid.Contract
 
 		[DataMember(Order = 3)]
 		public string ExceptionStackTrace { get; private set; }
+		
+		[DataMember(Order = 4)]
+		public ExceptionInfo Inner { get; private set; }
 
 		public ExceptionInfo (Exception ex)
 		{
@@ -27,6 +30,9 @@ namespace CoreDroid.Contract
 			this.ExceptionTypeName = ex.GetType ().FullName;
 			this.ExceptionMessage = ex.Message;
 			this.ExceptionStackTrace = ex.StackTrace;
+			
+			if (ex.InnerException != null)
+				this.Inner = new ExceptionInfo (ex.InnerException);
 		}
 	}
 }
