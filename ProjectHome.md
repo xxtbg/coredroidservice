@@ -1,0 +1,1 @@
+A service which gives android applications access to different os functions via an android service.
